@@ -95,7 +95,7 @@ if prompt := st.chat_input("Befehl eingeben..."):
     """
 
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
+        model = genai.GenerativeModel('gemini-1.5-flash-latest', system_instruction=system_instruction)
         chat = model.start_chat(history=[{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"])
         response = chat.send_message(prompt)
         
