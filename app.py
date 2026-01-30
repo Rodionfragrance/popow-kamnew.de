@@ -132,7 +132,7 @@ if prompt := st.chat_input("Frag mich..."):
         chat = model.start_chat(history=history)
         response = chat.send_message(prompt)
         
-        with st.chat_message("model"):
+        with st.chat_message("model", avatar="🧙‍♂️"):
             st.markdown(response.text)
         st.session_state.messages.append({"role": "model", "content": response.text})
 
