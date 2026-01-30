@@ -57,15 +57,15 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.link_button(
-        label="📸 Mein Instagram", 
+        label="Mein Instagram", 
         url="https://www.instagram.com/rodionpopow", 
-        icon="📱",
+        icon="📸",
         use_container_width=True # Macht den Button breit (gut für Handy)
     )
 
 with col2:
     st.link_button(
-        label="Gefällt dir? ☕ Spendier mir einen Kaffee", 
+        label="Gefällt dir? Spendier mir einen Kaffee", 
         url="https://www.paypal.com/paypalme/RodionPopow", 
         type="primary", # Roter Button
         icon="☕",
