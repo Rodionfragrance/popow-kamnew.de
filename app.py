@@ -79,7 +79,9 @@ if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften, Produkten, Business-Strategien oder Einwandbehandlung."}]
 
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
+    # Wähle das Icon: Zauberer für die KI, Mensch für den User
+    icon = "🧙‍♂️" if message["role"] == "model" else "👤"
+    with st.chat_message(message["role"], avatar=icon):
         st.markdown(message["content"])
 
 if prompt := st.chat_input("Frag mich..."):
