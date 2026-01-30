@@ -3,6 +3,7 @@ import pandas as pd
 import google.generativeai as genai
 from duckduckgo_search import DDGS
 import time
+import random  # WICHTIG für das Zufalls-Roulette
 
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
@@ -19,12 +20,19 @@ st.markdown("""
 <div class="footer">Olfazeta Business Intelligence Tool - Powered by Gemini AI</div>
 """, unsafe_allow_html=True)
 
-# --- API KEY HANDLING ---
-if "GOOGLE_API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+# --- MULTI-KEY HANDLING (Das Load-Balancing) ---
+# Wir holen die Liste aus den Secrets
+if "API_KEYS" in st.secrets:
+    api_keys = st.secrets["API_KEYS"]
+elif "GOOGLE_API_KEY" in st.secrets:
+    # Fallback, falls nur ein Key da ist
+    api_keys = [st.secrets["GOOGLE_API_KEY"]]
 else:
-    st.error("⚠️ API Key fehlt! Bitte in Streamlit Secrets hinterlegen.")
+    st.error("⚠️ Keine API Keys gefunden! Bitte in Secrets hinterlegen.")
     st.stop()
+
+def get_random_key():
+    return random.choice(api_keys)
 
 # --- DATEN LADEN ---
 @st.cache_data
@@ -102,29 +110,39 @@ if prompt := st.chat_input("Frage eingeben..."):
     Antworte auf: "{prompt}"
     """
 
-    # --- INTELLIGENTE FALLBACK LOGIK (Korrigierte Modelle) ---
+    # --- INTELLIGENTE LOAD-BALANCING LOGIK ---
     full_response = ""
-    # Hier sind die ECHTEN Modelle, die existieren:
+    # Echte, existierende Modelle
     models_to_try = ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-1.5-pro"]
     
     try:
-        for model_name in models_to_try:
+        # Wir versuchen es bis zu 5 Mal mit verschiedenen Keys und Modellen
+        for attempt in range(5):
             try:
-                # Versuch mit aktuellem Modell
+                # 1. Zufälligen Key ziehen (Das ist der Trick!)
+                current_key = get_random_key()
+                genai.configure(api_key=current_key)
+                
+                # 2. Modell auswählen (Beim ersten Versuch das Beste, dann Fallback)
+                model_name = models_to_try[0] if attempt == 0 else models_to_try[1]
+                
                 model = genai.GenerativeModel(model_name, system_instruction=system_instruction)
                 history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
                 chat = model.start_chat(history=history)
+                
+                # 3. Feuer frei
                 response = chat.send_message(prompt)
                 full_response = response.text
-                break # Erfolg! Schleife verlassen
+                break # Erfolg!
             
             except Exception as e:
-                # Prüfen auf Überlastung (429) oder "Nicht gefunden" (404)
-                if "429" in str(e) or "404" in str(e):
-                    time.sleep(1) # Kurz atmen
-                    continue # Nächstes Modell probieren
+                error_msg = str(e)
+                # Nur bei Überlastung oder 404 weitermachen
+                if "429" in error_msg or "404" in error_msg or "Quota" in error_msg:
+                    time.sleep(1)
+                    continue # Nächster Versuch mit neuem Key!
                 else:
-                    raise e # Anderer Fehler? Absturz.
+                    raise e # Echter Fehler? Anzeigen.
 
         # --- AUSGABE ---
         if full_response:
@@ -132,7 +150,7 @@ if prompt := st.chat_input("Frage eingeben..."):
                 st.markdown(full_response)
             st.session_state.messages.append({"role": "model", "content": full_response})
         else:
-            st.error("❌ Alle KI-Modelle sind gerade ausgelastet. Bitte warte 1 Minute.")
+            st.error("❌ Maximale Auslastung...Bitte warten.")
 
     except Exception as e:
         st.error(f"Technischer Fehler: {e}")
