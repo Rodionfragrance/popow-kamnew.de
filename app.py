@@ -26,7 +26,7 @@ if "API_KEYS" in st.secrets:
 elif "GOOGLE_API_KEY" in st.secrets:
     api_keys = [st.secrets["GOOGLE_API_KEY"]]
 else:
-    st.error("⚠️ Keine Keys gefunden!")
+    st.error("⚠️ Keine Keys gefunden! Bitte API Keys in den Secrets hinterlegen.")
     st.stop()
 
 def get_random_key():
@@ -45,22 +45,22 @@ def load_data():
 
 db = load_data()
 if not db:
-    st.error("Datenbank fehlt!")
+    st.error("Fehler: Datenbank fehlt auf GitHub!")
     st.stop()
 
-# --- WEB SUCHE (Robust) ---
+# --- WEB SUCHE (Mit Sicherheits-Check) ---
 def get_trend_info(query):
     try:
-        # Nur suchen, wenn die Anfrage lang genug ist (vermeidet unnötige Wartezeit bei "Hallo")
-        if len(query.split()) < 2: 
-            return ""
-            
+        # Wir suchen gezielt nach Kontext
         with DDGS() as ddgs:
-            results = list(ddgs.text(f"{query} Duftnoten Parfüm Beschreibung", max_results=1))
+            # max_results=2 reicht für Kontext, spart Zeit
+            results = list(ddgs.text(f"{query} Parfüm Duftnoten Beschreibung Anlass", max_results=2))
             if results:
-                return results[0]['body']
+                # Wir geben die Zusammenfassung der ersten 2 Ergebnisse zurück
+                return "\n".join([r['body'] for r in results])
             return ""
-    except:
+    except Exception as e:
+        # Wenn die Suche fehlschlägt (Timeout/Block), geben wir leer zurück, damit der Chat nicht abstürzt
         return ""
 
 # --- HEADER & BUTTONS ---
@@ -75,73 +75,78 @@ with col2:
 
 st.markdown("---")
 
-# --- CHAT ---
+# --- CHAT VERLAUF ---
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit."}]
+    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Ich suche für dich auch im Web nach aktuellen Trends."}]
 
 for message in st.session_state.messages:
     icon = "🧙‍♂️" if message["role"] == "model" else "👤"
     with st.chat_message(message["role"], avatar=icon):
         st.markdown(message["content"])
 
+# --- EINGABE ---
 if prompt := st.chat_input("Frage eingeben..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
-    # --- ANTWORT GENERIEREN ---
-    # Hier zeigen wir den Lade-Text an, während im Hintergrund gearbeitet wird
-    with st.spinner("Rodion sucht das Passende für dich... 🧙‍♂️"):
-        
-        # 1. Web Context holen (dauert 1-2 Sek)
+    # --- 1. WEB RECHERCHE (Sichtbar) ---
+    web_context = ""
+    # Wir zeigen dem User, dass wir arbeiten
+    with st.status("Rodion sucht das Passende für dich... 🧙‍♂️", expanded=False) as status:
+        start_time = time.time()
         web_context = get_trend_info(prompt)
-
-        # 2. Prompt bauen
-        system_instruction = f"""
-        Du bist Rodion, Elite-Mentor für Olfazeta.
+        duration = time.time() - start_time
         
-        DEIN WISSEN:
-        1. PRODUKT-DATENBANK (CSV): {db['csv']}
-        2. BUSINESS-GUIDE (TXT): {db['business']}
-        3. ZUSATZ-INFOS (WEB): {web_context}
+        if web_context:
+            status.update(label=f"Recherche abgeschlossen ({duration:.1f}s).", state="complete")
+        else:
+            status.update(label="Keine Web-Ergebnisse (nutze internes Wissen).", state="complete")
 
-        DEINE AUFGABE:
-        - Finde in der CSV das passende Parfüm.
-        - Nutze Web-Infos nur für Kontext (z.B. was ist ein "Candle Light Konzert").
-        
-        REGELN:
-        - Nenne NIE Fremdmarken (Dior, Chanel etc.) im Text. Sag "Riecht wie..." oder "Alternative zu...".
-        - Sei gender-neutral ("Du").
-        - Mach Preise **fett**.
+    # --- 2. KI ANTWORT ---
+    system_instruction = f"""
+    Du bist Rodion, Elite-Mentor für Olfazeta.
+    
+    QUELLEN:
+    1. PRODUKTE (CSV): {db['csv']}
+    2. WISSEN (TXT): {db['business']}
+    3. WEB-RECHERCHE: {web_context}
+    
+    AUFGABE:
+    - Kombiniere das Wissen aus der CSV mit den Infos aus der Web-Recherche.
+    - Wenn die Web-Recherche Infos zu einem Anlass (z.B. "Candle Light") liefert, nutze diese, um das passende Parfüm in der CSV zu finden.
+    - Priorität hat IMMER die CSV (verkaufe unsere Produkte!).
+    
+    REGELN:
+    - Nenne NIE Fremdmarken (Dior, Chanel etc.) im Text. Sag "Riecht wie..." oder "Alternative zu...".
+    - Sei gender-neutral ("Du").
+    - Mach Preise **fett**.
 
-        Antworte auf: "{prompt}"
-        """
+    Antworte auf: "{prompt}"
+    """
 
-        # 3. KI Abfragen (Load Balancing)
+    with st.chat_message("model", avatar="🧙‍♂️"):
+        message_placeholder = st.empty()
         full_response = ""
         success = False
         
+        # Key Rotation (Load Balancing)
         for attempt in range(5):
             try:
                 genai.configure(api_key=get_random_key())
-                # Modell: 1.5 Flash ist das schnellste
                 model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
                 
                 history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
                 chat = model.start_chat(history=history)
                 
-                # Streaming starten (Hier endet der Spinner, sobald das erste Wort da ist)
                 response_stream = chat.send_message(prompt, stream=True)
                 
-                # Wir verlassen den Spinner-Block und zeigen die Nachricht an
-                with st.chat_message("model", avatar="🧙‍♂️"):
-                    message_placeholder = st.empty()
-                    for chunk in response_stream:
-                        if chunk.text:
-                            full_response += chunk.text
-                            message_placeholder.markdown(full_response + "▌")
-                    message_placeholder.markdown(full_response)
+                for chunk in response_stream:
+                    if chunk.text:
+                        full_response += chunk.text
+                        message_placeholder.markdown(full_response + "▌")
                 
+                message_placeholder.markdown(full_response)
                 success = True
                 break 
             
@@ -152,4 +157,4 @@ if prompt := st.chat_input("Frage eingeben..."):
     if success:
         st.session_state.messages.append({"role": "model", "content": full_response})
     else:
-        st.error("⚠️ Der Server ist gerade überlastet. Bitte warte einen Moment und klicke nochmal auf Senden.")
+        st.error("⚠️ Server überlastet.")
