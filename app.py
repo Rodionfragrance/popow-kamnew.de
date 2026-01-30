@@ -8,7 +8,7 @@ import random
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- CSS ---
+# --- CSS (Optik) ---
 st.markdown("""
 <style>
 .footer {position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f1f1f1; color: black; text-align: center; padding: 10px; font-size: 12px;}
@@ -20,13 +20,13 @@ st.markdown("""
 <div class="footer">Olfazeta Business Intelligence Tool - Powered by Gemini AI</div>
 """, unsafe_allow_html=True)
 
-# --- MULTI-KEY HANDLING ---
+# --- KEYS HOLEN ---
 if "API_KEYS" in st.secrets:
     api_keys = st.secrets["API_KEYS"]
 elif "GOOGLE_API_KEY" in st.secrets:
     api_keys = [st.secrets["GOOGLE_API_KEY"]]
 else:
-    st.error("⚠️ Keine API Keys gefunden!")
+    st.error("⚠️ Keine Keys gefunden!")
     st.stop()
 
 def get_random_key():
@@ -41,15 +41,14 @@ def load_data():
         with open("business_wissen.txt", "r", encoding="utf-8") as f:
             txt_text = f.read()
         return {"csv": csv_text, "business": txt_text}
-    except Exception as e:
-        return None
+    except: return None
 
 db = load_data()
 if not db:
     st.error("Datenbank fehlt!")
     st.stop()
 
-# --- WEB SUCHE (TURBO: Nur bei Bedarf) ---
+# --- WEB SUCHE (Nur bei Bedarf) ---
 def get_trend_info(query):
     try:
         with DDGS() as ddgs:
@@ -63,15 +62,15 @@ st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 col1, col2 = st.columns(2)
 with col1:
-    st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", icon="📱", use_container_width=True)
+    st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 with col2:
-    st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", icon="☕", use_container_width=True)
+    st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 
 st.markdown("---")
 
 # --- CHAT ---
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften oder Business."}]
+    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit."}]
 
 for message in st.session_state.messages:
     icon = "🧙‍♂️" if message["role"] == "model" else "👤"
@@ -83,67 +82,58 @@ if prompt := st.chat_input("Frage eingeben..."):
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
-    # --- TURBO-MODUS ---
-    # Wir suchen NUR im Web, wenn explizit danach gefragt wird, sonst nutzen wir nur die CSV (viel schneller!)
+    # --- LOGIK START ---
     web_context = ""
-    if any(keyword in prompt.lower() for keyword in ["suche", "google", "info zu", "trend", "aktuell"]):
-        with st.status("🔍 Recherche läuft...", expanded=False) as status:
+    # Turbo-Check: Suchen wir im Web?
+    if any(k in prompt.lower() for k in ["suche", "google", "info", "trend"]):
+        with st.status("🔍 Recherche...", expanded=False) as status:
             web_context = get_trend_info(prompt)
-            status.update(label="Recherche beendet.", state="complete")
+            status.update(label="Fertig.", state="complete")
 
-    # System-Prompt
     system_instruction = f"""
     Du bist Rodion, Elite-Mentor für Olfazeta.
     WISSEN:
     1. PRODUKTE (CSV): {db['csv']}
     2. BUSINESS (TXT): {db['business']}
     3. EXTERNE INFOS: {web_context}
-
-    REGELN:
-    - Markenschutz: Nenne NIE Fremdmarken im Text.
-    - Ansprache: "Du", direkt, professionell.
-    - Upsell: Immer anbieten.
-    - Preise: **Fett**.
-
+    REGELN: Markenschutz beachten. Gender-Neutral. Preise fett.
     Antworte auf: "{prompt}"
     """
 
-    # --- ANTWORT GENERIEREN ---
-    full_response = ""
-    models_to_try = ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-1.5-pro"]
-    
-    # Lade-Animation anzeigen
-    with st.spinner("Der Zauberer denkt nach... 🧙‍♂️"):
-        try:
-            for attempt in range(5): # 5 Versuche (Keys + Modelle)
-                try:
-                    current_key = get_random_key()
-                    genai.configure(api_key=current_key)
-                    
-                    # Modellwahl: Beim 1. Versuch das Beste, dann Fallback
-                    model_name = models_to_try[0] if attempt == 0 else models_to_try[1]
-                    
-                    model = genai.GenerativeModel(model_name, system_instruction=system_instruction)
-                    history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
-                    chat = model.start_chat(history=history)
-                    
-                    response = chat.send_message(prompt)
-                    full_response = response.text
-                    break 
+    # --- ANTWORT GENERIEREN (STREAMING) ---
+    with st.chat_message("model", avatar="🧙‍♂️"):
+        message_placeholder = st.empty()
+        full_response = ""
+        success = False
+        
+        # Wir probieren Keys durch, bis einer geht
+        for attempt in range(5):
+            try:
+                genai.configure(api_key=get_random_key())
+                model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
                 
-                except Exception as e:
-                    if "429" in str(e) or "404" in str(e) or "Quota" in str(e):
-                        time.sleep(1) # Nur 1 Sekunde warten, dann Key wechseln
-                        continue
-                    else:
-                        raise e
+                # History bauen
+                history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
+                chat = model.start_chat(history=history)
+                
+                # Hier ist der Zauber: stream=True
+                response_stream = chat.send_message(prompt, stream=True)
+                
+                # Wir bauen die Antwort Stück für Stück auf
+                for chunk in response_stream:
+                    if chunk.text:
+                        full_response += chunk.text
+                        message_placeholder.markdown(full_response + "▌")
+                
+                message_placeholder.markdown(full_response)
+                success = True
+                break # Wenn wir hier sind, hat es geklappt -> Raus aus der Schleife
+            
+            except Exception as e:
+                time.sleep(1) # Kurz warten, neuer Versuch
+                continue
 
-            if full_response:
-                with st.chat_message("model", avatar="🧙‍♂️"):
-                    st.markdown(full_response)
-                st.session_state.messages.append({"role": "model", "content": full_response})
-            else:
-                st.error("⚠️ Hohe Auslastung. Bitte warten.")
-
-        except Exception as e:
-            st.error(f"Technischer Fehler: {e}")
+        if success:
+            st.session_state.messages.append({"role": "model", "content": full_response})
+        else:
+            st.error("⚠️ Hohe Auslastung.")
