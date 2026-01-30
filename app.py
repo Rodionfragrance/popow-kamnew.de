@@ -55,7 +55,7 @@ def get_trend_info(query):
 st.title("🧙‍♂️ Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
-# BUTTONS (Fehlersicher)
+# BUTTONS
 col1, col2 = st.columns(2)
 with col1:
     st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
@@ -102,12 +102,10 @@ if prompt := st.chat_input("Frage eingeben..."):
     Antworte auf: "{prompt}"
     """
 
-    # --- INTELLIGENTE FALLBACK LOGIK ---
+    # --- INTELLIGENTE FALLBACK LOGIK (Korrigierte Modelle) ---
     full_response = ""
-    # Liste der Modelle, die wir nacheinander probieren (vom besten zum sparsamsten)
-    models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-flash-8b"]
-    
-    place_holder = st.empty()
+    # Hier sind die ECHTEN Modelle, die existieren:
+    models_to_try = ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-1.5-pro"]
     
     try:
         for model_name in models_to_try:
@@ -121,11 +119,10 @@ if prompt := st.chat_input("Frage eingeben..."):
                 break # Erfolg! Schleife verlassen
             
             except Exception as e:
-                if "429" in str(e):
-                    # Wenn Limit erreicht, zeige Info und probiere nächstes Modell
-                    st.toast(f"⚠️ Modell {model_name} ausgelastet. Schalte um...", icon="🔄")
-                    time.sleep(2)
-                    continue # Nächstes Modell in der Liste probieren
+                # Prüfen auf Überlastung (429) oder "Nicht gefunden" (404)
+                if "429" in str(e) or "404" in str(e):
+                    time.sleep(1) # Kurz atmen
+                    continue # Nächstes Modell probieren
                 else:
                     raise e # Anderer Fehler? Absturz.
 
@@ -135,7 +132,7 @@ if prompt := st.chat_input("Frage eingeben..."):
                 st.markdown(full_response)
             st.session_state.messages.append({"role": "model", "content": full_response})
         else:
-            st.error("❌ Die KI lässt gerade keine Anfragen mehr zu. Probier es morgen wieder.")
+            st.error("❌ Alle KI-Modelle sind gerade ausgelastet. Bitte warte 1 Minute.")
 
     except Exception as e:
         st.error(f"Technischer Fehler: {e}")
