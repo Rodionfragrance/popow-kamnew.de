@@ -49,7 +49,7 @@ def get_trend_info(query):
     except: return ""
 
 # --- CHAT ---
-st.title("🦁 Rodions Command Center")
+st.title("🦁 Rodions Chogan Chat KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 if "messages" not in st.session_state:
