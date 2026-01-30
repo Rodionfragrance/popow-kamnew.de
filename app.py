@@ -4,7 +4,7 @@ import google.generativeai as genai
 from duckduckgo_search import DDGS
 
 # --- KONFIGURATION ---
-st.set_page_config(page_title="Rodions Business-Hub", page_icon="🦁", layout="wide")
+st.set_page_config(page_title="Rodions Business-Hub", page_icon="🧙‍♂️", layout="wide")
 
 # --- CSS ---
 st.markdown("""
@@ -48,7 +48,7 @@ def get_trend_info(query):
     except: return ""
 
 # --- CHAT ---
-st.title("🦁 Rodions Chogan KI")
+st.title("🧙‍♂️ Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 if "messages" not in st.session_state:
