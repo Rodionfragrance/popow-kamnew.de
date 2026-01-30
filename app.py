@@ -91,7 +91,7 @@ if prompt := st.chat_input("Frage eingeben..."):
     if not any(x in prompt.lower() for x in ["plan", "agb", "versand", "geld", "start", "einwand"]):
         with st.status("Prüfe Duftnoten...", expanded=False) as status:
             web_context = get_trend_info(prompt)
-            status.update(label="Check fertig.", state="complete")
+            status.update(label="Denke nach. Bitte warten.", state="complete")
 
     # System-Prompt
     system_instruction = f"""
