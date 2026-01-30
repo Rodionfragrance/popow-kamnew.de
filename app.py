@@ -6,32 +6,6 @@ from duckduckgo_search import DDGS
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- SIDEBAR (SOCIALS & SUPPORT) ---
-with st.sidebar:
-    st.title("Connect")
-    st.markdown("---")
-    
-    # 1. Instagram
-    st.write("**Folge mir:**")
-    st.link_button(
-        label="📸 Mein Instagram", 
-        url="https://www.instagram.com/rodionpopow", # <--- HIER DEINEN NAMEN EINTRAGEN
-        icon="📱" 
-    )
-    
-    st.markdown("---")
-    
-    # 2. PayPal / Support
-    st.write("**Gefällt dir das Tool?**")
-    st.caption("Unterstütze die Weiterentwicklung:")
-    st.link_button(
-        label="☕ Spendier mir einen Kaffee", 
-        url="https://www.paypal.com/paypalme/RodionPopow", # <--- HIER DEINEN PAYPAL LINK EINTRAGEN
-        type="primary" # Macht den Button rot/auffällig
-    )
-    st.markdown("---")
-    st.caption("© 2026 Rodion Popow")
-
 # --- CSS ---
 st.markdown("""
 <style>
@@ -74,10 +48,33 @@ def get_trend_info(query):
             return results[0]['body'] if results else ""
     except: return ""
 
-# --- CHAT ---
+# --- MAIN HEADER (Sichtbar auf Handy & PC) ---
 st.title("🧙‍♂️ Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie. (Hinweis: Fehler 429 = Zu viele Anfragen, bitte warten)")
 
+# HIER SIND DIE BUTTONS JETZT SICHTBAR:
+col1, col2 = st.columns(2)
+
+with col1:
+    st.link_button(
+        label="📸 Mein Instagram", 
+        url="https://www.instagram.com/rodionpopow", 
+        icon="📱",
+        use_container_width=True # Macht den Button breit (gut für Handy)
+    )
+
+with col2:
+    st.link_button(
+        label="Gefällt dir? ☕ Spendier mir einen Kaffee", 
+        url="https://www.paypal.com/paypalme/RodionPopow", 
+        type="primary", # Roter Button
+        icon="☕",
+        use_container_width=True # Macht den Button breit
+    )
+
+st.markdown("---")
+
+# --- CHAT ---
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften, Produkten, Business-Strategien oder Einwandbehandlung."}]
 
