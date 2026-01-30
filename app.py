@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
-from duckduckgo_search import DDGS
 import time
 import random
 
@@ -30,7 +29,7 @@ def load_data():
 
 db = load_data()
 
-# --- HEADER ---
+# --- HEADER & OPTIK ---
 st.title("🧙‍♂️ Rodions Chogan KI")
 col1, col2 = st.columns(2)
 with col1:
@@ -39,7 +38,7 @@ with col2:
     st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Was kann ich für dich tun?"}]
+    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften oder Strategien."}]
 
 for message in st.session_state.messages:
     icon = "🧙‍♂️" if message["role"] == "model" else "👤"
@@ -54,36 +53,26 @@ if prompt := st.chat_input("Frage eingeben..."):
     with st.chat_message("model", avatar="🧙‍♂️"):
         message_placeholder = st.empty()
         full_response = ""
-        web_info = ""
 
-        # --- RADIKALER WEB-TIMEOUT (2 Sekunden) ---
-        try:
-            with DDGS(timeout=2) as ddgs:
-                results = list(ddgs.text(f"{prompt} Parfüm Noten", max_results=1))
-                if results:
-                    web_info = results[0]['body']
-        except:
-            web_info = "" # Wenn es hakt, einfach ignorieren und weitermachen
-
-        # SYSTEM PROMPT
+        # SYSTEM PROMPT (Nur internes Wissen nutzen)
         system_instruction = f"""
         Du bist Rodion, Elite-Mentor für Olfazeta.
-        CSV-DATEN: {db['csv'] if db else 'Nicht verfügbar'}
-        BUSINESS-WISSEN: {db['business'] if db else 'Nicht verfügbar'}
-        WEB-INFO: {web_info}
+        CSV-DATEN: {db['csv'] if db else 'Datenbank lädt noch...'}
+        BUSINESS-WISSEN: {db['business'] if db else 'Wissen lädt noch...'}
         
-        AUFGABE: Beantworte die Frage präzise. Nutze primär die CSV. 
-        Nenne KEINE Fremdmarken. Preise fett.
+        AUFGABE: Beantworte die Frage präzise basierend auf deinen Daten.
+        - Finde Parfüms für Anlässe wie "Date" oder "Konzert" in der CSV.
+        - Nutze die Einwandbehandlung (Boomerang-Methode) bei Skepsis.
+        - Nenne KEINE Fremdmarken. Preise **fett**.
         """
 
-        # GENERIERUNG
         success = False
         for attempt in range(len(api_keys)):
             try:
                 genai.configure(api_key=random.choice(api_keys))
                 model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
                 
-                # Streaming starten
+                # Streaming starten für sofortige Sichtbarkeit
                 response = model.generate_content(prompt, stream=True)
                 for chunk in response:
                     if chunk.text:
@@ -99,5 +88,5 @@ if prompt := st.chat_input("Frage eingeben..."):
                 continue
         
         if not success:
-            st.error("⚠️ Aktuell keine Verbindung möglich. Bitte kurz warten.")
+            st.error("⚠️ Aktuell keine Antwort möglich. Bitte API-Keys prüfen.")
             
