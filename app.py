@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import google.generativeai as genai
 from duckduckgo_search import DDGS
+import time  # WICHTIG für die Wartezeit
 
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
@@ -11,8 +12,12 @@ st.markdown("""
 <style>
 .footer {position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f1f1f1; color: black; text-align: center; padding: 10px; font-size: 12px;}
 .stChatInput {position: fixed; bottom: 50px;}
+/* Avatar Styling: Weißer Hintergrund */
+.stChatMessage .stChatMessageAvatar {
+    background-color: #ffffff !important;
+}
 </style>
-<div class="footer">Olfazeta Business Intelligence Tool - Powered by Gemini 2.5 AI</div>
+<div class="footer">Olfazeta Business Intelligence Tool - Powered by Gemini AI</div>
 """, unsafe_allow_html=True)
 
 # --- API KEY HANDLING ---
@@ -26,7 +31,6 @@ else:
 @st.cache_data
 def load_data():
     try:
-        # CSV laden (mit Marken für interne Suche)
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";")
         csv_text = df.to_string(index=False)
         with open("business_wissen.txt", "r", encoding="utf-8") as f:
@@ -50,26 +54,26 @@ def get_trend_info(query):
 
 # --- MAIN HEADER (Sichtbar auf Handy & PC) ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption("Dein KI-Partner für Vertrieb & Strategie. (Hinweis: Fehler 429 = Zu viele Anfragen, bitte warten)")
+st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
-# HIER SIND DIE BUTTONS JETZT SICHTBAR:
+# BUTTONS (Breit für Handy)
 col1, col2 = st.columns(2)
 
 with col1:
     st.link_button(
         label="Mein Instagram", 
         url="https://www.instagram.com/rodionpopow", 
-        icon="📸",
-        use_container_width=True # Macht den Button breit (gut für Handy)
+        icon="📸 ",
+        use_container_width=True
     )
 
 with col2:
     st.link_button(
         label="Gefällt dir? Spendier mir einen Kaffee", 
         url="https://www.paypal.com/paypalme/RodionPopow", 
-        type="primary", # Roter Button
+        type="primary", 
         icon="☕",
-        use_container_width=True # Macht den Button breit
+        use_container_width=True
     )
 
 st.markdown("---")
@@ -78,15 +82,16 @@ st.markdown("---")
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften, Produkten, Business-Strategien oder Einwandbehandlung."}]
 
+# Verlauf anzeigen (Mit Zauberer-Icon)
 for message in st.session_state.messages:
-    # Wähle das Icon: Zauberer für die KI, Mensch für den User
     icon = "🧙‍♂️" if message["role"] == "model" else "👤"
     with st.chat_message(message["role"], avatar=icon):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("Frag mich..."):
+if prompt := st.chat_input("Frage eingeben..."):
+    # User Nachricht anzeigen
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
     # Web-Check
@@ -96,7 +101,7 @@ if prompt := st.chat_input("Frag mich..."):
             web_context = get_trend_info(prompt)
             status.update(label="Check fertig.", state="complete")
 
-    # --- SYSTEM PROMPT (NEUTRAL & SICHER) ---
+    # --- SYSTEM PROMPT ---
     system_instruction = f"""
     Du bist Rodion, Elite-Mentor für Olfazeta.
     
@@ -114,8 +119,6 @@ if prompt := st.chat_input("Frag mich..."):
     - Gehe NICHT davon aus, dass der User männlich ist.
     - Vermeide Anreden wie "Bruder", "Kumpel", "Mein Lieber" oder "Mann".
     - Nutze ein professionelles, direktes "Du".
-    - Beispiel Falsch: "Das ist genau dein Ding, Bruder."
-    - Beispiel Richtig: "Das ist genau das Richtige für dich."
 
     UPSELLING:
     - Wenn 'Upsell_Info' in der CSV steht, biete es immer an.
@@ -126,15 +129,43 @@ if prompt := st.chat_input("Frag mich..."):
     Antworte auf: "{prompt}"
     """
 
+    # --- ANTI-CRASH LOGIK (3 Versuche) ---
+    full_response = ""
+    
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash', system_instruction=system_instruction)
-        history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
-        chat = model.start_chat(history=history)
-        response = chat.send_message(prompt)
+        # Wir versuchen es 3 Mal
+        for attempt in range(3):
+            try:
+                # Modell-Wahl
+                model = genai.GenerativeModel('gemini-2.5-flash', system_instruction=system_instruction)
+                history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
+                chat = model.start_chat(history=history)
+                
+                # Anfrage senden
+                response = chat.send_message(prompt)
+                full_response = response.text
+                break # Wenn es klappt, brechen wir die Schleife ab (Erfolg!)
+            
+            except Exception as e:
+                # Wenn es ein "Rate Limit" (429) Fehler ist:
+                if "429" in str(e):
+                    # Wartezeit anzeigen
+                    wait_time = 5 * (attempt + 1)
+                    with st.spinner(f"Viel los gerade... Warte kurz ({attempt+1}/3)..."):
+                        time.sleep(wait_time)
+                    continue # Nächster Versuch
+                else:
+                    # Anderer Fehler? Dann raus hier.
+                    raise e
         
-        with st.chat_message("model", avatar="🧙‍♂️"):
-            st.markdown(response.text)
-        st.session_state.messages.append({"role": "model", "content": response.text})
+        # --- ANTWORT ODER NOTFALL-NACHRICHT ---
+        if full_response:
+            with st.chat_message("model", avatar="🧙‍♂️"):
+                st.markdown(full_response)
+            st.session_state.messages.append({"role": "model", "content": full_response})
+        else:
+            # Wenn es nach 3 Versuchen immer noch leer ist:
+            st.error("⚠️ Die KI ist gerade extrem überlastet (Fehler 429). Bitte warte 1 Minute und versuche es erneut.")
 
     except Exception as e:
-        st.error(f"Fehler: {e}")
+        st.error(f"Ein technischer Fehler ist aufgetreten: {e}")
