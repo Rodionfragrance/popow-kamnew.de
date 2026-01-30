@@ -1,19 +1,29 @@
 import streamlit as st
 import pandas as pd
-import google.generativeai as genai
+from google import genai
 import time
 import random
 
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- KEYS HOLEN ---
+# --- CSS ---
+st.markdown("""
+<style>
+.footer {position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f1f1f1; color: black; text-align: center; padding: 10px; font-size: 12px;}
+.stChatInput {position: fixed; bottom: 50px;}
+.stChatMessage .stChatMessageAvatar { background-color: #ffffff !important; }
+</style>
+<div class="footer">Olfazeta Business Intelligence Tool - Powered by Gemini AI</div>
+""", unsafe_allow_html=True)
+
+# --- API KEYS ---
 if "API_KEYS" in st.secrets:
     api_keys = st.secrets["API_KEYS"]
 elif "GOOGLE_API_KEY" in st.secrets:
     api_keys = [st.secrets["GOOGLE_API_KEY"]]
 else:
-    st.error("⚠️ Keine API-Keys gefunden! Bitte in Streamlit Secrets prüfen.")
+    st.error("⚠️ Keine API-Keys gefunden!")
     st.stop()
 
 # --- DATEN LADEN ---
@@ -29,7 +39,7 @@ def load_data():
 
 db = load_data()
 
-# --- HEADER & OPTIK ---
+# --- HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
 col1, col2 = st.columns(2)
 with col1:
@@ -38,7 +48,7 @@ with col2:
     st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften oder Strategien."}]
+    st.session_state.messages = []
 
 for message in st.session_state.messages:
     icon = "🧙‍♂️" if message["role"] == "model" else "👤"
@@ -53,27 +63,27 @@ if prompt := st.chat_input("Frage eingeben..."):
     with st.chat_message("model", avatar="🧙‍♂️"):
         message_placeholder = st.empty()
         full_response = ""
-
-        # SYSTEM PROMPT (Nur internes Wissen nutzen)
-        system_instruction = f"""
-        Du bist Rodion, Elite-Mentor für Olfazeta.
-        CSV-DATEN: {db['csv'] if db else 'Datenbank lädt noch...'}
-        BUSINESS-WISSEN: {db['business'] if db else 'Wissen lädt noch...'}
         
-        AUFGABE: Beantworte die Frage präzise basierend auf deinen Daten.
-        - Finde Parfüms für Anlässe wie "Date" oder "Konzert" in der CSV.
-        - Nutze die Einwandbehandlung (Boomerang-Methode) bei Skepsis.
-        - Nenne KEINE Fremdmarken. Preise **fett**.
-        """
+        # SYSTEM INSTRUCTION
+        sys_instr = f"""Du bist Rodion, Elite-Mentor für Olfazeta. 
+        Nutze dieses Wissen: 
+        PRODUKTE: {db['csv'] if db else 'Keine Daten'}
+        STRATEGIE: {db['business'] if db else 'Kein Wissen'}
+        Regeln: Nenne NIE Fremdmarken. Preise fett. Sei direkt und ehrlich."""
 
         success = False
+        # Nutze die neue 'google-genai' Bibliothek
         for attempt in range(len(api_keys)):
             try:
-                genai.configure(api_key=random.choice(api_keys))
-                model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
+                client = genai.Client(api_key=random.choice(api_keys))
                 
-                # Streaming starten für sofortige Sichtbarkeit
-                response = model.generate_content(prompt, stream=True)
+                # Streaming mit der neuen Bibliothek
+                response = client.models.generate_content_stream(
+                    model='gemini-1.5-flash',
+                    contents=prompt,
+                    config={'system_instruction': sys_instr}
+                )
+                
                 for chunk in response:
                     if chunk.text:
                         full_response += chunk.text
@@ -83,10 +93,10 @@ if prompt := st.chat_input("Frage eingeben..."):
                 st.session_state.messages.append({"role": "model", "content": full_response})
                 success = True
                 break
-            except:
-                time.sleep(1)
-                continue
-        
-        if not success:
-            st.error("⚠️ Aktuell keine Antwort möglich. Bitte API-Keys prüfen.")
-            
+            except Exception as e:
+                if attempt == len(api_keys) - 1:
+                    st.error(f"Fehler: {str(e)}")
+                else:
+                    time.sleep(1)
+                    continue
+                    
