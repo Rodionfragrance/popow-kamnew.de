@@ -56,23 +56,21 @@ def get_trend_info(query):
 st.title("🧙‍♂️ Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
-# BUTTONS (Breit für Handy)
+# BUTTONS (Fehlersicher: Emojis direkt im Text)
 col1, col2 = st.columns(2)
 
 with col1:
     st.link_button(
-        label="Mein Instagram", 
+        label="📸 Mein Instagram", 
         url="https://www.instagram.com/rodionpopow", 
-        icon="📸 ",
         use_container_width=True
     )
 
 with col2:
     st.link_button(
-        label="Gefällt dir? Spendier mir einen Kaffee", 
+        label="☕ Spendier mir einen Kaffee", 
         url="https://www.paypal.com/paypalme/RodionPopow", 
         type="primary", 
-        icon="☕",
         use_container_width=True
     )
 
@@ -165,7 +163,7 @@ if prompt := st.chat_input("Frage eingeben..."):
             st.session_state.messages.append({"role": "model", "content": full_response})
         else:
             # Wenn es nach 3 Versuchen immer noch leer ist:
-            st.error("⚠️ Die KI ist gerade extrem überlastet (Fehler 429). Bitte warte 1 Minute und versuche es erneut.")
+            st.error("⚠️ Der Google-Server ist gerade extrem überlastet (Fehler 429). Bitte warte 30 Sekunden und versuche es erneut.")
 
     except Exception as e:
         st.error(f"Ein technischer Fehler ist aufgetreten: {e}")
