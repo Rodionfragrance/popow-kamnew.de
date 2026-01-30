@@ -8,7 +8,7 @@ import random
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- CSS ---
+# --- CSS (Optik) ---
 st.markdown("""
 <style>
 .footer {position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f1f1f1; color: black; text-align: center; padding: 10px; font-size: 12px;}
@@ -20,7 +20,7 @@ st.markdown("""
 <div class="footer">Olfazeta Business Intelligence Tool - Powered by Gemini AI</div>
 """, unsafe_allow_html=True)
 
-# --- KEYS ---
+# --- KEYS HOLEN ---
 if "API_KEYS" in st.secrets:
     api_keys = st.secrets["API_KEYS"]
 elif "GOOGLE_API_KEY" in st.secrets:
@@ -48,10 +48,13 @@ if not db:
     st.error("Datenbank fehlt!")
     st.stop()
 
-# --- WEB SUCHE (Robust & Schnell) ---
+# --- WEB SUCHE (Robust) ---
 def get_trend_info(query):
     try:
-        # Wir suchen gezielt nach Duftnoten-Beschreibungen, um Kontext zu liefern
+        # Nur suchen, wenn die Anfrage lang genug ist (vermeidet unnötige Wartezeit bei "Hallo")
+        if len(query.split()) < 2: 
+            return ""
+            
         with DDGS() as ddgs:
             results = list(ddgs.text(f"{query} Duftnoten Parfüm Beschreibung", max_results=1))
             if results:
@@ -86,66 +89,67 @@ if prompt := st.chat_input("Frage eingeben..."):
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
-    # --- INTELLIGENTE SUCHE ---
-    # Wir aktivieren die Suche IMMER, aber im Hintergrund (ohne Ladebalken, damit es schnell wirkt)
-    # Das gibt dem Bot Kontext, auch wenn er ihn vielleicht nicht braucht.
-    web_context = get_trend_info(prompt)
+    # --- ANTWORT GENERIEREN ---
+    # Hier zeigen wir den Lade-Text an, während im Hintergrund gearbeitet wird
+    with st.spinner("Rodion sucht das Passende für dich... 🧙‍♂️"):
+        
+        # 1. Web Context holen (dauert 1-2 Sek)
+        web_context = get_trend_info(prompt)
 
-    system_instruction = f"""
-    Du bist Rodion, Elite-Mentor für Olfazeta.
-    
-    DEIN WISSEN:
-    1. PRODUKT-DATENBANK (CSV): {db['csv']}
-    2. BUSINESS-GUIDE (TXT): {db['business']}
-    3. ZUSATZ-INFOS (WEB): {web_context}
+        # 2. Prompt bauen
+        system_instruction = f"""
+        Du bist Rodion, Elite-Mentor für Olfazeta.
+        
+        DEIN WISSEN:
+        1. PRODUKT-DATENBANK (CSV): {db['csv']}
+        2. BUSINESS-GUIDE (TXT): {db['business']}
+        3. ZUSATZ-INFOS (WEB): {web_context}
 
-    DEINE AUFGABE:
-    - Finde in der CSV das passende Parfüm für die Anfrage.
-    - Wenn der User nach einem Anlass fragt (z.B. "Date", "Sport"), nutze die Spalte "Vibe_Beschreibung" oder "Duftfamilie", um das Passende zu finden.
-    - Wenn du nichts 100% Passendes findest, empfehle den besten Allrounder (z.B. Nr. 118 oder Nr. 44).
-    
-    REGELN:
-    - Nenne NIE Fremdmarken (Dior, Chanel etc.) im Text. Sag "Riecht wie..." oder "Alternative zu...".
-    - Sei gender-neutral ("Du").
-    - Mach Preise **fett**.
+        DEINE AUFGABE:
+        - Finde in der CSV das passende Parfüm.
+        - Nutze Web-Infos nur für Kontext (z.B. was ist ein "Candle Light Konzert").
+        
+        REGELN:
+        - Nenne NIE Fremdmarken (Dior, Chanel etc.) im Text. Sag "Riecht wie..." oder "Alternative zu...".
+        - Sei gender-neutral ("Du").
+        - Mach Preise **fett**.
 
-    Antworte auf: "{prompt}"
-    """
+        Antworte auf: "{prompt}"
+        """
 
-    # --- ANTWORT GENERIEREN (STREAMING) ---
-    with st.chat_message("model", avatar="🧙‍♂️"):
-        message_placeholder = st.empty()
+        # 3. KI Abfragen (Load Balancing)
         full_response = ""
         success = False
         
-        # Load-Balancing (Keys durchprobieren)
         for attempt in range(5):
             try:
                 genai.configure(api_key=get_random_key())
-                # Wir nehmen das schnellste Modell: 1.5 Flash
+                # Modell: 1.5 Flash ist das schnellste
                 model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
                 
                 history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
                 chat = model.start_chat(history=history)
                 
-                # Streaming Starten
+                # Streaming starten (Hier endet der Spinner, sobald das erste Wort da ist)
                 response_stream = chat.send_message(prompt, stream=True)
                 
-                for chunk in response_stream:
-                    if chunk.text:
-                        full_response += chunk.text
-                        message_placeholder.markdown(full_response + "▌")
+                # Wir verlassen den Spinner-Block und zeigen die Nachricht an
+                with st.chat_message("model", avatar="🧙‍♂️"):
+                    message_placeholder = st.empty()
+                    for chunk in response_stream:
+                        if chunk.text:
+                            full_response += chunk.text
+                            message_placeholder.markdown(full_response + "▌")
+                    message_placeholder.markdown(full_response)
                 
-                message_placeholder.markdown(full_response)
                 success = True
                 break 
             
             except Exception as e:
-                # Bei Fehler kurz warten und nächsten Key probieren
                 time.sleep(1)
                 continue
 
-        if success:
-            st.session_state.messages.append({"role": "model", "content": full_response})
-        else:
-            st.error("⚠️ Der Server ist gerade überlastet.")
+    if success:
+        st.session_state.messages.append({"role": "model", "content": full_response})
+    else:
+        st.error("⚠️ Der Server ist gerade überlastet. Bitte warte einen Moment und klicke nochmal auf Senden.")
