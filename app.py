@@ -26,6 +26,7 @@ else:
 @st.cache_data
 def load_data():
     try:
+        # Wir laden die CSV so wie sie ist (mit Marken)
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";")
         csv_text = df.to_string(index=False)
         with open("business_wissen.txt", "r", encoding="utf-8") as f:
@@ -43,6 +44,7 @@ if not db:
 def get_trend_info(query):
     try:
         with DDGS() as ddgs:
+            # Suche OHNE Markennamen in der Ausgabe
             results = list(ddgs.text(f"{query} Duftnoten Beschreibung", max_results=1))
             return results[0]['body'] if results else ""
     except: return ""
@@ -52,7 +54,7 @@ st.title("🧙‍♂️ Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften (Olfazeta Nummern), Upsells oder Business-Regeln."}]
+    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften."}]
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -70,7 +72,7 @@ if prompt := st.chat_input("Befehl eingeben..."):
             web_context = get_trend_info(prompt)
             status.update(label="Check fertig.", state="complete")
 
-    # --- INTELLIGENTER PROMPT (NO-BRAND MODE) ---
+    # --- DER FILTER-PROMPT ---
     system_instruction = f"""
     Du bist Rodion, Elite-Mentor für Olfazeta.
     
@@ -79,19 +81,21 @@ if prompt := st.chat_input("Befehl eingeben..."):
     2. BUSINESS (TXT): {db['business']}
     3. EXTERNE INFOS: {web_context}
 
-    DIE WICHTIGSTE REGEL (MARKENRECHT):
-    - Wenn der User nach einer Fremdmarke fragt (z.B. "Baccarat Rouge", "Dior"), darfst du diesen Namen in deiner Antwort **NICHT** als Produktnamen verwenden.
-    - Du sagst STATTDESSEN: "Ich habe da unsere **Nr. 118**. Die trifft genau diese orientalisch-blumige Duftrichtung."
-    - Benutze NIEMALS Formulierungen wie "Inspiriert von..." oder "Das ist der Zwilling von...". 
-    - Sag immer: "Geht in die Richtung von..." oder "Hat denselben Vibe wie...".
+    🔴 REGEL NR. 1: DER STILLE FILTER (Markenschutz)
+    - In der CSV steht eine Spalte "Original_Marke" oder "Inspiriert_Von".
+    - Du darfst diese Spalte NUTZEN, um zu verstehen, was der Kunde will (Suche).
+    - ABER: Du darfst diese Namen NIEMALS, unter KEINEN UMSTÄNDEN in deiner Antwort an den User schreiben.
+    
+    🔴 WIE DU ANTWORTEN MUSST:
+    - FALSCH: "Das ist wie Dior Sauvage." (VERBOTEN!)
+    - RICHTIG: "Wenn du diesen würzig-frischen Stil suchst, nimm unsere **Nr. 94**."
+    - RICHTIG: "Ich empfehle dir unsere **Nr. 139** (orientalisch-blumig, sehr exklusiv)."
+    
+    Szenario: User fragt "Hast du Baccarat Rouge?"
+    Deine Antwort: "Ich führe keine Fremdmarken. Aber schau dir unbedingt unsere **Nr. 118** an. Die trifft exakt diesen Vibe."
 
     UPSELLING:
-    - Wenn in der CSV bei 'Upsell_Info' etwas steht (z.B. Duschgel), biete es IMMER an!
-    - Beispiel: "Dazu passt perfekt unser Luxus-Duschgel für 18,90 €."
-
-    FORMAT:
-    - Sei kurz und knackig.
-    - Preise immer **fett**.
+    - Wenn 'Upsell_Info' in der CSV steht, biete es immer an.
 
     Antworte auf: "{prompt}"
     """
