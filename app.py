@@ -35,21 +35,20 @@ def load_data():
         return None
 
 db = load_data()
-
 if not db:
-    st.error("FEHLER: Datenbank-Dateien (CSV/TXT) fehlen auf GitHub!")
+    st.error("Datenbank fehlt auf GitHub!")
     st.stop()
 
-# --- LIVE WEB SUCHE ---
+# --- WEB SUCHE ---
 def get_trend_info(query):
     try:
         with DDGS() as ddgs:
-            results = list(ddgs.text(f"{query} Parfum Trend Erfahrung 2026", max_results=2))
-            return "\n".join([f"- {r['title']}: {r['body']}" for r in results]) if results else ""
+            results = list(ddgs.text(f"{query} Duftnoten Beschreibung", max_results=1))
+            return results[0]['body'] if results else ""
     except: return ""
 
 # --- CHAT ---
-st.title("🦁 Rodions Chogan Chat KI")
+st.title("🦁 Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 if "messages" not in st.session_state:
@@ -67,42 +66,38 @@ if prompt := st.chat_input("Befehl eingeben..."):
     # Web-Check
     web_context = ""
     if not any(x in prompt.lower() for x in ["plan", "agb", "versand", "geld"]):
-        with st.status("Analysiere Live-Trends...", expanded=False) as status:
+        with st.status("Prüfe Duftnoten...", expanded=False) as status:
             web_context = get_trend_info(prompt)
             status.update(label="Check fertig.", state="complete")
 
-    # --- INTELLIGENTER PROMPT (SAFE MODE) ---
+    # --- INTELLIGENTER PROMPT (NO-BRAND MODE) ---
     system_instruction = f"""
-    Du bist Rodion, ein Elite-Mentor für Olfazeta.
+    Du bist Rodion, Elite-Mentor für Olfazeta.
     
     WISSEN:
     1. PRODUKTE (CSV): {db['csv']}
     2. BUSINESS (TXT): {db['business']}
-    3. LIVE-WEB: {web_context}
+    3. EXTERNE INFOS: {web_context}
 
-    STRENGE REGELN FÜR DEN VERKAUF:
-    
-    1. MARKEN-SCHUTZ (WICHTIG!):
-       - Du verkaufst **AUSSCHLIESSLICH** Produkte von "Olfazeta", "Aurodhea", "SuppleFit" oder "Mytologik".
-       - Wenn der Kunde nach einer Fremdmarke fragt (z.B. "Hast du Dior Sauvage?"), darfst du **NIEMALS** sagen: "Ja, hier ist es."
-       - Du musst sagen: "Wir führen keine Fremdmarken. Aber ich empfehle dir unsere **Olfazeta Nr. 94**. Die geht genau in diese würzig-frische Duftrichtung."
-       - Benutze Markennamen NUR als Referenz für die Duftfamilie ("Riecht wie...", "Duftzwilling zu..."), nie als Produktnamen.
+    DIE WICHTIGSTE REGEL (MARKENRECHT):
+    - Wenn der User nach einer Fremdmarke fragt (z.B. "Baccarat Rouge", "Dior"), darfst du diesen Namen in deiner Antwort **NICHT** als Produktnamen verwenden.
+    - Du sagst STATTDESSEN: "Ich habe da unsere **Nr. 118**. Die trifft genau diese orientalisch-blumige Duftrichtung."
+    - Benutze NIEMALS Formulierungen wie "Inspiriert von..." oder "Das ist der Zwilling von...". 
+    - Sag immer: "Geht in die Richtung von..." oder "Hat denselben Vibe wie...".
 
-    2. UPSELLING:
-       - Prüfe die CSV-Spalte 'Upsell_Info'. Wenn dort etwas steht, biete es aktiv an.
+    UPSELLING:
+    - Wenn in der CSV bei 'Upsell_Info' etwas steht (z.B. Duschgel), biete es IMMER an!
+    - Beispiel: "Dazu passt perfekt unser Luxus-Duschgel für 18,90 €."
 
-    3. BUSINESS-COACH:
-       - Bei Fragen zu Geld/Karriere: Zitiere den Marketingplan 2026 exakt. Fantasiere keine Zahlen.
-
-    4. TONALITÄT:
-       - Direkt, maskulin, professionell. Preise immer **fett**.
+    FORMAT:
+    - Sei kurz und knackig.
+    - Preise immer **fett**.
 
     Antworte auf: "{prompt}"
     """
 
     try:
         model = genai.GenerativeModel('gemini-2.5-flash', system_instruction=system_instruction)
-        
         history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
         chat = model.start_chat(history=history)
         response = chat.send_message(prompt)
