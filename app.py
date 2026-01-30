@@ -8,7 +8,7 @@ import random
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- CSS (Optik) ---
+# --- CSS ---
 st.markdown("""
 <style>
 .footer {position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f1f1f1; color: black; text-align: center; padding: 10px; font-size: 12px;}
@@ -20,7 +20,7 @@ st.markdown("""
 <div class="footer">Olfazeta Business Intelligence Tool - Powered by Gemini AI</div>
 """, unsafe_allow_html=True)
 
-# --- KEYS HOLEN ---
+# --- KEYS ---
 if "API_KEYS" in st.secrets:
     api_keys = st.secrets["API_KEYS"]
 elif "GOOGLE_API_KEY" in st.secrets:
@@ -48,13 +48,17 @@ if not db:
     st.error("Datenbank fehlt!")
     st.stop()
 
-# --- WEB SUCHE (Nur bei Bedarf) ---
+# --- WEB SUCHE (Robust & Schnell) ---
 def get_trend_info(query):
     try:
+        # Wir suchen gezielt nach Duftnoten-Beschreibungen, um Kontext zu liefern
         with DDGS() as ddgs:
-            results = list(ddgs.text(f"{query} Duftnoten Beschreibung", max_results=1))
-            return results[0]['body'] if results else ""
-    except: return ""
+            results = list(ddgs.text(f"{query} Duftnoten Parfüm Beschreibung", max_results=1))
+            if results:
+                return results[0]['body']
+            return ""
+    except:
+        return ""
 
 # --- HEADER & BUTTONS ---
 st.title("🧙‍♂️ Rodions Chogan KI")
@@ -82,21 +86,29 @@ if prompt := st.chat_input("Frage eingeben..."):
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
-    # --- LOGIK START ---
-    web_context = ""
-    # Turbo-Check: Suchen wir im Web?
-    if any(k in prompt.lower() for k in ["suche", "google", "info", "trend"]):
-        with st.status("🔍 Recherche...", expanded=False) as status:
-            web_context = get_trend_info(prompt)
-            status.update(label="Fertig.", state="complete")
+    # --- INTELLIGENTE SUCHE ---
+    # Wir aktivieren die Suche IMMER, aber im Hintergrund (ohne Ladebalken, damit es schnell wirkt)
+    # Das gibt dem Bot Kontext, auch wenn er ihn vielleicht nicht braucht.
+    web_context = get_trend_info(prompt)
 
     system_instruction = f"""
     Du bist Rodion, Elite-Mentor für Olfazeta.
-    WISSEN:
-    1. PRODUKTE (CSV): {db['csv']}
-    2. BUSINESS (TXT): {db['business']}
-    3. EXTERNE INFOS: {web_context}
-    REGELN: Markenschutz beachten. Gender-Neutral. Preise fett.
+    
+    DEIN WISSEN:
+    1. PRODUKT-DATENBANK (CSV): {db['csv']}
+    2. BUSINESS-GUIDE (TXT): {db['business']}
+    3. ZUSATZ-INFOS (WEB): {web_context}
+
+    DEINE AUFGABE:
+    - Finde in der CSV das passende Parfüm für die Anfrage.
+    - Wenn der User nach einem Anlass fragt (z.B. "Date", "Sport"), nutze die Spalte "Vibe_Beschreibung" oder "Duftfamilie", um das Passende zu finden.
+    - Wenn du nichts 100% Passendes findest, empfehle den besten Allrounder (z.B. Nr. 118 oder Nr. 44).
+    
+    REGELN:
+    - Nenne NIE Fremdmarken (Dior, Chanel etc.) im Text. Sag "Riecht wie..." oder "Alternative zu...".
+    - Sei gender-neutral ("Du").
+    - Mach Preise **fett**.
+
     Antworte auf: "{prompt}"
     """
 
@@ -106,20 +118,19 @@ if prompt := st.chat_input("Frage eingeben..."):
         full_response = ""
         success = False
         
-        # Wir probieren Keys durch, bis einer geht
+        # Load-Balancing (Keys durchprobieren)
         for attempt in range(5):
             try:
                 genai.configure(api_key=get_random_key())
+                # Wir nehmen das schnellste Modell: 1.5 Flash
                 model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_instruction)
                 
-                # History bauen
                 history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
                 chat = model.start_chat(history=history)
                 
-                # Hier ist der Zauber: stream=True
+                # Streaming Starten
                 response_stream = chat.send_message(prompt, stream=True)
                 
-                # Wir bauen die Antwort Stück für Stück auf
                 for chunk in response_stream:
                     if chunk.text:
                         full_response += chunk.text
@@ -127,13 +138,14 @@ if prompt := st.chat_input("Frage eingeben..."):
                 
                 message_placeholder.markdown(full_response)
                 success = True
-                break # Wenn wir hier sind, hat es geklappt -> Raus aus der Schleife
+                break 
             
             except Exception as e:
-                time.sleep(1) # Kurz warten, neuer Versuch
+                # Bei Fehler kurz warten und nächsten Key probieren
+                time.sleep(1)
                 continue
 
         if success:
             st.session_state.messages.append({"role": "model", "content": full_response})
         else:
-            st.error("⚠️ Hohe Auslastung.")
+            st.error("⚠️ Der Server ist gerade überlastet.")
