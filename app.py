@@ -54,7 +54,7 @@ st.title("🧙‍♂️ Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften."}]
+    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften, Business und mehr."}]
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
