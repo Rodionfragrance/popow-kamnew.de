@@ -4,7 +4,7 @@ import google.generativeai as genai
 from duckduckgo_search import DDGS
 
 # --- KONFIGURATION ---
-st.set_page_config(page_title="Rodions Business-Hub", page_icon="🧙‍♂️", layout="wide")
+st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
 # --- CSS ---
 st.markdown("""
@@ -26,12 +26,23 @@ else:
 @st.cache_data
 def load_data():
     try:
-        # Wir laden die CSV so wie sie ist (mit Marken)
+        data = {}
+        # 1. Produkte
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";")
-        csv_text = df.to_string(index=False)
+        data["csv"] = df.to_string(index=False)
+        
+        # 2. Business Wissen (Basis)
         with open("business_wissen.txt", "r", encoding="utf-8") as f:
-            txt_text = f.read()
-        return {"csv": csv_text, "business": txt_text}
+            data["business"] = f.read()
+            
+        # 3. Network Bibel (Go Pro & 5x5) - NEU!
+        try:
+            with open("network_bible.txt", "r", encoding="utf-8") as f:
+                data["bible"] = f.read()
+        except:
+            data["bible"] = "Keine Experten-Daten gefunden."
+            
+        return data
     except Exception as e:
         return None
 
@@ -44,7 +55,6 @@ if not db:
 def get_trend_info(query):
     try:
         with DDGS() as ddgs:
-            # Suche OHNE Markennamen in der Ausgabe
             results = list(ddgs.text(f"{query} Duftnoten Beschreibung", max_results=1))
             return results[0]['body'] if results else ""
     except: return ""
@@ -54,7 +64,7 @@ st.title("🧙‍♂️ Rodions Chogan KI")
 st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften, Business und mehr."}]
+    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften, Produkten, Strategien oder Wissen."}]
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -67,37 +77,32 @@ if prompt := st.chat_input("Befehl eingeben..."):
 
     # Web-Check
     web_context = ""
-    if not any(x in prompt.lower() for x in ["plan", "agb", "versand", "geld"]):
+    if not any(x in prompt.lower() for x in ["plan", "agb", "versand", "geld", "eric", "worre", "strategie"]):
         with st.status("Prüfe Duftnoten...", expanded=False) as status:
             web_context = get_trend_info(prompt)
             status.update(label="Check fertig.", state="complete")
 
-    # --- SYSTEM PROMPT (NEUTRAL & SICHER) ---
+    # --- SYSTEM PROMPT ---
     system_instruction = f"""
     Du bist Rodion, Elite-Mentor für Olfazeta.
     
-    WISSEN:
-    1. PRODUKTE (CSV): {db['csv']}
-    2. BUSINESS (TXT): {db['business']}
-    3. EXTERNE INFOS: {web_context}
+    DEIN WISSEN:
+    1. PRODUKTE: {db['csv']}
+    2. REGELN & PLAN: {db['business']}
+    3. EXPERTEN-STRATEGIE (Go Pro / 5x5): {db.get('bible', '')}
+    4. WEB-INFOS: {web_context}
 
-    🔴 REGEL NR. 1: DER STILLE FILTER (Markenschutz)
-    - Nutze die Spalte "Original_Marke" NUR zum Verstehen der Suche.
-    - Nenne NIEMALS den fremden Markennamen in der Antwort.
-    - Sag stattdessen: "Wenn du diesen [Duftrichtung]-Vibe suchst, empfehle ich unsere **Nr. XY**."
+    🔴 REGEL NR. 1: MARKEN-SCHUTZ
+    - Nutze "Original_Marke" nur intern. Nenne sie NIE im Chat.
+    - Sag: "Wenn du diesen Vibe suchst, nimm Nr. XY."
 
-    🔴 REGEL NR. 2: ANSPRACHE (GENDER NEUTRAL)
-    - Gehe NICHT davon aus, dass der User männlich ist.
-    - Vermeide Anreden wie "Bruder", "Kumpel", "Mein Lieber" oder "Mann".
-    - Nutze ein professionelles, direktes "Du".
-    - Beispiel Falsch: "Das ist genau dein Ding, Bruder."
-    - Beispiel Richtig: "Das ist genau das Richtige für dich."
+    🔴 REGEL NR. 2: ANSPRACHE
+    - Gender-neutral ("Du", keine "Bruder"-Floskeln).
+    - Professionell, direkt, motivierend.
 
-    UPSELLING:
-    - Wenn 'Upsell_Info' in der CSV steht, biete es immer an.
-
-    TONALITÄT:
-    - Kurz, professionell, direkt. Preise **fett**.
+    COACHING-MODUS:
+    - Wenn der User Probleme beim Recruiting hat, nutze das Wissen aus der "Network Bibel" (Eric Worre / 5x5).
+    - Zitiere Strategien: "Wie Eric Worre sagt: Sei ein Farmer..." oder "Denk an die 5x5 Regel..."
 
     Antworte auf: "{prompt}"
     """
