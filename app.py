@@ -50,10 +50,10 @@ def get_trend_info(query):
 
 # --- CHAT ---
 st.title("🦁 Rodions Command Center")
-st.caption("Dein KI-Partner für Vertrieb & Strategie (Modell: Gemini 2.5).")
+st.caption("Dein KI-Partner für Vertrieb & Strategie.")
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften, Upsells oder Business-Regeln."}]
+    st.session_state.messages = [{"role": "model", "content": "Servus. Ich bin bereit. Frag mich nach Düften (Olfazeta Nummern), Upsells oder Business-Regeln."}]
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -71,7 +71,7 @@ if prompt := st.chat_input("Befehl eingeben..."):
             web_context = get_trend_info(prompt)
             status.update(label="Check fertig.", state="complete")
 
-    # --- INTELLIGENTER PROMPT ---
+    # --- INTELLIGENTER PROMPT (SAFE MODE) ---
     system_instruction = f"""
     Du bist Rodion, ein Elite-Mentor für Olfazeta.
     
@@ -80,18 +80,27 @@ if prompt := st.chat_input("Befehl eingeben..."):
     2. BUSINESS (TXT): {db['business']}
     3. LIVE-WEB: {web_context}
 
-    REGELN:
-    - KUNDEN: Sei Sommelier. Empfiehl Klassiker & Geheimtipps (Mytologik/Event).
-    - UPSELL: Wenn 'Upsell_Info' existiert, biete es an!
-    - BUSINESS: Zitiere Regeln/Karriereplan exakt aus dem Text.
-    - RECHT: Sag "Geht in die Richtung von" (NIE "Inspiriert von").
-    - PREISE: Immer **fett**.
+    STRENGE REGELN FÜR DEN VERKAUF:
+    
+    1. MARKEN-SCHUTZ (WICHTIG!):
+       - Du verkaufst **AUSSCHLIESSLICH** Produkte von "Olfazeta", "Aurodhea", "SuppleFit" oder "Mytologik".
+       - Wenn der Kunde nach einer Fremdmarke fragt (z.B. "Hast du Dior Sauvage?"), darfst du **NIEMALS** sagen: "Ja, hier ist es."
+       - Du musst sagen: "Wir führen keine Fremdmarken. Aber ich empfehle dir unsere **Olfazeta Nr. 94**. Die geht genau in diese würzig-frische Duftrichtung."
+       - Benutze Markennamen NUR als Referenz für die Duftfamilie ("Riecht wie...", "Duftzwilling zu..."), nie als Produktnamen.
+
+    2. UPSELLING:
+       - Prüfe die CSV-Spalte 'Upsell_Info'. Wenn dort etwas steht, biete es aktiv an.
+
+    3. BUSINESS-COACH:
+       - Bei Fragen zu Geld/Karriere: Zitiere den Marketingplan 2026 exakt. Fantasiere keine Zahlen.
+
+    4. TONALITÄT:
+       - Direkt, maskulin, professionell. Preise immer **fett**.
 
     Antworte auf: "{prompt}"
     """
 
     try:
-        # UPDATE: Wir nutzen jetzt das verfügbare Modell 'gemini-2.5-flash'
         model = genai.GenerativeModel('gemini-2.5-flash', system_instruction=system_instruction)
         
         history = [{"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages if m["role"] != "system"]
