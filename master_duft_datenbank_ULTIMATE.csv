@@ -74,23 +74,23 @@ ID;Marke_Olfazeta;Inspiriert_Von;Original_Marke;Geschlecht;Duftfamilie;Preis_30m
 146;Nr. 146;Rouge;Pierre Balmain;Unisex;blumig-chypre, rose, ylang;-;-;52,00 €;-;;Parfüm
 147;Nr. 147;Bottled Absolu;Hugo Boss;Men;holzig-leder, apfel, pflaume;18,00 €;35,00 €;-;-;;Parfüm
 148;Nr. 148;Goddess;Burberry;Women;aromatisch-gourmand, vanille, lavendel;18,00 €;35,00 €;-;-;;Parfüm
-2022;EVENT22;Eigenkreation;Olfazeta;Unisex;orientalisch-holzig, tief, edel, special;-;-;60,00 €;-;;Parfüm
-20232;EVENT23M;Eigenkreation;Olfazeta;Men;zitrisch-süss, mysteriös, paris, verführung;-;-;60,00 €;-;;Parfüm
-20231;EVENT23W;Eigenkreation;Olfazeta;Women;süss-fruchtig, verführung, paris, elegant;-;-;60,00 €;-;;Parfüm
-20241;ASTRAL24;Eigenkreation;Olfazeta;Women;blumig-fruchtig, zukunft, strahlend, stern;-;-;60,00 €;-;;Parfüm
-20242;MULTIVERSE;Eigenkreation;Olfazeta;Men;süss-würzig, parallelwelt, stark, maskulin;-;-;60,00 €;-;;Parfüm
-20251;NADIR;Eigenkreation;Olfazeta;Men;zitrisch-frisch, jubiläum, energetisch, kraft;-;-;60,00 €;-;;Parfüm
-20252;IMPERATRIX;Eigenkreation;Olfazeta;Women;blumig-gourmandig, kaiserin, luxuriös, macht;-;-;60,00 €;-;;Parfüm
-5001;Ares;Eigenkreation;Mytologik;Unisex;zitrisch-ledrig, kriegsgott, maskulin, stark, macht;-;-;-;299,00 €;;Parfüm
-5002;Afrodite;Eigenkreation;Mytologik;Women;gourmandig-orientalisch, göttin, liebe, süss, verführung;-;-;-;299,00 €;;Parfüm
-5003;Artemide;Eigenkreation;Mytologik;Women;holzig-aromatisch, jagd, natur, wild, wald;-;-;-;299,00 €;;Parfüm
-5004;Medusa;Eigenkreation;Mytologik;Women;frisch-aquatisch, ozean, mythos, kühl, blick;-;-;-;299,00 €;;Parfüm
-5005;Apollo;Eigenkreation;Mytologik;Men;frisch-orientalisch, sonne, musik, licht, strahlend;-;-;-;299,00 €;;Parfüm
-5006;Zeus;Eigenkreation;Mytologik;Men;würzig-aquatisch, herrscher, blitz, macht, himmel;-;-;-;299,00 €;;Parfüm
-5007;Ermes;Eigenkreation;Mytologik;Men;zitrisch-würzig, bote, reise, dynamisch, flügel;-;-;-;299,00 €;;Parfüm
-1022;LOVE22;Eigenkreation;Scented Love;Unisex;orientalisch-blumig, romantisch, date;19,90 € (25ml);-;-;-;;Parfüm
-1024;LOVE24;Eigenkreation;Scented Love;Unisex;blumig-orientalisch, leidenschaft, herz;24,90 € (25ml);-;-;-;;Parfüm
-1025;LOVE25;Eigenkreation;Scented Love;Unisex;blumig-süss, verspielt, zart;24,90 € (25ml);-;-;-;;Parfüm
+EVENT22;EVENT22;Eigenkreation;Olfazeta;Unisex;orientalisch-holzig, tief, edel, special;-;-;60,00 €;-;;Parfüm
+EVENT23M;EVENT23M;Eigenkreation;Olfazeta;Men;zitrisch-süss, mysteriös, paris, verführung;-;-;60,00 €;-;;Parfüm
+EVENT23W;EVENT23W;Eigenkreation;Olfazeta;Women;süss-fruchtig, verführung, paris, elegant;-;-;60,00 €;-;;Parfüm
+ASTRAL24;ASTRAL24;Eigenkreation;Olfazeta;Women;blumig-fruchtig, zukunft, strahlend, stern;-;-;60,00 €;-;;Parfüm
+MULTIVERSE;MULTIVERSE;Eigenkreation;Olfazeta;Men;süss-würzig, parallelwelt, stark, maskulin;-;-;60,00 €;-;;Parfüm
+NADIR;NADIR;Eigenkreation;Olfazeta;Men;zitrisch-frisch, jubiläum, energetisch, kraft;-;-;60,00 €;-;;Parfüm
+IMPERATRIX;IMPERATRIX;Eigenkreation;Olfazeta;Women;blumig-gourmandig, kaiserin, luxuriös, macht;-;-;60,00 €;-;;Parfüm
+Ares;Ares;Eigenkreation;Mytologik;Unisex;zitrisch-ledrig, kriegsgott, maskulin, stark, macht;-;-;299,00 €;-;;Parfüm
+Afrodite;Afrodite;Eigenkreation;Mytologik;Women;gourmandig-orientalisch, göttin, liebe, süss, verführung;-;-;299,00 €;-;;Parfüm
+Artemide;Artemide;Eigenkreation;Mytologik;Women;holzig-aromatisch, jagd, natur, wild, wald;-;-;299,00 €;-;;Parfüm
+Medusa;Medusa;Eigenkreation;Mytologik;Women;frisch-aquatisch, ozean, mythos, kühl, blick;-;-;299,00 €;-;;Parfüm
+Apollo;Apollo;Eigenkreation;Mytologik;Men;frisch-orientalisch, sonne, musik, licht, strahlend;-;-;299,00 €;-;;Parfüm
+Zeus;Zeus;Eigenkreation;Mytologik;Men;würzig-aquatisch, herrscher, blitz, macht, himmel;-;-;299,00 €;-;;Parfüm
+Ermes;Ermes;Eigenkreation;Mytologik;Men;zitrisch-würzig, bote, reise, dynamisch, flügel;-;-;299,00 €;-;;Parfüm
+LOVE22;LOVE22;Eigenkreation;Scented Love;Unisex;orientalisch-blumig, romantisch, date;19,90 € (25ml);-;-;-;;Parfüm
+LOVE24;LOVE24;Eigenkreation;Scented Love;Unisex;blumig-orientalisch, leidenschaft, herz;24,90 € (25ml);-;-;-;;Parfüm
+LOVE23;LOVE25;Eigenkreation;Scented Love;Unisex;blumig-süss, verspielt, zart;24,90 € (25ml);-;-;-;;Parfüm
 45;Baby Boy;Eigenkreation;Kids;Kids;frisch, sanft, junge, mild;29,00 €;-;-;-;;Parfüm
 58;Baby Girl;Eigenkreation;Kids;Kids;blumig-frisch, mädchen, sanft;29,00 €;-;-;-;;Parfüm
 59;Baby Joy;Eigenkreation;Kids;Kids;pudrig-sanft, baby, neutral, weich;29,00 €;-;-;-;;Parfüm
