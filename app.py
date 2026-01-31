@@ -218,8 +218,9 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
 
         # --- VERBINDUNG ZU GOOGLE GEMINI ---
         success = False
+        # Wir nutzen jetzt die STANDARD Modelle (sicherer)
         models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro"]
-        random.shuffle(api_keys) # Load Balancing
+        random.shuffle(api_keys) 
         
         for model_name in models_to_try:
             if success: break
@@ -248,13 +249,16 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
                         st.session_state.messages.append({"role": "model", "content": full_text})
                         success = True
                         break 
-                except Exception as e:
-                    # HIER ZEIGEN WIR DEN FEHLER ANSTATT IHN ZU VERSTECKEN
-                    st.error(f"Technischer Fehler bei Key ...{key[-5:]}: {e}")
-                    if 'response' in locals():
+                    else:
+                        # HIER IST DER NEUE DEBUGGER!
+                        # Wenn Google NICHT 200 (OK) sendet, zeigen wir den Fehler an:
+                        st.error(f"❌ API-Fehler bei Key ...{key[-5:]} mit Modell {model_name}")
                         st.error(f"Status Code: {response.status_code}")
-                        st.error(f"Details: {response.text}")
+                        st.code(response.text) # Zeigt die genaue Meldung von Google an
+
+                except Exception as e:
+                    st.error(f"❌ Technischer Absturz bei Key ...{key[-5:]}: {e}")
                     continue
             
         if not success:
-            st.error("⚠️ Verbindung fehlgeschlagen. Siehe Fehlermeldungen oben. Bitte den Fehler an Rodion schicken")
+            st.error("⚠️ Fehler. Bitte Screenshot von den roten Fehlermeldungen oben machen und Rodion schicken!")
