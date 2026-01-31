@@ -62,7 +62,7 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- PROMPT MIT MARKENSCHUTZ ---
+        # --- PROMPT ---
         system_text = f"""
         Du bist Rodion, Elite-Mentor für Olfazeta.
         DATEN: {db['csv'] if db else ''} {db['business'] if db else ''}.
@@ -75,53 +75,58 @@ if prompt := st.chat_input("Frage eingeben..."):
         
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
 
-        # --- DIE DIREKTE API ANBINDUNG (Ohne Bibliothek) ---
+        # --- DIE DIREKTE API ANBINDUNG (REST) ---
         success = False
+        error_details = []
         
-        # Wir nutzen 'gemini-1.5-flash', weil es schnell ist und hohe Limits hat
-        model_name = "gemini-1.5-flash"
+        # Wir probieren erst Flash (schnell), dann Pro (altes Modell als Backup)
+        # Manchmal ist Flash leer, aber Pro hat noch Quote!
+        models_to_test = ["gemini-1.5-flash", "gemini-pro"]
         
         # Keys mischen
         random.shuffle(api_keys)
         
-        for key in api_keys:
-            try:
-                # Das ist der direkte Link zu Google (funktioniert immer)
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
-                
-                headers = {'Content-Type': 'application/json'}
-                data = {
-                    "contents": [{
-                        "parts": [{"text": final_prompt}]
-                    }]
-                }
-                
-                # Wir senden die Post per Internet (requests)
-                response = requests.post(url, headers=headers, json=data)
-                
-                if response.status_code == 200:
-                    # Erfolg! Daten auspacken
-                    result_json = response.json()
-                    answer = result_json['candidates'][0]['content']['parts'][0]['text']
+        for model_name in models_to_test:
+            if success: break
+            
+            for key in api_keys:
+                try:
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
+                    headers = {'Content-Type': 'application/json'}
+                    data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                     
-                    # Streaming simulieren (für den Effekt)
-                    for word in answer.split():
-                        full_text += word + " "
-                        placeholder.markdown(full_text + "▌")
-                        time.sleep(0.05)
+                    response = requests.post(url, headers=headers, json=data)
                     
-                    placeholder.markdown(full_text)
-                    st.session_state.messages.append({"role": "model", "content": full_text})
-                    success = True
-                    break
-                else:
-                    # Wenn Google Fehler meldet (z.B. 429 Limit), probieren wir den nächsten Key
-                    # st.write(f"Key Error: {response.status_code}") # Debug
+                    if response.status_code == 200:
+                        # Erfolg!
+                        result_json = response.json()
+                        try:
+                            answer = result_json['candidates'][0]['content']['parts'][0]['text']
+                        except:
+                            # Manchmal blockiert der Sicherheitsfilter die Antwort
+                            answer = "Entschuldigung, meine Antwort wurde vom Sicherheitsfilter blockiert. Bitte formuliere die Frage etwas anders."
+
+                        # Streaming Effekt
+                        for word in answer.split():
+                            full_text += word + " "
+                            placeholder.markdown(full_text + "▌")
+                            time.sleep(0.05)
+                        
+                        placeholder.markdown(full_text)
+                        st.session_state.messages.append({"role": "model", "content": full_text})
+                        success = True
+                        break
+                    else:
+                        # Fehler protokollieren (aber weitermachen)
+                        error_details.append(f"Modell {model_name} mit Key ...{key[-4:]}: Code {response.status_code}")
+                        continue
+                        
+                except Exception as e:
+                    error_details.append(str(e))
                     continue
-                    
-            except Exception as e:
-                continue
 
         if not success:
-            st.error("⚠️ Alle Keys sind aufgebraucht (Limit erreicht) oder gesperrt. Bitte erstelle morgen neue Keys oder nutze ein anderes Google Konto.")
-            st.info("Hinweis: Der Server ist okay, aber Google lässt deine Keys gerade nicht durch.")
+            st.error("⚠️ Limit erreicht.")
+            with st.expander("Details für Rodion (Hier klicken)"):
+                st.write(error_details)
+                st.info("LÖSUNG: Erstelle ein 'Neues Projekt' in Google AI Studio und generiere dort einen frischen Key.")
