@@ -218,8 +218,8 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
 
         # --- VERBINDUNG ZU GOOGLE GEMINI ---
         success = False
-        # Wir nutzen jetzt die STANDARD Modelle (sicherer)
-        models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro"]
+        # Wir probieren jetzt ALLE Varianten durch, bis eine klappt
+        models_to_try = ["gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-pro", "gemini-1.0-pro"]
         random.shuffle(api_keys) 
         
         for model_name in models_to_try:
