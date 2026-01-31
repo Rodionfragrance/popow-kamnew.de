@@ -126,14 +126,14 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
            WICHTIG: Höre NICHT nach Mytologik auf! Biete Alternativen für jedes Budget.
            Sortiere die finale Liste strikt ABSTEIGEND nach Preis.
            
-           -> OUTPUT FORMAT (WICHTIG: Nutze Markdown fett für Name/Preis und mache IMMER Leerzeilen zwischen den Elementen!):
+           -> OUTPUT FORMAT (Design-Vorschrift: Nutze **Fett** für Name/Preis, mache Leerzeilen zwischen Abschnitten!):
            "Hier ist Rodions Empfehlung:
-           
+
            ---
 
            ### 🏆 Option 1 (Premium): **[Name]** - **[Preis]**
            
-           [Pitch]
+           [Pitch: Warum dieser Duft?]
 
            ---
 
@@ -147,11 +147,16 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
            
            [Pitch]
 
-           [...bis zu 5 Optionen...]
+           [...bis zu 5 Optionen, immer mit Trennlinien...]
 
            ---
 
-           ### 🛍️ Cross-Selling: **[Upsell]**"
+           ### 🛍️ Cross-Selling: **[Upsell]**
+           
+           ---
+
+           ### ❓ Abschlussfrage (Strategisch): 
+           [Gib dem Berater eine offene Frage an die Hand, die er dem Kunden stellen soll, um den Sack zuzumachen.]"
         
         FALL B: USER FRAGT NACH BUSINESS / DOWNLINE / REKRUTIERUNG / MINDSET
         -> Nutze NUR "Network-Marketing-Bibel" und "Business-Wissen".
@@ -159,7 +164,12 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         -> VERBOT: Stelle dich NICHT vor ("Das ist Rodion" oder "Hier ist Rodion"). Starte DIREKT mit dem Inhalt/Rat.
         -> STRATEGIE: Sei gnadenlos ehrlich, direkt und strategisch.
         -> OUTPUT FORMAT: 
-           Freier Text. Fettgedrucktes für Key-Learnings. Schritt-für-Schritt Liste.
+           Freier Text. Fettgedrucktes für Key-Learnings. Schritt-für-Schritt Liste. 
+           
+           ---
+           
+           ### 🧠 Reflexionsfrage an dich:
+           [Stelle eine harte, direkte Frage an den Berater, die ihn zum Nachdenken oder Handeln zwingt. Z.B. 'Wann fängst du an, Profi zu sein?']
 
         ---
 
@@ -192,12 +202,13 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
                 
                 if list_response.status_code == 200:
                     models_data = list_response.json().get('models', [])
+                    # Wir suchen das beste Modell, das 'generateContent' kann
                     for m in models_data:
                         m_name = m['name'].replace('models/', '')
                         methods = m.get('supportedGenerationMethods', [])
                         
                         if 'generateContent' in methods:
-                            # Wir bevorzugen Flash für Speed, aber nehmen auch Pro
+                            # Priorität: Flash -> Pro -> Irgendeins
                             if 'flash' in m_name and '1.5' in m_name:
                                 valid_model = m_name
                                 break
