@@ -89,7 +89,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # --- 8. PROMPT & ANTWORT ---
-if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Multi-Language)"):
+if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-Language)"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -121,44 +121,44 @@ if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Mult
         1. **ANALYSE:** Sucht der User nach einer KONKRETEN NUMMER (z.B. "118", "42") oder einem KONKRETEN NAMEN (z.B. "Baccarat", "Gisada")?
            
            - **SZENARIO 1: KONKRETE SUCHE (Der Kunde weiß, was er will)**
-             a) **Suche** die entsprechende Zeile in der CSV (z.B. Zeile mit "Nr. 118").
-             b) **Option 1 (Die Antwort):** MUSS zwingend das gesuchte Produkt sein! (z.B. "Hier ist deine Nr. 118").
-             c) **Option 2 (Das Upgrade):** Biete JETZT eine höherwertige Alternative an (Mytologik/Olfazeta), die ähnlich riecht. Pitch: "Wenn du 118 magst, wirst du [Mytologik] lieben, weil..."
-             d) **UPSELL-PFLICHT (EXTREM WICHTIG):** Lies die Spalte `Upsell_Info` der gefundenen Zeile (Option 1). 
-                - Steht dort Text (z.B. "Refill", "Duschgel")? -> DANN LISTE ES AUF! Sag nicht "Kein Upsell".
-                - Steht dort "-" oder leer? -> Dann empfiehl allgemein passendes Duschgel oder Körpercreme.
-                - BEISPIEL: Wenn bei Nr. 118 "Refill T118" steht, MUSST du das Refill anbieten.
+             a) **Suche** die entsprechende Zeile in der CSV.
+             b) **Option 1 (Die Antwort):** MUSS das gesuchte Produkt sein.
+             c) **Option 2 (Das Upgrade):** Biete JETZT eine höherwertige Alternative an (Mytologik/Olfazeta). Pitch: "Wenn du [Gesucht] magst, ist [Mytologik] dein nächstes Level."
+             d) **UPSELL-PFLICHT (ABSOLUTER ZWANG):** Schau in die Spalte `Upsell_Info` der gefundenen Zeile.
+                Steht da ein Code (z.B. "BSF118", "T118")? -> DANN MUSST DU IHN NENNEN!
+                WARNUNG: Schreibe NICHT "Passendes Duschgel", wenn in der Spalte "BSF118 - Unisex Duschgel" steht. Kopiere den Text aus der Spalte!
            
-           - **SZENARIO 2: FREMDPRODUKT NICHT IN DB (Spezialfälle & Allgemein)**
-             a) **GISADA AMBASSADOR:** Empfiehl **Nr. 68** (wegen Fruchtigkeit/Ananas) ODER **Nr. 87** (Azzaro Wanted - Ingwer/Zitrone/Süße). Das sind die besten Matches. (Nicht Nr. 94!).
-             b) **ALLE ANDEREN Fremdprodukte:** Analysiere die Duftnoten des gesuchten Produkts (z.B. JPG Paradise = Kokos, Minze). Suche dann in der CSV nach dem Duft, der in 'Duftfamilie' diese Noten hat.
-             c) Pitch: "Haben wir nicht direkt, aber [Alternative] ist die perfekte, günstigere und intensivere Variante für dich, da sie ebenfalls [Noten] enthält."
+           - **SZENARIO 2: FREMDPRODUKT NICHT IN DB (Spezialfälle)**
+             a) **GISADA AMBASSADOR:** Empfiehl **Nr. 68** oder **Nr. 87**.
+             b) **Andere:** Analysiere die Duftnoten und suche das Match in der CSV.
+             c) Pitch: "Haben wir nicht direkt, aber [Alternative] ist die perfekte, intensivere Variante."
              d) Biete danach ein Mytologik-Upgrade an.
            
-           - **SZENARIO 3: ALLGEMEINE SUCHE (z.B. "Winterduft", "Sport")**
-             a) Hier gilt der Standard-Trichter: Mytologik (Option 1) -> Olfazeta -> Standard.
+           - **SZENARIO 3: ALLGEMEINE SUCHE (z.B. "Winterduft")**
+             a) Standard-Trichter: Mytologik -> Olfazeta -> Standard.
         
-        2. **LAYOUT (Zwingend):**
-           Nutze Markdown (**Fett**) und Leerzeilen für perfekte Lesbarkeit.
+        2. **LAYOUT & INHALT (ZWINGEND EINHALTEN):**
+           - Nutze Markdown Fett `**...**` für Name, Code und Preis.
+           - Der **Bestellcode** (aus Spalte `ID`) MUSS IMMER im Titel stehen!
            
            -> OUTPUT FORMAT:
            "Hier ist Rodions Empfehlung:
 
            ---
 
-           ### 🏆 Option 1 (Dein Treffer/Favorit): **[Name]** - **[Preis]**
+           ### 🏆 Option 1 (Dein Treffer/Favorit): **[Name]** (Code: **[ID]**) - **[Preis]**
            
-           [Pitch: Bestätige die Wahl oder erkläre die Alternative.]
+           [Pitch]
 
            ---
 
-           ### ✨ Option 2 (Das Luxus-Upgrade): **[Name]** - **[Preis]**
+           ### ✨ Option 2 (Das Luxus-Upgrade): **[Name]** (Code: **[ID]**) - **[Preis]**
            
-           [Pitch: Warum dieser Duft noch besser/intensiver/exklusiver ist.]
+           [Pitch]
 
            ---
 
-           ### 💎 Option 3: **[Name]** - **[Preis]**
+           ### 💎 Option 3: **[Name]** (Code: **[ID]**) - **[Preis]**
            
            [Pitch]
 
@@ -168,7 +168,7 @@ if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Mult
 
            ### 🛍️ Cross-Selling (Umsatz-Booster):
            **[Hier MUSS der Inhalt der Spalte 'Upsell_Info' des Hauptduftes stehen!]**
-           [Füge erklärenden Text hinzu, warum das wichtig ist (Haltbarkeit, Layering).]
+           (Falls die Spalte Codes wie BSF... oder T... enthält, nenne sie exakt so!)
            
            ---
 
@@ -218,7 +218,6 @@ if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Mult
                     for m in models_data:
                         m_name = m['name'].replace('models/', '')
                         methods = m.get('supportedGenerationMethods', [])
-                        
                         if 'generateContent' in methods:
                             if 'flash' in m_name and '1.5' in m_name:
                                 valid_model = m_name
