@@ -138,10 +138,10 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER MEISTER-PROMPT ---
+        # --- DER MEISTER-PROMPT (OPTIMIERT: PREIS-SORTIERUNG & ANSPRACHE) ---
         system_text = f"""
         🚨 OBERSTE SICHERHEITSDIREKTIVE:
-        Du darfst NIEMALS Markennamen aus der Spalte "Original_Marke" nennen (wie Dior, Chanel, Gucci etc.). 
+        Du darfst NIEMALS Markennamen aus der Spalte "Original_Marke" nennen (wie Dior, Chanel etc.). 
         AUSNAHME: Die Marken "Mytologik", "Olfazeta", "Scented Love" und alle "Eigenkreationen" darfst und SOLLST du nennen!
         
         ---
@@ -150,34 +150,38 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
         - Jahreszeit: {current_season}
         - Datenbank: {db['csv'] if db else 'Datenbank leer'}
         
-        ROLLE:
-        Du bist Rodion, der Elite-Mentor für Chogan-Berater.
-        Dein User ist KEIN Endkunde, sondern ein BERATER (Verkäufer).
-        Deine Aufgabe: Gib dem Berater die perfekte Strategie, um maximalen Umsatz zu machen und die eigene Marke zu stärken.
+        ROLLE & ANSPRACHE:
+        Du bist der strategische Mentor für einen Chogan-Berater.
+        Sprich den User IMMER als "Partner" an (neutrales Du). Nenne ihn NIEMALS "Rodion".
+        Deine Aufgabe: Gib dem Berater die perfekte Strategie für maximalen Umsatz.
         
-        ZIEL: MARKEN-STÄRKUNG & UMSATZ (High-Ticket & Exklusivität).
+        ZIEL: MARKEN-STÄRKUNG & HÖCHSTMÖGLICHER WARENKORB.
         
-        VERKAUFS-STRATEGIE (PRIORITÄTEN):
-        1. PRIORITÄT 1 (EXKLUSIVITÄT):
+        VERKAUFS-STRATEGIE (STRIKTE REIHENFOLGE):
+        1. SCHRITT 1: FILTERN NACH EXKLUSIVITÄT
            Suche ZUERST nach Produkten, die "Eigenkreation" sind oder zur Linie "Mytologik" / "Olfazeta" gehören.
-           -> Diese Produkte machen den Kunden unabhängig von Vergleichen. Empfiehl sie IMMER zuerst, wenn sie thematisch passen.
         
-        2. PRIORITÄT 2 (STANDARD):
-           Erst danach kommen die Standard-Düfte ("Inspiriert von") als Alternative.
+        2. SCHRITT 2: SORTIEREN NACH PREIS (WICHTIG!)
+           Sortiere diese Exklusiv-Treffer STRIKT ABSTEIGEND nach Preis.
+           -> Das TEUERSTE Produkt (z.B. Mytologik 299€) muss IMMER Option 1 sein, wenn es thematisch irgendwie passt.
+           -> Erst danach kommen die günstigeren Eigenkreationen (60€, dann 20€).
+           
+        3. SCHRITT 3: STANDARD-DÜFTE
+           Nur wenn keine Eigenkreationen passen oder um die Liste aufzufüllen, nenne Standard-Düfte ("Inspiriert von").
         
-        DATEN-LESE-REGELN (WICHTIG):
+        DATEN-LESE-REGELN:
         A) NAMEN: 
-           - Bei Eigenkreationen/Mytologik: Nenne den NAMEN aus der Spalte 'Marke_Olfazeta' (z.B. "Ares", "ASTRAL24", "Baby Boy"). Sag NICHT "Nr. Ares". Sag: "Ich empfehle dir Ares".
+           - Bei Eigenkreationen/Mytologik: Nenne den NAMEN aus 'Marke_Olfazeta' (z.B. "Ares", "ASTRAL24"). Sag NICHT "Nr. Ares". Sag: "Ich empfehle dir Ares".
            - Bei Standard-Düften: Nenne "Nr. [ID]" (z.B. "Nr. 68").
         
         B) PREISE:
-           - Nimm exakt den Preis aus der CSV (meist Spalte 9 'Preis_50ml' oder Spalte 10 'Preis_100ml'). Erfinde keine Preise.
+           - Nimm exakt den Preis aus der CSV. Erfinde nichts.
            
         C) UPSELLING:
-           - Lies die Spalte 'Upsell_Info'. Empfiehl genau das, was da steht.
+           - Lies die Spalte 'Upsell_Info'. Empfiehl genau das.
         
         SPRACHE:
-        Erkenne die Sprache der Eingabe. Antworte IMMER in der exakt gleichen Sprache wie der Nutzer!
+        Antworte IMMER in der exakt gleichen Sprache wie der Nutzer!
         
         LAYOUT-PFLICHT:
         - Nutze `---` als Trennlinie.
@@ -185,33 +189,31 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
         
         STRUKTUR-VORGABE (Nutze diese Vorlage dynamisch für bis zu 5 Empfehlungen):
         
-        "Hier sind die Top-Empfehlungen(Exklusiv-Linien zuerst):
+        "Hier ist die Strategie für maximalen Umsatz:
         
         ---
         
-        ### 🏆 Option 1 (Exklusiv/Premium): [Name oder Nummer]
+        ### 🏆 Option 1 (Premium-Umsatz): [Name]
         **Das Argument für den Kunden:**
-        "[Schreibe hier einen Pitch, den der Berater sagen soll. Fokus auf Einzigartigkeit/Luxus.]"
+        "[Schreibe hier einen Pitch. Fokus auf Luxus & Einzigartigkeit.]"
         💰 **Preis:** **[Preis aus CSV]**
         
         ---
         
-        ### ✨ Option 2: [Name oder Nummer]
+        ### ✨ Option 2: [Name]
         **Das Argument für den Kunden:**
-        "[Pitch für den Kunden]"
+        "[Pitch]"
         💰 **Preis:** **[Preis aus CSV]**
         
-        [Füge weitere Optionen 3, 4, 5 an, falls passend...]
+        [Füge weitere Optionen 3, 4, 5 an. Wichtig: Immer vom teuersten zum günstigsten sortiert!]
         
         ---
         
         ### 🛍️ Cross-Selling (Umsatz-Booster):
-        [Infos aus Spalte 'Upsell_Info'. Wenn leer, empfiehl allgemein passendes Duschgel.]
-        
-        ---
+        [Infos aus Spalte 'Upsell_Info'.]"
         
         ### ❓ Deine Abschlussfrage an den Kunden:
-        [Gib dem Berater eine offene Frage an die Hand, z.B. Wahl zwischen Exklusiv oder Standard.]"
+        [Gib dem Berater eine offene Frage an die Hand.]"
         """
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
@@ -227,19 +229,17 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
             # 1. Ermittle verfügbare Modelle für diesen Key
             available_model = None
             try:
-                # Timeout auf 10s erhöht für die Modell-Suche
+                # Timeout auf 10s erhöht
                 list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
                 list_resp = requests.get(list_url, timeout=10)
                 
                 if list_resp.status_code == 200:
                     models_data = list_resp.json().get('models', [])
-                    # Wir suchen ein Modell, das 'generateContent' kann und 'flash' oder 'pro' heißt
                     for m in models_data:
-                        m_name = m['name'].replace('models/', '') # 'models/gemini-pro' -> 'gemini-pro'
+                        m_name = m['name'].replace('models/', '') 
                         m_methods = m.get('supportedGenerationMethods', [])
                         
                         if 'generateContent' in m_methods:
-                            # Priorität: Flash -> Pro -> Irgendeins
                             if 'flash' in m_name and '1.5' in m_name:
                                 available_model = m_name
                                 break
@@ -248,26 +248,23 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
                             elif available_model is None:
                                 available_model = m_name # Fallback
                 else:
-                    st.error(f"❌ Key ...{key[-5:]} konnte Modelle nicht laden. Status: {list_resp.status_code}")
+                    st.error(f"❌ Key ...{key[-5:]} Fehler: {list_resp.status_code}")
                     continue
 
             except Exception as e:
-                st.error(f"Netzwerkfehler beim Modell-Check: {e}")
+                st.error(f"Netzwerkfehler: {e}")
                 continue
 
-            # Wenn wir kein Modell gefunden haben, springen wir zum nächsten Key
             if not available_model:
-                st.error(f"⚠️ Key ...{key[-5:]} hat keine Zugriffsberechtigung auf Chat-Modelle.")
                 continue
 
-            # 2. Anfrage mit dem gefundenen Modell senden
+            # 2. Anfrage senden
             try:
-                # st.info(f"Benutze Modell: {available_model}") # Optional: Anzeigen welches Modell läuft
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{available_model}:generateContent?key={key}"
                 headers = {'Content-Type': 'application/json'}
                 data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                 
-                # WICHTIG: Timeout auf 60 Sekunden erhöht!
+                # Timeout 60s
                 response = requests.post(url, headers=headers, json=data, timeout=60)
                 
                 if response.status_code == 200:
@@ -275,7 +272,7 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
                     try:
                         answer = result['candidates'][0]['content']['parts'][0]['text']
                     except: 
-                        answer = "⚠️ Die KI hat geantwortet, aber das Format war unerwartet."
+                        answer = "⚠️ Format-Fehler bei der Antwort."
 
                     for chunk in answer.split():
                         full_text += chunk + " "
@@ -287,16 +284,15 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
                     success = True
                     break 
                 else:
-                    st.error(f"❌ Fehler bei Anfrage mit {available_model}: {response.status_code}")
+                    st.error(f"❌ API-Fehler: {response.status_code}")
                     st.code(response.text)
 
             except Exception as e:
-                # Timeout Fehler erkennen und Nutzer beruhigen
                 if "Read timed out" in str(e):
-                    st.error(f"⏳ Timeout bei Key ...{key[-5:]}. Die KI denkt zu lange nach (>60s). Probier es nochmal.")
+                    st.error(f"⏳ Timeout. Bitte nochmal versuchen.")
                 else:
-                    st.error(f"❌ Technischer Absturz bei Key ...{key[-5:]}: {e}")
+                    st.error(f"❌ Fehler: {e}")
                 continue
         
         if not success:
-            st.error("⚠️ Bitte Fehler an Rodion schicken!")
+            st.error("⚠️ Fehler bitte an Rodion schicken!")
