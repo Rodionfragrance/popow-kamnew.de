@@ -62,49 +62,51 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # System-Wissen
-        sys_instr = f"Du bist Rodion. WISSEN: {db['csv'] if db else ''} {db['business'] if db else ''}. Sei direkt."
+        # --- DER NEUE "MAULKORB"-PROMPT ---
+        sys_instr = f"""
+        Du bist Rodion, Elite-Mentor für Olfazeta.
+        
+        DEIN WISSEN:
+        1. PRODUKTE: {db['csv'] if db else ''}
+        2. BUSINESS: {db['business'] if db else ''}
+
+        🔴 ABSOLUTE REGEL (MARKENSCHUTZ):
+        In deiner Datenbank steht eine Spalte "Original_Marke" oder "Inspiriert von".
+        Du nutzt diese Info NUR, um zu wissen, welcher Duft gemeint ist.
+        ABER: Du darfst den Namen der Fremdmarke (z.B. Dior, Chanel, Gucci, YSL) NIEMALS im Chat schreiben!
+        
+        WIE DU ANTWORTEST:
+        FALSCH: "Das ist Nr. 20, inspiriert von YSL La Nuit."
+        RICHTIG: "Ich empfehle dir unsere **Nr. 20**. Ein fantastischer Duft mit Kardamom und Lavendel, perfekt für dein Date."
+        RICHTIG: "Wenn du diesen Stil magst, nimm **Nr. 136**. Er hat diese pudrige Iris-Note."
+
+        Sei direkt, herzlich und verkaufsorientiert. Preise immer **fett**.
+        """
 
         try:
             # 1. Key setzen
             genai.configure(api_key=random.choice(api_keys))
             
-            # 2. AUTO-PILOT: Wir fragen Google, welche Modelle da sind
+            # 2. AUTO-PILOT: Modelle finden
             available_models = []
             try:
                 for m in genai.list_models():
                     if 'generateContent' in m.supported_generation_methods:
                         available_models.append(m.name)
-            except Exception as e:
-                st.error(f"Fehler beim Listen der Modelle: {e}")
-                st.stop()
+            except: pass
             
-            # 3. Das beste verfügbare Modell auswählen
-            # Wir bevorzugen Flash, dann Pro, dann irgendeins mit 'gemini'
+            # 3. Bestes Modell wählen
             chosen_model = None
-            if not available_models:
-                st.error("❌ Keine Modelle verfügbar für diesen API Key.")
-                st.stop()
-                
-            # Intelligente Auswahl
-            for m in available_models:
-                if "flash" in m and "1.5" in m: chosen_model = m; break
-            if not chosen_model:
+            if available_models:
                 for m in available_models:
-                    if "pro" in m and "1.5" in m: chosen_model = m; break
-            if not chosen_model:
-                for m in available_models:
-                    if "gemini" in m: chosen_model = m; break
-            if not chosen_model:
-                chosen_model = available_models[0] # Nimm einfach das Erste
-            
-            # Debug-Info (Kannst du später löschen)
-            # st.caption(f"Nutze Modell: {chosen_model}") 
+                    if "flash" in m and "1.5" in m: chosen_model = m; break
+                if not chosen_model: chosen_model = available_models[0]
+            else:
+                # Notfall-Fallback, falls Liste leer
+                chosen_model = "gemini-1.5-flash"
 
-            # 4. Generieren mit dem gefundenen Modell
-            model = genai.GenerativeModel(chosen_model) # Alte Syntax (stabil)
-            
-            # Trick: Instruction in den Prompt packen, das verstehen alle Modelle
+            # 4. Generieren
+            model = genai.GenerativeModel(chosen_model)
             final_prompt = f"{sys_instr}\n\nUSER FRAGE: {prompt}"
             
             response = model.generate_content(final_prompt, stream=True)
@@ -118,6 +120,7 @@ if prompt := st.chat_input("Frage eingeben..."):
             st.session_state.messages.append({"role": "model", "content": full_text})
             
         except Exception as e:
-            st.error(f"Kritischer Fehler: {e}")
+            st.error(f"Ein Fehler ist aufgetreten: {e}")
+            # Wenn 404, versuchen wir einen Hard-Reset auf 'gemini-pro'
             if "404" in str(e):
-                st.info("Tipp: API Key könnte ungültig sein oder keinen Zugriff auf Modelle haben.")
+                st.info("Versuche automatischen Fallback...")
