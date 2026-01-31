@@ -218,7 +218,7 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
 
         # --- VERBINDUNG ZU GOOGLE GEMINI ---
         success = False
-        models_to_try = ["gemini-2.0-flash", "gemini-flash-latest", "gemini-pro-latest"]
+        models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro"]
         random.shuffle(api_keys) # Load Balancing
         
         for model_name in models_to_try:
@@ -249,7 +249,12 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
                         success = True
                         break 
                 except Exception as e:
+                    # HIER ZEIGEN WIR DEN FEHLER ANSTATT IHN ZU VERSTECKEN
+                    st.error(f"Technischer Fehler bei Key ...{key[-5:]}: {e}")
+                    if 'response' in locals():
+                        st.error(f"Status Code: {response.status_code}")
+                        st.error(f"Details: {response.text}")
                     continue
             
         if not success:
-            st.error("⚠️ Verbindung fehlgeschlagen. Alle API-Keys sind gerade ausgelastet oder ungültig. Warte kurz.")
+            st.error("⚠️ Verbindung fehlgeschlagen. Siehe Fehlermeldungen oben. Bitte den Fehler an Rodion schicken")
