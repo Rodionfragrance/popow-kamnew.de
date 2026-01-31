@@ -89,7 +89,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # --- 8. PROMPT & ANTWORT ---
-if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-Language)"):
+if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Multi-Language)"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -121,16 +121,18 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         1. **ANALYSE:** Sucht der User nach einer KONKRETEN NUMMER (z.B. "118", "42") oder einem KONKRETEN NAMEN (z.B. "Baccarat", "Gisada")?
            
            - **SZENARIO 1: KONKRETE SUCHE (Der Kunde weiß, was er will)**
-             Das ist ein "Direct Hit". Wir müssen sofort liefern, aber dann upgraden.
              a) **Suche** die entsprechende Zeile in der CSV (z.B. Zeile mit "Nr. 118").
              b) **Option 1 (Die Antwort):** MUSS zwingend das gesuchte Produkt sein! (z.B. "Hier ist deine Nr. 118").
              c) **Option 2 (Das Upgrade):** Biete JETZT eine höherwertige Alternative an (Mytologik/Olfazeta), die ähnlich riecht. Pitch: "Wenn du 118 magst, wirst du [Mytologik] lieben, weil..."
-             d) **UPSELL-PFLICHT (WICHTIG):** Lies die Spalte `Upsell_Info` der gefundenen Zeile (Option 1). Wenn da Text steht (z.B. "Refill", "Duschgel"), musst du das unter "Cross-Selling" auflisten. Kopiere die Infos aus der Spalte! Halluziniere keine Standard-Cremes, wenn spezifische Refills da sind.
+             d) **UPSELL-PFLICHT (EXTREM WICHTIG):** Lies die Spalte `Upsell_Info` der gefundenen Zeile (Option 1). 
+                - Steht dort Text (z.B. "Refill", "Duschgel")? -> DANN LISTE ES AUF! Sag nicht "Kein Upsell".
+                - Steht dort "-" oder leer? -> Dann empfiehl allgemein passendes Duschgel oder Körpercreme.
+                - BEISPIEL: Wenn bei Nr. 118 "Refill T118" steht, MUSST du das Refill anbieten.
            
-           - **SZENARIO 2: FREMDPRODUKT NICHT IN DB (z.B. Gisada, Sauvage Elixir)**
-             a) Analysiere die Duftnoten des Fremdprodukts.
-             b) Suche den ähnlichsten Duft in der CSV.
-             c) Pitch: "Haben wir nicht direkt, aber [Alternative] ist die perfekte, günstigere und intensivere Variante für dich (basierend auf Noten X, Y)."
+           - **SZENARIO 2: FREMDPRODUKT NICHT IN DB (Spezialfälle & Allgemein)**
+             a) **GISADA AMBASSADOR:** Empfiehl **Nr. 68** (wegen Fruchtigkeit/Ananas) ODER **Nr. 87** (Azzaro Wanted - Ingwer/Zitrone/Süße). Das sind die besten Matches. (Nicht Nr. 94!).
+             b) **ALLE ANDEREN Fremdprodukte:** Analysiere die Duftnoten des gesuchten Produkts (z.B. JPG Paradise = Kokos, Minze). Suche dann in der CSV nach dem Duft, der in 'Duftfamilie' diese Noten hat.
+             c) Pitch: "Haben wir nicht direkt, aber [Alternative] ist die perfekte, günstigere und intensivere Variante für dich, da sie ebenfalls [Noten] enthält."
              d) Biete danach ein Mytologik-Upgrade an.
            
            - **SZENARIO 3: ALLGEMEINE SUCHE (z.B. "Winterduft", "Sport")**
