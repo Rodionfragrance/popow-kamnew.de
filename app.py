@@ -227,9 +227,9 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
             # 1. Ermittle verfügbare Modelle für diesen Key
             available_model = None
             try:
-                # Wir rufen die Liste der Modelle ab, um Fehler 404 zu vermeiden
+                # Timeout auf 10s erhöht für die Modell-Suche
                 list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
-                list_resp = requests.get(list_url, timeout=5)
+                list_resp = requests.get(list_url, timeout=10)
                 
                 if list_resp.status_code == 200:
                     models_data = list_resp.json().get('models', [])
@@ -267,7 +267,8 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
                 headers = {'Content-Type': 'application/json'}
                 data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                 
-                response = requests.post(url, headers=headers, json=data, timeout=10)
+                # WICHTIG: Timeout auf 60 Sekunden erhöht!
+                response = requests.post(url, headers=headers, json=data, timeout=60)
                 
                 if response.status_code == 200:
                     result = response.json()
@@ -290,8 +291,12 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
                     st.code(response.text)
 
             except Exception as e:
-                st.error(f"❌ Technischer Absturz bei Key ...{key[-5:]}: {e}")
+                # Timeout Fehler erkennen und Nutzer beruhigen
+                if "Read timed out" in str(e):
+                    st.error(f"⏳ Timeout bei Key ...{key[-5:]}. Die KI denkt zu lange nach (>60s). Probier es nochmal.")
+                else:
+                    st.error(f"❌ Technischer Absturz bei Key ...{key[-5:]}: {e}")
                 continue
         
         if not success:
-            st.error("⚠️ Bitte Fehler an Rodion schicken")
+            st.error("⚠️ Bitte Fehler an Rodion schicken!")
