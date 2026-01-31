@@ -15,7 +15,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- KEY MANAGEMENT (Findet jeden Key) ---
+# --- KEY MANAGEMENT ---
+# Wir suchen deine Keys überall
 raw_keys = None
 if "API_KEYS" in st.secrets:
     raw_keys = st.secrets["API_KEYS"]
@@ -28,13 +29,13 @@ if not raw_keys:
     st.error("⚠️ Keine API-Keys gefunden! Bitte in Secrets prüfen.")
     st.stop()
 
-# Sicherstellen, dass es eine Liste ist
+# Liste erzwingen
 if isinstance(raw_keys, str):
     api_keys = [raw_keys]
 elif isinstance(raw_keys, list):
     api_keys = raw_keys
 else:
-    st.error("Format der Keys nicht erkannt.")
+    st.error("Key-Format falsch.")
     st.stop()
 
 # --- DATEN LADEN ---
@@ -56,7 +57,7 @@ st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", u
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
 
-# --- CHAT VERLAUF ---
+# --- CHAT ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -65,7 +66,6 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar=icon):
         st.markdown(msg["content"])
 
-# --- CORE LOGIK ---
 if prompt := st.chat_input("Frage eingeben..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
@@ -75,30 +75,41 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_response = ""
         
-        # WICHTIG: System Instruction als einfacher String (verhindert den 'strip' Fehler der alten Lib)
+        # System-Wissen
         sys_instr = f"Du bist Rodion, Elite-Mentor. WISSEN: {db['csv'] if db else ''} {db['business'] if db else ''}. REGELN: Keine Fremdmarken. Preise fett."
 
-        try:
-            # Key setzen
-            genai.configure(api_key=random.choice(api_keys))
+        # LISTE DER MODELLE (Die Rettungskette)
+        # Wir probieren sie der Reihe nach durch
+        models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+        
+        success = False
+        
+        # Versuchsschleife: Keys UND Modelle rotieren
+        for model_name in models_to_try:
+            if success: break
             
-            # Modell initialisieren (Alte Lib Syntax - Robust)
-            model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=sys_instr)
+            # Wir versuchen jeden Key einmal pro Modell
+            current_key = random.choice(api_keys)
             
-            # Generierung (Ohne History-Objekt, direkt Prompt senden -> Maximale Stabilität)
-            response = model.generate_content(prompt, stream=True)
-            
-            for chunk in response:
-                if chunk.text:
-                    full_response += chunk.text
-                    placeholder.markdown(full_response + "▌")
-            
-            placeholder.markdown(full_response)
-            st.session_state.messages.append({"role": "model", "content": full_response})
-            
-        except Exception as e:
-            # Fehler abfangen, falls Modell 404 wirft (Fallback auf Standard)
-            if "404" in str(e):
-                st.error("Modell nicht erreichbar. Versuche Neustart.")
-            else:
-                st.error(f"Technischer Fehler: {e}")
+            try:
+                genai.configure(api_key=current_key)
+                model = genai.GenerativeModel(model_name, system_instruction=sys_instr)
+                
+                # Generierung
+                response = model.generate_content(prompt, stream=True)
+                
+                for chunk in response:
+                    if chunk.text:
+                        full_response += chunk.text
+                        placeholder.markdown(full_response + "▌")
+                
+                placeholder.markdown(full_response)
+                st.session_state.messages.append({"role": "model", "content": full_response})
+                success = True # Geschafft!
+                
+            except Exception as e:
+                # Wenn 404 kommt (Modell nicht gefunden), probieren wir sofort das nächste Modell in der Liste
+                continue
+
+        if not success:
+            st.error("⚠️ Alle KI-Modelle sind gerade nicht erreichbar. Bitte lade die Seite neu (Reboot).")
