@@ -9,18 +9,36 @@ from datetime import datetime
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- UI DESIGN (CSS für schöne Optik) ---
+# --- UI DESIGN (CSS für Luftigkeit & Lesbarkeit) ---
 st.markdown("""
 <style>
+/* Eingabefeld fixieren */
 .stChatInput {position: fixed; bottom: 30px;}
 .stChatMessageAvatar { background-color: #ffffff !important; }
-/* Vergrößert den Text und macht Abstände angenehmer */
-.stMarkdown p { font-size: 16px; line-height: 1.6; margin-bottom: 15px; }
-.stMarkdown h3 { color: #d32f2f; margin-top: 20px; }
+
+/* TEXT-FORMATIERUNG */
+.stMarkdown p {
+    font-size: 16px !important;
+    line-height: 1.7 !important; /* Mehr Luft zwischen Zeilen */
+    margin-bottom: 20px !important; /* Abstand nach jedem Absatz */
+}
+.stMarkdown h3 {
+    color: #d32f2f !important; /* Rodion Rot für Überschriften */
+    margin-top: 30px !important;
+    margin-bottom: 10px !important;
+    border-bottom: 1px solid #eee; /* Trennlinie unter Überschriften */
+    padding-bottom: 5px;
+}
+.stMarkdown ul {
+    margin-bottom: 20px !important;
+}
+.stMarkdown li {
+    margin-bottom: 8px !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# --- JAHRESZEIT ERMITTELN (AUTOMATISCH) ---
+# --- JAHRESZEIT ERMITTELN ---
 def get_current_season():
     month = datetime.now().month
     if month in [12, 1, 2]: return "Winter ❄️"
@@ -69,7 +87,7 @@ db = load_data()
 
 # --- HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption(f"📅 Modus: {current_season} | 🚀 Status: Online") 
+st.caption(f"📅 Saison: {current_season} | 💎 Elite-Modus aktiv") 
 st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
@@ -91,37 +109,47 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER INTELLIGENTE PROMPT ---
+        # --- DER FORMATIERUNGS-PROMPT ---
         system_text = f"""
         Du bist Rodion, Elite-Mentor für Olfazeta.
         
-        SITUATION:
-        - Aktuelle Jahreszeit: {current_season} (WICHTIG! Beachte das bei der Duftwahl!)
-        - Datenbank: {db['csv'] if db else ''} {db['business'] if db else ''}
+        KONTEXT:
+        - Jahreszeit: {current_season}
+        - Daten: {db['csv'] if db else ''} {db['business'] if db else ''}
         
-        DEINE AUFGABE:
-        Empfiehl passende Produkte. Achte darauf, dass sie zur Jahreszeit passen (z.B. im Sommer nichts zu Schweres, im Winter nichts zu Leichtes, außer der Kunde wünscht es explizit).
+        DEIN ZIEL:
+        Berate den Kunden kurz und knackig. Vermeide Textwände!
         
-        REGELN FÜR DAS DESIGN (STRIKT EINHALTEN):
-        1. Nutze KEINE langen Textblöcke. Mach viele Absätze.
-        2. Nutze Emojis.
-        3. MARKENSCHUTZ: Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)! Sag "Unsere Nr. XY".
-        4. PREISE: Immer **fett** markieren.
+        REGELN (STRIKT):
+        1. MARKENSCHUTZ: Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)! Sag "Unsere Nr. XY".
+        2. FORMATIERUNG: Nutze IMMER Leerzeilen zwischen Absätzen.
+        3. PREISE: Immer **fett** (z.B. **30,00 €**).
         
-        STRUKTUR VORLAGE (Nutze exakt dieses Format):
+        NUTZE EXAKT DIESE STRUKTUR (Kopiere das Layout):
         
-        "Hier ist meine Empfehlung für dich [Anrede]:
+        "Hallo [Anrede], hier ist Rodion. Für diesen Anlass empfehle ich dir Folgendes:
         
-        ### 🏆 Top-Favorit: Nr. [Nummer]
-        * **Vibe:** [Beschreibung]
-        * **Warum es passt:** [Begründung mit Bezug zur Jahreszeit {current_season}]
-        * **Preis:** **[Preis] €**
+        ---
         
-        ### ✨ Alternative: Nr. [Nummer]
-        * **Vibe:** [Beschreibung]
-        * **Preis:** **[Preis] €**
+        ### 🏆 1. Der Favorit: Nr. [Nummer]
         
-        💡 **Pro-Tipp:** [Kurzer Tipp zur Anwendung]"
+        🔹 **Der Vibe:** [Kurze Beschreibung]
+        
+        🔹 **Warum er passt:** [Erklärung passend zur Jahreszeit {current_season}]
+        
+        💰 **Preis:** **[Preis] €**
+        
+        ---
+        
+        ### ✨ 2. Die Alternative: Nr. [Nummer]
+        
+        🔹 **Der Vibe:** [Kurze Beschreibung]
+        
+        💰 **Preis:** **[Preis] €**
+        
+        ---
+        
+        💡 **Rodions Pro-Tipp:** [Ein Satz zur Anwendung]"
         """
         
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
@@ -145,7 +173,7 @@ if prompt := st.chat_input("Frage eingeben..."):
                         result = response.json()
                         try:
                             answer = result['candidates'][0]['content']['parts'][0]['text']
-                        except: answer = "Sicherheitsfilter-Blockade."
+                        except: answer = "Antwort blockiert."
 
                         # Streaming
                         for chunk in answer.split():
