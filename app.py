@@ -127,13 +127,16 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
            Sortiere die finale Liste strikt ABSTEIGEND nach Preis.
            
         -> OUTPUT FORMAT (Zwingend!):
-           "Hier ist die Strategie für diesen Kunden (Trichter-Methode):
-           ### 🏆 Option 1 (Premium): [Name] - [Preis]
+           "Hier ist Rodions Empfehlung:
+           ### 🏆 Option 1 (Premium): **[Name]** - **[Preis]**
            [Pitch]
-           ### ✨ Option 2: [Name] - [Preis]
+           ---
+           ### 💎 Option 2: **[Name]** - [Preis]**
            [Pitch]
-           ### 💎 Option 3: [Name] - [Preis]
+           ---
+           ### ✨ Option 3: **[Name]** - [Preis]**
            [Pitch]
+           ---
            [...bis zu 5 Optionen...]
            ### 🛍️ Cross-Selling: [Upsell]"
         
