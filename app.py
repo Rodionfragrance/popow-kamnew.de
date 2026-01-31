@@ -4,19 +4,31 @@ import requests
 import json
 import random
 import time
+from datetime import datetime
 
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- UI DESIGN ---
+# --- UI DESIGN (CSS für schöne Optik) ---
 st.markdown("""
 <style>
 .stChatInput {position: fixed; bottom: 30px;}
 .stChatMessageAvatar { background-color: #ffffff !important; }
-/* Macht die Ausgabe lesbarer */
-.stMarkdown { font-size: 16px; line-height: 1.6; }
+/* Vergrößert den Text und macht Abstände angenehmer */
+.stMarkdown p { font-size: 16px; line-height: 1.6; margin-bottom: 15px; }
+.stMarkdown h3 { color: #d32f2f; margin-top: 20px; }
 </style>
 """, unsafe_allow_html=True)
+
+# --- JAHRESZEIT ERMITTELN (AUTOMATISCH) ---
+def get_current_season():
+    month = datetime.now().month
+    if month in [12, 1, 2]: return "Winter ❄️"
+    elif month in [3, 4, 5]: return "Frühling 🌷"
+    elif month in [6, 7, 8]: return "Sommer ☀️"
+    else: return "Herbst 🍂"
+
+current_season = get_current_season()
 
 # --- KEYS HOLEN & REINIGEN ---
 raw_input = None
@@ -57,6 +69,7 @@ db = load_data()
 
 # --- HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
+st.caption(f"📅 Modus: {current_season} | 🚀 Status: Online") 
 st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
@@ -78,56 +91,53 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER NEUE DESIGN-PROMPT ---
+        # --- DER INTELLIGENTE PROMPT ---
         system_text = f"""
         Du bist Rodion, Elite-Mentor für Olfazeta.
-        DATEN: {db['csv'] if db else ''} {db['business'] if db else ''}.
+        
+        SITUATION:
+        - Aktuelle Jahreszeit: {current_season} (WICHTIG! Beachte das bei der Duftwahl!)
+        - Datenbank: {db['csv'] if db else ''} {db['business'] if db else ''}
         
         DEINE AUFGABE:
-        Berate den Kunden kurz, knackig und visuell ansprechend.
+        Empfiehl passende Produkte. Achte darauf, dass sie zur Jahreszeit passen (z.B. im Sommer nichts zu Schweres, im Winter nichts zu Leichtes, außer der Kunde wünscht es explizit).
         
-        VISUELLE REGELN (WICHTIG):
-        1. Nutze NIEMALS Blocktext. Mach Absätze!
-        2. Nutze Listenpunkte ( - ) für Produkte.
-        3. Nutze Überschriften mit ### für Struktur.
-        4. Mache Preise und Nummern immer **fett**.
+        REGELN FÜR DAS DESIGN (STRIKT EINHALTEN):
+        1. Nutze KEINE langen Textblöcke. Mach viele Absätze.
+        2. Nutze Emojis.
+        3. MARKENSCHUTZ: Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)! Sag "Unsere Nr. XY".
+        4. PREISE: Immer **fett** markieren.
         
-        INHALTLICHE REGELN:
-        1. MARKENSCHUTZ: Nenne NIEMALS die Namen aus der Spalte 'Original_Marke' oder 'Inspiriert von' (kein Dior, Chanel, etc.)!
-        2. VERKAUF: Sag "Das ist unsere **Nr. XY**".
+        STRUKTUR VORLAGE (Nutze exakt dieses Format):
         
-        Beispiel-Format:
-        ### 🌟 Meine Top-Empfehlung
-        - **Nr. XY**: Ein warmer Duft...
-        - **Vibe**: Männlich, stark...
-        - **Preis**: **30,00 €**
+        "Hier ist meine Empfehlung für dich [Anrede]:
         
-        ### 💡 Alternative
-        - **Nr. AB**: ...
+        ### 🏆 Top-Favorit: Nr. [Nummer]
+        * **Vibe:** [Beschreibung]
+        * **Warum es passt:** [Begründung mit Bezug zur Jahreszeit {current_season}]
+        * **Preis:** **[Preis] €**
+        
+        ### ✨ Alternative: Nr. [Nummer]
+        * **Vibe:** [Beschreibung]
+        * **Preis:** **[Preis] €**
+        
+        💡 **Pro-Tipp:** [Kurzer Tipp zur Anwendung]"
         """
+        
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
 
         # --- VERBINDUNG ---
         success = False
-        
-        models_to_try = [
-            "gemini-2.0-flash", 
-            "gemini-flash-latest", 
-            "gemini-pro-latest"
-        ]
-
+        models_to_try = ["gemini-2.0-flash", "gemini-flash-latest", "gemini-pro-latest"]
         random.shuffle(api_keys)
         
         for model_name in models_to_try:
             if success: break
-            
             for key in api_keys:
                 try:
                     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
                     headers = {'Content-Type': 'application/json'}
-                    data = {
-                        "contents": [{"parts": [{"text": final_prompt}]}]
-                    }
+                    data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                     
                     response = requests.post(url, headers=headers, json=data, timeout=10)
                     
@@ -135,8 +145,7 @@ if prompt := st.chat_input("Frage eingeben..."):
                         result = response.json()
                         try:
                             answer = result['candidates'][0]['content']['parts'][0]['text']
-                        except: 
-                            answer = "Sicherheitsfilter hat die Antwort blockiert."
+                        except: answer = "Sicherheitsfilter-Blockade."
 
                         # Streaming
                         for chunk in answer.split():
@@ -148,9 +157,7 @@ if prompt := st.chat_input("Frage eingeben..."):
                         st.session_state.messages.append({"role": "model", "content": full_text})
                         success = True
                         break 
-                    
-                except Exception:
-                    continue
+                except: continue
             
         if not success:
             st.error("⚠️ Verbindung fehlgeschlagen.")
