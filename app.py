@@ -148,60 +148,83 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ZU GOOGLE GEMINI (STABLE LIST) ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI (AUTO-PILOT MODE ✈️) ---
         success = False
         last_error_message = "Kein Verbindungsversuch gestartet."
-        
-        # WICHTIG: Das sind die einzigen 3 offiziellen Namen, die aktuell garantiert funktionieren.
-        # "gemini-pro" wurde entfernt, dafür nutzen wir "gemini-1.0-pro".
-        models_to_check = [
-            "gemini-1.5-flash", 
-            "gemini-1.5-pro",
-            "gemini-1.0-pro" 
-        ]
+        used_model_name = "Unbekannt"
         
         random.shuffle(api_keys) 
         
         for key in api_keys:
             if success: break
             
-            for model_name in models_to_check:
-                if success: break
+            # SCHRITT 1: FRAGEN WIR GOOGLE, WELCHE MODELLE DA SIND (LISTMODELS)
+            # Damit verhindern wir den 404 Fehler, weil wir nur existierende Namen nutzen.
+            valid_model = None
+            try:
+                list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
+                list_response = requests.get(list_url, timeout=5)
                 
-                try:
-                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
-                    headers = {'Content-Type': 'application/json'}
-                    data = {"contents": [{"parts": [{"text": final_prompt}]}]}
-                    
-                    # Timeout 60s
-                    response = requests.post(url, headers=headers, json=data, timeout=60)
-                    
-                    if response.status_code == 200:
-                        try:
-                            answer = response.json()['candidates'][0]['content']['parts'][0]['text']
-                            
-                            for chunk in answer.split():
-                                full_text += chunk + " "
-                                placeholder.markdown(full_text + "▌")
-                                time.sleep(0.03)
-                            
-                            placeholder.markdown(full_text)
-                            st.session_state.messages.append({"role": "model", "content": full_text})
-                            success = True
-                        except Exception as parse_err:
-                            last_error_message = f"Antwort-Format ungültig: {parse_err}"
-                            
-                    else:
-                        # Fehler speichern und nächstes Modell probieren
-                        error_json = response.json()
-                        error_msg = error_json.get('error', {}).get('message', response.text)
-                        last_error_message = f"Google Fehler {response.status_code} bei Modell {model_name}: {error_msg}"
-
-                except Exception as e:
-                    last_error_message = f"Technischer Absturz (Exception): {str(e)}"
+                if list_response.status_code == 200:
+                    models_data = list_response.json().get('models', [])
+                    # Wir suchen das beste Modell, das 'generateContent' kann
+                    for m in models_data:
+                        m_name = m['name'].replace('models/', '')
+                        methods = m.get('supportedGenerationMethods', [])
+                        
+                        if 'generateContent' in methods:
+                            # Priorität: Flash -> Pro -> Irgendeins
+                            if 'flash' in m_name and '1.5' in m_name:
+                                valid_model = m_name
+                                break
+                            elif 'pro' in m_name and '1.5' in m_name:
+                                valid_model = m_name
+                            elif valid_model is None: # Nimm das erste verfügbare als Fallback
+                                valid_model = m_name
+                else:
+                    last_error_message = f"Konnte Modell-Liste nicht laden: {list_response.status_code}"
                     continue
+            except Exception as e:
+                last_error_message = f"Fehler beim Auto-Scan der Modelle: {str(e)}"
+                continue
+
+            # Wenn wir kein Modell gefunden haben, ist der Key nutzlos
+            if not valid_model:
+                last_error_message = "Kein passendes 'generateContent' Modell für diesen Key gefunden."
+                continue
+
+            # SCHRITT 2: ANFRAGE SENDEN (MIT DEM GEFUNDENEN NAMEN)
+            try:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
+                headers = {'Content-Type': 'application/json'}
+                data = {"contents": [{"parts": [{"text": final_prompt}]}]}
+                
+                response = requests.post(url, headers=headers, json=data, timeout=60)
+                
+                if response.status_code == 200:
+                    try:
+                        answer = response.json()['candidates'][0]['content']['parts'][0]['text']
+                        for chunk in answer.split():
+                            full_text += chunk + " "
+                            placeholder.markdown(full_text + "▌")
+                            time.sleep(0.03)
+                        
+                        placeholder.markdown(full_text)
+                        st.session_state.messages.append({"role": "model", "content": full_text})
+                        success = True
+                        used_model_name = valid_model # Für Debugging
+                    except Exception as parse_err:
+                        last_error_message = f"Antwort ungültig: {parse_err}"
+                else:
+                    error_json = response.json()
+                    error_msg = error_json.get('error', {}).get('message', response.text)
+                    last_error_message = f"Fehler {response.status_code} bei {valid_model}: {error_msg}"
+
+            except Exception as e:
+                last_error_message = f"Technischer Absturz bei Anfrage: {str(e)}"
+                continue
         
         if not success:
             st.error("⚠️ Fehler bitte an Rodion schicken.")
-            st.warning(f"🔍 Letzter technischer Fehlergrund: {last_error_message}")
-            st.info("Wir haben alle verfügbaren Modelle (1.5-Flash, 1.5-Pro, 1.0-Pro) getestet.")
+            st.warning(f"🔍 Letzter Fehlergrund: {last_error_message}")
+            st.info("Tipp: Wenn 'ListModels' fehlschlägt, ist die 'Generative Language API' in der Google Cloud Console für dieses Projekt vielleicht nicht aktiviert.")
