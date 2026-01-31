@@ -95,7 +95,7 @@ db = load_data()
 
 # --- HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption(f"📅 Saison: {current_season} | 🌍 Multi-Language Mentor | 🛡️ Secure") 
+st.caption(f"📅 Saison: {current_season} | 🌍 Multi-Language Mentor | 🛡️ Dein KI-Mentor für Strategie & Verkauf") 
 st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
