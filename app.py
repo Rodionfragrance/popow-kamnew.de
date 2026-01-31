@@ -148,20 +148,16 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ZU GOOGLE GEMINI (MAXIMUM ROBUSTNESS) ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI (STABLE LIST) ---
         success = False
         last_error_message = "Kein Verbindungsversuch gestartet."
         
-        # WICHTIG: Diese Liste enthält ALLE Varianten. Eine davon MUSS funktionieren.
-        # Wir starten mit Flash (schnell), gehen zu den Versionen, und enden beim "Traktor" Gemini-Pro.
+        # WICHTIG: Das sind die einzigen 3 offiziellen Namen, die aktuell garantiert funktionieren.
+        # "gemini-pro" wurde entfernt, dafür nutzen wir "gemini-1.0-pro".
         models_to_check = [
             "gemini-1.5-flash", 
-            "gemini-1.5-flash-001",
-            "gemini-1.5-flash-002",
             "gemini-1.5-pro",
-            "gemini-1.5-pro-001",
-            "gemini-1.5-pro-002",
-            "gemini-pro" # Der alte, unzerstörbare Standard (Fallback)
+            "gemini-1.0-pro" 
         ]
         
         random.shuffle(api_keys) 
@@ -208,4 +204,4 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         if not success:
             st.error("⚠️ Fehler bitte an Rodion schicken.")
             st.warning(f"🔍 Letzter technischer Fehlergrund: {last_error_message}")
-            st.info("Einer der Keys oder Modelle ist definitiv nicht erreichbar. Wir haben alle Varianten durchprobiert.")
+            st.info("Wir haben alle verfügbaren Modelle (1.5-Flash, 1.5-Pro, 1.0-Pro) getestet.")
