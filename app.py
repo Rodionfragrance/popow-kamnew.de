@@ -89,7 +89,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # --- 8. PROMPT & ANTWORT ---
-if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-Language)"):
+if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Multi-Language)"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -116,30 +116,42 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         FALL A: USER FRAGT NACH PRODUKTEN / DÜFTEN / EMPFEHLUNGEN
         -> Nutze NUR die "Datenbank (CSV)".
         -> Ignoriere Business-Tipps.
-        -> STRATEGIE: "Der Preis-Trichter".
-           Du musst versuchen, dem User 5 Optionen zu geben (wenn thematisch passend).
-           Bau die Liste wie folgt auf:
-           1. Start: High-Ticket (Mytologik ~299€) -> Das muss oben stehen!
-           2. Mitte: Eigenkreationen (Olfazeta / Scented Love ~60€-25€)
-           3. Ende: Standard-Düfte (Nr. XX ~30-52€)
+        
+        STRATEGIE & LOGIK (PRIORITÄTEN):
+        1. **ANALYSE:** Sucht der User nach einer KONKRETEN NUMMER (z.B. "118", "42") oder einem KONKRETEN NAMEN (z.B. "Baccarat", "Gisada")?
            
-           WICHTIG: Höre NICHT nach Mytologik auf! Biete Alternativen für jedes Budget.
-           Sortiere die finale Liste strikt ABSTEIGEND nach Preis.
+           - **SZENARIO 1: PRODUKT IST IN DB VORHANDEN**
+             a) Suche diese Zeile in der CSV.
+             b) **UPSELL-PFLICHT:** Schau in die Spalte `Upsell_Info` GENAU DIESER ZEILE. Wenn dort etwas steht, MUSST du das bei "Cross-Selling" anbieten.
+             c) Biete als "Option 1" trotzdem ein passendes Mytologik-Upgrade an.
+             d) Biete als "Option 2" das gesuchte Produkt an.
            
-           -> OUTPUT FORMAT (Design-Vorschrift: Nutze **Fett** für Name/Preis, mache Leerzeilen zwischen Abschnitten!):
+           - **SZENARIO 2: PRODUKT IST NICHT IN DB (z.B. Gisada, Sauvage Elixir)**
+             a) Nutze dein allgemeines Wissen über das gesuchte Fremdprodukt (Duftnoten, Stil).
+             b) Suche in der CSV nach dem Duft, der diesem Stil AM NÄCHSTEN kommt (nutze Spalte 'Duftfamilie').
+             c) Pitch: "Diesen speziellen Duft haben wir nicht, ABER basierend auf den Noten (z.B. Mango, würzig) ist [Alternative] die perfekte, günstigere und intensivere Alternative für dich."
+             d) Biete Mytologik als Premium-Alternative an.
+           
+           - **SZENARIO 3: ALLGEMEINE SUCHE (z.B. "Winterduft", "Sport")**
+             a) Nutze den Standard-Trichter: Mytologik -> Olfazeta -> Standard.
+        
+        2. **LAYOUT (Zwingend):**
+           Nutze Markdown (**Fett**) und Leerzeilen für perfekte Lesbarkeit.
+           
+           -> OUTPUT FORMAT:
            "Hier ist Rodions Empfehlung:
 
            ---
 
            ### 🏆 Option 1 (Premium): **[Name]** - **[Preis]**
            
-           [Pitch: Warum dieser Duft?]
+           [Pitch: Warum dieser Duft das ultimative Upgrade ist?]
 
            ---
 
-           ### ✨ Option 2: **[Name]** - **[Preis]**
+           ### ✨ Option 2 (Die perfekte Alternative/Wahl): **[Name]** - **[Preis]**
            
-           [Pitch]
+           [Pitch: Erkläre genau, warum dieser Duft passt (besonders wenn es eine Alternative zu einem Fremdprodukt ist).]
 
            ---
 
@@ -147,16 +159,17 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
            
            [Pitch]
 
-           [...bis zu 5 Optionen, immer mit Trennlinien...]
+           [...bis zu 5 Optionen...]
 
            ---
 
            ### 🛍️ Cross-Selling: **[Upsell]**
+           [Hier MUSS das Produkt aus der Spalte 'Upsell_Info' des Hauptduftes stehen, falls vorhanden!]
            
            ---
 
            ### ❓ Abschlussfrage (Strategisch): 
-           [Gib dem Berater eine offene Frage an die Hand, die er dem Kunden stellen soll, um den Sack zuzumachen.]"
+           [Gib dem Berater eine offene Frage an die Hand.]"
         
         FALL B: USER FRAGT NACH BUSINESS / DOWNLINE / REKRUTIERUNG / MINDSET
         -> Nutze NUR "Network-Marketing-Bibel" und "Business-Wissen".
@@ -165,11 +178,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         -> STRATEGIE: Sei gnadenlos ehrlich, direkt und strategisch.
         -> OUTPUT FORMAT: 
            Freier Text. Fettgedrucktes für Key-Learnings. Schritt-für-Schritt Liste. 
-           
-           ---
-           
-           ### 🧠 Reflexionsfrage an dich:
-           [Stelle eine harte, direkte Frage an den Berater, die ihn zum Nachdenken oder Handeln zwingt. Z.B. 'Wann fängst du an, Profi zu sein?']
+           Beende die Antwort IMMER mit einer reflektierenden Frage an den Berater!
 
         ---
 
