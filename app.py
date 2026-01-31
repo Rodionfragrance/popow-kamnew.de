@@ -1,137 +1,67 @@
 import streamlit as st
-import pandas as pd
 import requests
-import random
-import time
 
-# --- KONFIGURATION ---
-st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
+st.set_page_config(page_title="Key Diagnose", layout="wide")
+st.title("🕵️‍♂️ Der API-Detektiv")
 
-# --- UI DESIGN ---
-st.markdown("""
-<style>
-.stChatInput {position: fixed; bottom: 30px;}
-.stChatMessageAvatar { background-color: #ffffff !important; }
-</style>
-""", unsafe_allow_html=True)
+# 1. KEYS LESEN
+raw_input = None
+if "API_KEYS" in st.secrets: raw_input = st.secrets["API_KEYS"]
+elif "GOOGLE_API_KEY" in st.secrets: raw_input = st.secrets["GOOGLE_API_KEY"]
 
-# --- KEYS HOLEN & REINIGEN (WICHTIG!) ---
-raw_keys = None
-if "API_KEYS" in st.secrets: raw_keys = st.secrets["API_KEYS"]
-elif "GOOGLE_API_KEY" in st.secrets: raw_keys = st.secrets["GOOGLE_API_KEY"]
-
-if not raw_keys:
-    st.error("⚠️ Keine Keys gefunden! Bitte Secrets prüfen.")
+if not raw_input:
+    st.error("❌ Keine Keys in den Secrets gefunden.")
     st.stop()
 
-if isinstance(raw_keys, str): raw_keys = [raw_keys]
-elif not isinstance(raw_keys, list): raw_keys = []
+# Wir wandeln alles in eine Liste um, egal wie es eingegeben wurde
+keys_to_test = []
+if isinstance(raw_input, str):
+    # Falls es ein langer String mit Kommas ist
+    if "," in raw_input:
+        keys_to_test = [k.strip() for k in raw_input.split(",")]
+    else:
+        keys_to_test = [raw_input.strip()]
+elif isinstance(raw_input, list):
+    keys_to_test = raw_input
 
-# --- DIE WASCHMASCHINE FÜR KEYS ---
-api_keys = []
-for k in raw_keys:
-    if isinstance(k, str):
-        # Entfernt Leerzeichen, Zeilenumbrüche und versehentliche Anführungszeichen
-        clean_key = k.strip().replace('"', '').replace("'", "").replace("\n", "")
-        if len(clean_key) > 10: # Nur echte Keys behalten
-            api_keys.append(clean_key)
+st.write(f"Gefundene Einträge: {len(keys_to_test)}")
 
-if not api_keys:
-    st.error("⚠️ Keine gültigen Keys nach der Reinigung übrig.")
-    st.stop()
+# 2. TESTEN
+st.write("---")
+st.subheader("Wir fragen Google: 'Welche Modelle darf ich sehen?'")
+st.info("Wenn hier 404 kommt, ist die API in deinem Google-Account deaktiviert.")
 
-# --- DATEN LADEN ---
-@st.cache_data
-def load_data():
+for i, key in enumerate(keys_to_test):
+    # Key säubern (Anführungszeichen weg, Leerzeichen weg)
+    clean_key = str(key).replace("'", "").replace('"', "").strip()
+    
+    # Maskierten Key anzeigen
+    masked = f"{clean_key[:5]}...{clean_key[-4:]}" if len(clean_key) > 10 else "UNGÜLTIG"
+    
+    st.write(f"**Test Key #{i+1}:** `{masked}` (Länge: {len(clean_key)})")
+    
+    # Der einfachste Test: Liste die Modelle auf
+    url = f"https://generativelanguage.googleapis.com/v1beta/models?key={clean_key}"
+    
     try:
-        df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";")
-        return {"csv": df.to_string(index=False), "business": open("business_wissen.txt", "r", encoding="utf-8").read()}
-    except: return None
-
-db = load_data()
-
-# --- HEADER ---
-st.title("🧙‍♂️ Rodions Chogan KI")
-st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
-st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
-st.markdown("---")
-
-# --- CHAT ---
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
-        st.markdown(msg["content"])
-
-if prompt := st.chat_input("Frage eingeben..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar="👤"):
-        st.markdown(prompt)
-
-    with st.chat_message("model", avatar="🧙‍♂️"):
-        placeholder = st.empty()
-        full_text = ""
+        response = requests.get(url, timeout=5)
         
-        # PROMPT
-        system_text = f"""
-        Du bist Rodion, Elite-Mentor für Olfazeta.
-        DATEN: {db['csv'] if db else ''} {db['business'] if db else ''}.
-        REGELN: 1. KEINE Fremdmarken nennen! 2. Preise fett. 3. Sei direkt.
-        """
-        final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
-
-        # --- INTELLIGENTE VERBINDUNG ---
-        success = False
-        debug_log = []
-        
-        # Wir testen verschiedene Adressen (Endpoints), falls eine 404 ist
-        endpoints = [
-            ("gemini-1.5-flash", "v1beta"), # Standard Neu
-            ("gemini-1.5-flash", "v1"),     # Alternative Adresse
-            ("gemini-pro", "v1beta"),       # Alt Stabil
-            ("gemini-pro", "v1")            # Alt Alternative
-        ]
-
-        random.shuffle(api_keys)
-
-        # Wir probieren erst alle Keys am besten Modell, dann alle Keys am zweitbesten...
-        for model_name, version in endpoints:
-            if success: break
+        if response.status_code == 200:
+            st.success("✅ TREFFER! Dieser Key funktioniert perfekt.")
+            st.json(response.json()) # Zeigt, was Google antwortet
+            st.stop() # Wir haben einen Gewinner!
             
-            for key in api_keys:
-                try:
-                    url = f"https://generativelanguage.googleapis.com/{version}/models/{model_name}:generateContent?key={key}"
-                    headers = {'Content-Type': 'application/json'}
-                    data = {"contents": [{"parts": [{"text": final_prompt}]}]}
-                    
-                    response = requests.post(url, headers=headers, json=data, timeout=10)
-                    
-                    if response.status_code == 200:
-                        # TREFFER!
-                        result = response.json()
-                        try:
-                            answer = result['candidates'][0]['content']['parts'][0]['text']
-                        except: answer = "Ich habe eine Antwort, aber der Sicherheitsfilter hat sie blockiert."
-                        
-                        # Stream Output
-                        for chunk in answer.split():
-                            full_text += chunk + " "
-                            placeholder.markdown(full_text + "▌")
-                            time.sleep(0.04)
-                        
-                        placeholder.markdown(full_text)
-                        st.session_state.messages.append({"role": "model", "content": full_text})
-                        success = True
-                        break
-                    else:
-                        debug_log.append(f"{model_name} ({version}): Code {response.status_code}")
-                except Exception as e:
-                    debug_log.append(f"Error: {str(e)}")
-                    continue
+        elif response.status_code == 400:
+            st.error("❌ FEHLER 400: Der Key ist falsch formatiert (Ungültige Zeichen).")
+            
+        elif response.status_code == 404:
+            st.error("❌ FEHLER 404: Key gültig, aber API deaktiviert.")
+            st.warning("👉 LÖSUNG: Geh in die Google Cloud Console, such nach 'Generative Language API' und klicke auf 'ENABLE'.")
+            
+        else:
+            st.error(f"❌ FEHLER {response.status_code}: {response.text}")
+            
+    except Exception as e:
+        st.error(f"Verbindungsfehler: {e}")
 
-        if not success:
-            st.error("⚠️ Verbindung fehlgeschlagen.")
-            with st.expander("Fehleranalyse anzeigen"):
-                st.write(debug_log)
-                st.write("Mögliche Ursachen: 404 = Key/Modell passt nicht zusammen. 429 = Limit.")
+st.write("---")
