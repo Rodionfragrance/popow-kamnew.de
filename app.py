@@ -148,17 +148,17 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ZU GOOGLE GEMINI (ROBUST) ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI (VERBOSE DEBUG MODE) ---
         success = False
-        # WICHTIG: Hier sind jetzt nur noch die Namen, die zu 100% existieren
-        # Wir entfernen "latest", da das den 404 Fehler verursacht hat.
-        models_to_check = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+        last_error_message = "Kein Verbindungsversuch gestartet."
+        
+        # Nur noch die absolut stabilen Modelle
+        models_to_check = ["gemini-1.5-flash", "gemini-1.5-pro"]
         random.shuffle(api_keys) 
         
         for key in api_keys:
             if success: break
             
-            # Wir probieren die Modelle der Reihe nach durch
             for model_name in models_to_check:
                 if success: break
                 
@@ -167,34 +167,35 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
                     headers = {'Content-Type': 'application/json'}
                     data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                     
-                    # Timeout 60s
                     response = requests.post(url, headers=headers, json=data, timeout=60)
                     
                     if response.status_code == 200:
                         try:
                             answer = response.json()['candidates'][0]['content']['parts'][0]['text']
-                        except: answer = "Format-Fehler."
-
-                        for chunk in answer.split():
-                            full_text += chunk + " "
-                            placeholder.markdown(full_text + "▌")
-                            time.sleep(0.03)
-                        
-                        placeholder.markdown(full_text)
-                        st.session_state.messages.append({"role": "model", "content": full_text})
-                        success = True
-                    elif response.status_code == 404:
-                        # Modell nicht gefunden -> Nächstes Modell probieren (leise scheitern)
-                        continue
-                    elif response.status_code == 429:
-                        # Rate Limit -> Schleife bricht ab, nächster Key wird genommen
-                        break 
+                            
+                            for chunk in answer.split():
+                                full_text += chunk + " "
+                                placeholder.markdown(full_text + "▌")
+                                time.sleep(0.03)
+                            
+                            placeholder.markdown(full_text)
+                            st.session_state.messages.append({"role": "model", "content": full_text})
+                            success = True
+                        except Exception as parse_err:
+                            last_error_message = f"Antwort-Format ungültig: {parse_err}"
+                            
                     else:
-                        st.error(f"❌ Fehler bei Key ...{key[-5:]} mit Modell {model_name}: {response.status_code}")
-                        st.code(response.text)
+                        # HIER SPEICHERN WIR DEN FEHLER FÜR DIE ANZEIGE
+                        error_json = response.json()
+                        error_msg = error_json.get('error', {}).get('message', response.text)
+                        last_error_message = f"Google Fehler {response.status_code} bei Modell {model_name}: {error_msg}"
+                        # Wir probieren weiter (nächstes Modell/Key), aber merken uns den Grund
 
                 except Exception as e:
+                    last_error_message = f"Technischer Absturz (Exception): {str(e)}"
                     continue
         
         if not success:
-            st.error("⚠️  Wenn du oben rote Fehlermeldungen siehst, schicke diese an Rodion!")
+            st.error("⚠️ Verbindung fehlgeschlagen.")
+            st.warning(f"🔍 Letzter technischer Fehlergrund: {last_error_message}")
+            st.info("Bitte diesen Fehlergrund an Rodion senden!")
