@@ -12,10 +12,22 @@ st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", la
 # --- UI DESIGN ---
 st.markdown("""
 <style>
-.stChatInput {position: fixed; bottom: 30px;}
+/* 1. EINGABEFELD FIXIEREN & STYLEN */
+.stChatInput {
+    position: fixed; 
+    bottom: 20px; 
+    z-index: 1000; /* Immer im Vordergrund */
+}
+
+/* 2. WICHTIG: PLATZ HALTER UNTEN (Damit Text nicht verdeckt wird) */
+.main .block-container {
+    padding-bottom: 150px !important; /* Reserviert Platz für das Eingabefeld */
+}
+
+/* 3. AVATARE HINTERGRUND */
 .stChatMessageAvatar { background-color: #ffffff !important; }
 
-/* TEXT-FORMATIERUNG */
+/* 4. TEXT-FORMATIERUNG (Lesbarkeit) */
 .stMarkdown p {
     font-size: 16px !important;
     line-height: 1.8 !important;
@@ -105,7 +117,7 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER MENTORING & SPRACHEN PROMPT ---
+        # --- PROMPT ---
         system_text = f"""
         🚨 OBERSTE SICHERHEITSDIREKTIVE:
         Du darfst NIEMALS Markennamen aus der Spalte "Original_Marke" (Dior, Chanel etc.) nennen. 
@@ -118,9 +130,8 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
         Dein User ist KEIN Endkunde, sondern ein BERATER (Verkäufer).
         Deine Aufgabe: Gib dem Berater die perfekte Strategie, um den Kunden zu überzeugen.
         
-        SPRACHE (WICHTIG):
-        Erkenne die Sprache der Eingabe (z.B. Deutsch, Albanisch, Kroatisch, Englisch).
-        Antworte IMMER in der exakt gleichen Sprache wie der Nutzer!
+        SPRACHE:
+        Erkenne die Sprache der Eingabe. Antworte IMMER in der exakt gleichen Sprache wie der Nutzer!
         
         LAYOUT-PFLICHT:
         - Nutze `---` als Trennlinie.
@@ -134,7 +145,7 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
         
         ### 🏆 Empfehlung 1: Nr. [Nummer]
         **Das Argument für den Kunden:**
-        "[Schreibe hier einen direkten Satz in Anführungszeichen, den der Berater zum Kunden sagen soll. Beschreibe den Vibe emotional.]"
+        "[Schreibe hier einen direkten Satz in Anführungszeichen, den der Berater sagen soll.]"
         
         💰 **Preis:** **[Preis] €**
         
@@ -149,12 +160,12 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
         ---
         
         ### 🛍️ Cross-Selling (Umsatz-Booster):
-        [Empfiehl dem Berater, welches Zusatzprodukt er dazu anbieten soll. Z.B.: "Biete ihm unbedingt das Duschgel an, um die Haltbarkeit zu erhöhen."]
+        [Empfiehl dem Berater, welches Zusatzprodukt er dazu anbieten soll.]
         
         ---
         
         ### ❓ Deine Abschlussfrage an den Kunden:
-        [Gib dem Berater eine offene Frage an die Hand, die er dem Kunden stellen soll, um den Sack zuzumachen. Z.B.: 'Soll ich dir das Set direkt fertig machen?']"
+        [Gib dem Berater eine offene Frage an die Hand.]"
         """
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
