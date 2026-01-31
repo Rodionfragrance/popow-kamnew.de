@@ -90,18 +90,30 @@ if not api_keys:
     st.error("⚠️ Keine gültigen Keys verfügbar.")
     st.stop()
 
-# --- 5. DATENBANK LADEN ---
+# --- 5. DATENBANK LADEN (ERWEITERT) ---
 @st.cache_data
 def load_data():
     try:
-        # WICHTIG: Semikolon als Trenner nutzen!
+        # 1. CSV laden (Semikolon-Trennung)
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";", encoding="utf-8")
-        # Business Wissen laden falls vorhanden, sonst leer
+        
+        # 2. Business Wissen laden (falls vorhanden)
         try:
             biz = open("business_wissen.txt", "r", encoding="utf-8").read()
         except: 
             biz = ""
-        return {"csv": df.to_string(index=False), "business": biz}
+            
+        # 3. NETWORK BIBEL LADEN (NEU!)
+        try:
+            net = open("network_bible.txt", "r", encoding="utf-8").read()
+        except:
+            net = ""
+            
+        return {
+            "csv": df.to_string(index=False), 
+            "business": biz, 
+            "network": net
+        }
     except Exception as e: 
         st.error(f"Fehler beim Laden der Datenbank: {e}")
         return None
