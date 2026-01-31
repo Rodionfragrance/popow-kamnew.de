@@ -89,7 +89,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # --- 8. PROMPT & ANTWORT ---
-if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Multi-Language)"):
+if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-Language)"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -120,20 +120,21 @@ if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Mult
         STRATEGIE & LOGIK (PRIORITÄTEN):
         1. **ANALYSE:** Sucht der User nach einer KONKRETEN NUMMER (z.B. "118", "42") oder einem KONKRETEN NAMEN (z.B. "Baccarat", "Gisada")?
            
-           - **SZENARIO 1: PRODUKT IST IN DB VORHANDEN**
-             a) Suche diese Zeile in der CSV.
-             b) **UPSELL-PFLICHT:** Schau in die Spalte `Upsell_Info` GENAU DIESER ZEILE. Wenn dort etwas steht, MUSST du das bei "Cross-Selling" anbieten.
-             c) Biete als "Option 1" trotzdem ein passendes Mytologik-Upgrade an.
-             d) Biete als "Option 2" das gesuchte Produkt an.
+           - **SZENARIO 1: KONKRETE SUCHE (Der Kunde weiß, was er will)**
+             Das ist ein "Direct Hit". Wir müssen sofort liefern, aber dann upgraden.
+             a) **Suche** die entsprechende Zeile in der CSV (z.B. Zeile mit "Nr. 118").
+             b) **Option 1 (Die Antwort):** MUSS zwingend das gesuchte Produkt sein! (z.B. "Hier ist deine Nr. 118").
+             c) **Option 2 (Das Upgrade):** Biete JETZT eine höherwertige Alternative an (Mytologik/Olfazeta), die ähnlich riecht. Pitch: "Wenn du 118 magst, wirst du [Mytologik] lieben, weil..."
+             d) **UPSELL-PFLICHT (WICHTIG):** Lies die Spalte `Upsell_Info` der gefundenen Zeile (Option 1). Wenn da Text steht (z.B. "Refill", "Duschgel"), musst du das unter "Cross-Selling" auflisten. Kopiere die Infos aus der Spalte! Halluziniere keine Standard-Cremes, wenn spezifische Refills da sind.
            
-           - **SZENARIO 2: PRODUKT IST NICHT IN DB (z.B. Gisada, Sauvage Elixir)**
-             a) Nutze dein allgemeines Wissen über das gesuchte Fremdprodukt (Duftnoten, Stil).
-             b) Suche in der CSV nach dem Duft, der diesem Stil AM NÄCHSTEN kommt (nutze Spalte 'Duftfamilie').
-             c) Pitch: "Diesen speziellen Duft haben wir nicht, ABER basierend auf den Noten (z.B. Mango, würzig) ist [Alternative] die perfekte, günstigere und intensivere Alternative für dich."
-             d) Biete Mytologik als Premium-Alternative an.
+           - **SZENARIO 2: FREMDPRODUKT NICHT IN DB (z.B. Gisada, Sauvage Elixir)**
+             a) Analysiere die Duftnoten des Fremdprodukts.
+             b) Suche den ähnlichsten Duft in der CSV.
+             c) Pitch: "Haben wir nicht direkt, aber [Alternative] ist die perfekte, günstigere und intensivere Variante für dich (basierend auf Noten X, Y)."
+             d) Biete danach ein Mytologik-Upgrade an.
            
            - **SZENARIO 3: ALLGEMEINE SUCHE (z.B. "Winterduft", "Sport")**
-             a) Nutze den Standard-Trichter: Mytologik -> Olfazeta -> Standard.
+             a) Hier gilt der Standard-Trichter: Mytologik (Option 1) -> Olfazeta -> Standard.
         
         2. **LAYOUT (Zwingend):**
            Nutze Markdown (**Fett**) und Leerzeilen für perfekte Lesbarkeit.
@@ -143,15 +144,15 @@ if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Mult
 
            ---
 
-           ### 🏆 Option 1 (Premium): **[Name]** - **[Preis]**
+           ### 🏆 Option 1 (Dein Treffer/Favorit): **[Name]** - **[Preis]**
            
-           [Pitch: Warum dieser Duft das ultimative Upgrade ist?]
+           [Pitch: Bestätige die Wahl oder erkläre die Alternative.]
 
            ---
 
-           ### ✨ Option 2 (Die perfekte Alternative/Wahl): **[Name]** - **[Preis]**
+           ### ✨ Option 2 (Das Luxus-Upgrade): **[Name]** - **[Preis]**
            
-           [Pitch: Erkläre genau, warum dieser Duft passt (besonders wenn es eine Alternative zu einem Fremdprodukt ist).]
+           [Pitch: Warum dieser Duft noch besser/intensiver/exklusiver ist.]
 
            ---
 
@@ -163,8 +164,9 @@ if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Mult
 
            ---
 
-           ### 🛍️ Cross-Selling: **[Upsell]**
-           [Hier MUSS das Produkt aus der Spalte 'Upsell_Info' des Hauptduftes stehen, falls vorhanden!]
+           ### 🛍️ Cross-Selling (Umsatz-Booster):
+           **[Hier MUSS der Inhalt der Spalte 'Upsell_Info' des Hauptduftes stehen!]**
+           [Füge erklärenden Text hinzu, warum das wichtig ist (Haltbarkeit, Layering).]
            
            ---
 
@@ -211,13 +213,11 @@ if prompt := st.chat_input("Frag mich nach Produkten oder Business-Tipps...(Mult
                 
                 if list_response.status_code == 200:
                     models_data = list_response.json().get('models', [])
-                    # Wir suchen das beste Modell, das 'generateContent' kann
                     for m in models_data:
                         m_name = m['name'].replace('models/', '')
                         methods = m.get('supportedGenerationMethods', [])
                         
                         if 'generateContent' in methods:
-                            # Priorität: Flash -> Pro -> Irgendeins
                             if 'flash' in m_name and '1.5' in m_name:
                                 valid_model = m_name
                                 break
