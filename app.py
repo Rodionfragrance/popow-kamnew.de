@@ -116,24 +116,34 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         FALL A: USER FRAGT NACH PRODUKTEN / DÜFTEN / EMPFEHLUNGEN
         -> Nutze NUR die "Datenbank (CSV)".
         -> Ignoriere Business-Tipps.
-        -> STRATEGIE: Exklusivität vor Standard. 
-           1. Suche ZUERST nach "Mytologik"/"Eigenkreation". 
-           2. Sortiere STRIKT nach Preis (teuerste zuerst).
+        -> STRATEGIE: "Der Preis-Trichter".
+           Du musst versuchen, dem User 5 Optionen zu geben (wenn thematisch passend).
+           Bau die Liste wie folgt auf:
+           1. Start: High-Ticket (Mytologik ~299€) -> Das muss oben stehen!
+           2. Mitte: Eigenkreationen (Olfazeta / Scented Love ~60€-25€)
+           3. Ende: Standard-Düfte (Nr. XX ~30-50€)
+           
+           WICHTIG: Höre NICHT nach Mytologik auf! Biete Alternativen für jedes Budget.
+           Sortiere die finale Liste strikt ABSTEIGEND nach Preis.
+           
         -> OUTPUT FORMAT (Zwingend!):
-           "Hier ist die Umsatz-Strategie:
+           "Hier ist die Strategie für diesen Kunden (Trichter-Methode):
            ### 🏆 Option 1 (Premium): [Name] - [Preis]
            [Pitch]
            ### ✨ Option 2: [Name] - [Preis]
            [Pitch]
+           ### 💎 Option 3: [Name] - [Preis]
+           [Pitch]
+           [...bis zu 5 Optionen...]
            ### 🛍️ Cross-Selling: [Upsell]"
         
         FALL B: USER FRAGT NACH BUSINESS / DOWNLINE / REKRUTIERUNG / MINDSET
         -> Nutze NUR "Network-Marketing-Bibel" und "Business-Wissen".
-        -> VERBOT: Empfiehl KEINE konkreten Parfüms, wenn es um Mindset oder Downline-Probleme geht! Konzentriere dich auf Führung und Strategie.
-        -> Ignoriere die CSV-Datenbank und Preise.
-        -> STRATEGIE: Sei ein gnadenloser Mentor. Gib klare, harte Handlungsempfehlungen. Kein "Blabla", sondern Strategie.
+        -> VERBOT: Empfiehl KEINE konkreten Parfüms, wenn es um Mindset geht.
+        -> VERBOT: Stelle dich NICHT vor ("Das ist Rodion" oder "Hier ist Rodion"). Starte DIREKT mit dem Inhalt/Rat.
+        -> STRATEGIE: Sei gnadenlos ehrlich, direkt und strategisch.
         -> OUTPUT FORMAT: 
-           Freier Text. Nutze Fettgedrucktes für Key-Learnings. Erstelle eine Schritt-für-Schritt Liste. Sprich Klartext.
+           Freier Text. Fettgedrucktes für Key-Learnings. Schritt-für-Schritt Liste.
 
         ---
 
@@ -148,7 +158,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ZU GOOGLE GEMINI (AUTO-PILOT MODE ✈️) ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI (AUTO-PILOT ✈️) ---
         success = False
         last_error_message = "Kein Verbindungsversuch gestartet."
         used_model_name = "Unbekannt"
@@ -158,8 +168,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         for key in api_keys:
             if success: break
             
-            # SCHRITT 1: FRAGEN WIR GOOGLE, WELCHE MODELLE DA SIND (LISTMODELS)
-            # Damit verhindern wir den 404 Fehler, weil wir nur existierende Namen nutzen.
+            # SCHRITT 1: SCAN (ListModels)
             valid_model = None
             try:
                 list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
@@ -167,33 +176,31 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
                 
                 if list_response.status_code == 200:
                     models_data = list_response.json().get('models', [])
-                    # Wir suchen das beste Modell, das 'generateContent' kann
                     for m in models_data:
                         m_name = m['name'].replace('models/', '')
                         methods = m.get('supportedGenerationMethods', [])
                         
                         if 'generateContent' in methods:
-                            # Priorität: Flash -> Pro -> Irgendeins
+                            # Wir bevorzugen Flash für Speed, aber nehmen auch Pro
                             if 'flash' in m_name and '1.5' in m_name:
                                 valid_model = m_name
                                 break
                             elif 'pro' in m_name and '1.5' in m_name:
                                 valid_model = m_name
-                            elif valid_model is None: # Nimm das erste verfügbare als Fallback
+                            elif valid_model is None: 
                                 valid_model = m_name
                 else:
                     last_error_message = f"Konnte Modell-Liste nicht laden: {list_response.status_code}"
                     continue
             except Exception as e:
-                last_error_message = f"Fehler beim Auto-Scan der Modelle: {str(e)}"
+                last_error_message = f"Fehler beim Auto-Scan: {str(e)}"
                 continue
 
-            # Wenn wir kein Modell gefunden haben, ist der Key nutzlos
             if not valid_model:
-                last_error_message = "Kein passendes 'generateContent' Modell für diesen Key gefunden."
+                last_error_message = "Kein passendes Modell für diesen Key gefunden."
                 continue
 
-            # SCHRITT 2: ANFRAGE SENDEN (MIT DEM GEFUNDENEN NAMEN)
+            # SCHRITT 2: GENERATE
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
                 headers = {'Content-Type': 'application/json'}
@@ -212,7 +219,6 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
                         placeholder.markdown(full_text)
                         st.session_state.messages.append({"role": "model", "content": full_text})
                         success = True
-                        used_model_name = valid_model # Für Debugging
                     except Exception as parse_err:
                         last_error_message = f"Antwort ungültig: {parse_err}"
                 else:
@@ -221,10 +227,10 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
                     last_error_message = f"Fehler {response.status_code} bei {valid_model}: {error_msg}"
 
             except Exception as e:
-                last_error_message = f"Technischer Absturz bei Anfrage: {str(e)}"
+                last_error_message = f"Technischer Absturz: {str(e)}"
                 continue
         
         if not success:
             st.error("⚠️ Fehler bitte an Rodion schicken.")
             st.warning(f"🔍 Letzter Fehlergrund: {last_error_message}")
-            st.info("Tipp: Wenn 'ListModels' fehlschlägt, ist die 'Generative Language API' in der Google Cloud Console für dieses Projekt vielleicht nicht aktiviert.")
+            st.info("Tipp: Prüfe 'Generative Language API' in der Google Cloud Console.")
