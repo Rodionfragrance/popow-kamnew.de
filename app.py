@@ -9,7 +9,7 @@ from datetime import datetime
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- UI DESIGN (CSS für Luftigkeit & Lesbarkeit) ---
+# --- UI DESIGN (CSS für maximalen Abstand) ---
 st.markdown("""
 <style>
 /* Eingabefeld fixieren */
@@ -19,21 +19,24 @@ st.markdown("""
 /* TEXT-FORMATIERUNG */
 .stMarkdown p {
     font-size: 16px !important;
-    line-height: 1.7 !important; /* Mehr Luft zwischen Zeilen */
-    margin-bottom: 20px !important; /* Abstand nach jedem Absatz */
+    line-height: 1.8 !important; /* Viel Luft zwischen Zeilen */
+    margin-bottom: 25px !important; /* Großer Abstand nach jedem Absatz */
 }
 .stMarkdown h3 {
-    color: #d32f2f !important; /* Rodion Rot für Überschriften */
-    margin-top: 30px !important;
-    margin-bottom: 10px !important;
-    border-bottom: 1px solid #eee; /* Trennlinie unter Überschriften */
+    color: #d32f2f !important; 
+    margin-top: 40px !important; /* Abstand vor Überschriften */
+    margin-bottom: 15px !important;
+    border-bottom: 1px solid #eee; 
     padding-bottom: 5px;
 }
-.stMarkdown ul {
-    margin-bottom: 20px !important;
+.stMarkdown hr {
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    border-color: #f0f0f0;
 }
 .stMarkdown li {
-    margin-bottom: 8px !important;
+    margin-bottom: 10px !important;
+    line-height: 1.7 !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -57,7 +60,7 @@ if not raw_input:
     st.error("⚠️ Keine Keys gefunden! Bitte Secrets prüfen.")
     st.stop()
 
-# Keys vorbereiten
+# Keys vorbereiten & reinigen
 keys_to_use = []
 if isinstance(raw_input, str):
     if "," in raw_input: keys_to_use = [k.strip() for k in raw_input.split(",")]
@@ -65,14 +68,13 @@ if isinstance(raw_input, str):
 elif isinstance(raw_input, list):
     keys_to_use = raw_input
 
-# Aggressive Reinigung
 api_keys = []
 for k in keys_to_use:
     clean = str(k).replace("'", "").replace('"', "").strip()
     if len(clean) > 20: api_keys.append(clean)
 
 if not api_keys:
-    st.error("⚠️ Keine gültigen Keys nach der Reinigung.")
+    st.error("⚠️ Keine gültigen Keys verfügbar.")
     st.stop()
 
 # --- DATEN LADEN ---
@@ -87,7 +89,7 @@ db = load_data()
 
 # --- HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption(f"📅 Saison: {current_season} | 💎 Elite-Modus aktiv") 
+st.caption(f"📅 Saison: {current_season} | 💎 Elite-Modus") 
 st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
@@ -109,33 +111,37 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER FORMATIERUNGS-PROMPT ---
+        # --- DER NEUE "DU & CLEAN" PROMPT ---
         system_text = f"""
-        Du bist Rodion, Elite-Mentor für Olfazeta.
+        Du bist Rodion, der KI-Mentor für Olfazeta.
         
         KONTEXT:
         - Jahreszeit: {current_season}
         - Daten: {db['csv'] if db else ''} {db['business'] if db else ''}
         
-        DEIN ZIEL:
-        Berate den Kunden kurz und knackig. Vermeide Textwände!
+        TONALITY (STRIKT):
+        1. ANSPRACHE: Nutze immer das **"Du"**. Sei locker, direkt, aber professionell.
+        2. KEINE FLOSKELN: **Lass die Vorstellung weg.** Sag nicht "Hier ist Rodion" oder "Hallo Partner". Starte direkt mit der Antwort.
+        3. MARKENSCHUTZ: Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)!
         
-        REGELN (STRIKT):
-        1. MARKENSCHUTZ: Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)! Sag "Unsere Nr. XY".
-        2. FORMATIERUNG: Nutze IMMER Leerzeilen zwischen Absätzen.
-        3. PREISE: Immer **fett** (z.B. **30,00 €**).
+        LAYOUT-REGELN (STRIKT):
+        1. Nutze `---` als Trennlinie zwischen den Optionen.
+        2. Mach nach JEDER Info (Vibe, Preis, Warum) einen **doppelten Absatz** (Leerzeile).
+        3. Kein Fließtext! Nutze die Struktur unten.
         
-        NUTZE EXAKT DIESE STRUKTUR (Kopiere das Layout):
+        ANTWORT-SCHABLONE (Nutze genau diese):
         
-        "Hallo [Anrede], hier ist Rodion. Für diesen Anlass empfehle ich dir Folgendes:
+        "Hier sind die passenden Empfehlungen für dich:
         
         ---
         
         ### 🏆 1. Der Favorit: Nr. [Nummer]
         
-        🔹 **Der Vibe:** [Kurze Beschreibung]
+        **Vibe:**
+        [Beschreibung]
         
-        🔹 **Warum er passt:** [Erklärung passend zur Jahreszeit {current_season}]
+        **Warum er passt:**
+        [Erklärung passend zur Jahreszeit {current_season}]
         
         💰 **Preis:** **[Preis] €**
         
@@ -143,13 +149,15 @@ if prompt := st.chat_input("Frage eingeben..."):
         
         ### ✨ 2. Die Alternative: Nr. [Nummer]
         
-        🔹 **Der Vibe:** [Kurze Beschreibung]
+        **Vibe:**
+        [Beschreibung]
         
         💰 **Preis:** **[Preis] €**
         
         ---
         
-        💡 **Rodions Pro-Tipp:** [Ein Satz zur Anwendung]"
+        💡 **Pro-Tipp:**
+        [Kurzer Tipp]"
         """
         
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
