@@ -89,7 +89,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # --- 8. PROMPT & ANTWORT ---
-if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
+if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-Language)"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -148,12 +148,22 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ZU GOOGLE GEMINI (VERBOSE DEBUG MODE) ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI (MAXIMUM ROBUSTNESS) ---
         success = False
         last_error_message = "Kein Verbindungsversuch gestartet."
         
-        # Nur noch die absolut stabilen Modelle
-        models_to_check = ["gemini-1.5-flash", "gemini-1.5-pro"]
+        # WICHTIG: Diese Liste enthält ALLE Varianten. Eine davon MUSS funktionieren.
+        # Wir starten mit Flash (schnell), gehen zu den Versionen, und enden beim "Traktor" Gemini-Pro.
+        models_to_check = [
+            "gemini-1.5-flash", 
+            "gemini-1.5-flash-001",
+            "gemini-1.5-flash-002",
+            "gemini-1.5-pro",
+            "gemini-1.5-pro-001",
+            "gemini-1.5-pro-002",
+            "gemini-pro" # Der alte, unzerstörbare Standard (Fallback)
+        ]
+        
         random.shuffle(api_keys) 
         
         for key in api_keys:
@@ -167,6 +177,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
                     headers = {'Content-Type': 'application/json'}
                     data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                     
+                    # Timeout 60s
                     response = requests.post(url, headers=headers, json=data, timeout=60)
                     
                     if response.status_code == 200:
@@ -185,17 +196,16 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
                             last_error_message = f"Antwort-Format ungültig: {parse_err}"
                             
                     else:
-                        # HIER SPEICHERN WIR DEN FEHLER FÜR DIE ANZEIGE
+                        # Fehler speichern und nächstes Modell probieren
                         error_json = response.json()
                         error_msg = error_json.get('error', {}).get('message', response.text)
                         last_error_message = f"Google Fehler {response.status_code} bei Modell {model_name}: {error_msg}"
-                        # Wir probieren weiter (nächstes Modell/Key), aber merken uns den Grund
 
                 except Exception as e:
                     last_error_message = f"Technischer Absturz (Exception): {str(e)}"
                     continue
         
         if not success:
-            st.error("⚠️ Verbindung fehlgeschlagen.")
+            st.error("⚠️ Fehler bitte an Rodion schicken.")
             st.warning(f"🔍 Letzter technischer Fehlergrund: {last_error_message}")
-            st.info("Bitte diesen Fehlergrund an Rodion senden!")
+            st.info("Einer der Keys oder Modelle ist definitiv nicht erreichbar. Wir haben alle Varianten durchprobiert.")
