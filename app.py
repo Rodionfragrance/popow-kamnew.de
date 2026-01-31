@@ -12,16 +12,16 @@ st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", la
 # --- UI DESIGN ---
 st.markdown("""
 <style>
-/* 1. EINGABEFELD FIXIEREN & STYLEN */
-.stChatInput {
-    position: fixed; 
-    bottom: 20px; 
-    z-index: 1000; /* Immer im Vordergrund */
+/* 1. PLATZ HALTER UNTEN (Damit Text nicht verdeckt wird) */
+.main .block-container {
+    padding-bottom: 120px !important; 
 }
 
-/* 2. WICHTIG: PLATZ HALTER UNTEN (Damit Text nicht verdeckt wird) */
-.main .block-container {
-    padding-bottom: 150px !important; /* Reserviert Platz für das Eingabefeld */
+/* 2. EINGABEFELD STYLEN (ChatGPT Style) */
+/* Wir entfernen 'position: fixed', damit Streamlit die volle Breite nutzt */
+[data-testid="stChatInput"] {
+    border-radius: 20px !important;
+    border: 1px solid #e0e0e0 !important;
 }
 
 /* 3. AVATARE HINTERGRUND */
