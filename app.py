@@ -25,7 +25,7 @@ if not raw_keys:
     st.error("⚠️ Keine Keys gefunden! Bitte Secrets prüfen.")
     st.stop()
 
-# Sicherstellen, dass wir eine Liste haben
+# Formatierung sicherstellen
 if isinstance(raw_keys, str): api_keys = [raw_keys]
 elif isinstance(raw_keys, list): api_keys = raw_keys
 else: api_keys = []
@@ -44,6 +44,46 @@ db = load_data()
 st.title("🧙‍♂️ Rodions Chogan KI")
 st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
+
+# --- AUTOMATISCHER MODELL-FINDER (Der Fix) ---
+# Wir suchen einmal beim Start das beste Modell, das dein Key erlaubt
+@st.cache_resource
+def find_best_model():
+    # Wir probieren Keys durch, bis wir eine Modell-Liste bekommen
+    for key in api_keys:
+        try:
+            genai.configure(api_key=key)
+            found_models = []
+            for m in genai.list_models():
+                if 'generateContent' in m.supported_generation_methods:
+                    found_models.append(m.name)
+            
+            if not found_models: continue
+
+            # Intelligente Auswahl: Wir suchen Flash, dann Pro
+            best = None
+            for m in found_models:
+                if "flash" in m and "1.5" in m: best = m; break
+            if not best:
+                for m in found_models:
+                    if "pro" in m and "1.5" in m: best = m; break
+            if not best:
+                for m in found_models:
+                    if "gemini-pro" in m: best = m; break
+            if not best:
+                best = found_models[0] # Nimm einfach das erste
+            
+            return best
+        except:
+            continue
+    return "gemini-pro" # Fallback, falls alles scheitert
+
+# Das gefundene Modell speichern wir
+active_model_name = find_best_model()
+
+# --- DEBUG INFO (Damit wir sehen, was läuft) ---
+# st.caption(f"🤖 Aktiviertes Modell: `{active_model_name}`") # Kannst du später auskommentieren
+
 st.markdown("---")
 
 # --- CHAT VERLAUF ---
@@ -64,39 +104,34 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # SYSTEM PROMPT (Mit Markenschutz & Verkaufsturbo)
+        # SYSTEM PROMPT (Mit Markenschutz)
         sys_instr = f"""
         Du bist Rodion, Elite-Mentor für Olfazeta.
+        DATEN: {db['csv'] if db else ''} {db['business'] if db else ''}.
         
-        DATENBANK:
-        1. PRODUKTE: {db['csv'] if db else ''}
-        2. BUSINESS: {db['business'] if db else ''}
-
-        🔴 REGEL 1 (MARKENSCHUTZ):
-        Du kennst die Original-Marken aus der CSV, aber du darfst sie NIEMALS nennen.
-        Sag statt "Riecht wie Dior Sauvage": "Das ist unsere **Nr. XY**. Ein frischer, wilder Duft..."
-        
-        🔴 REGEL 2 (VERKAUF):
-        Sei überzeugt. Preise immer **fett**. Nutze Emojis.
+        REGELN:
+        1. Nenne NIEMALS Fremdmarken (Dior, Chanel etc.) beim Namen!
+        2. Sag: "Das ist unsere Nr. XY, riecht wie..."
+        3. Preise fett.
         """
 
-        # --- DIE ROTATION (Der Trick gegen 429 Fehler) ---
+        # --- GENERIERUNG ---
         success = False
-        last_error = ""
         
-        # Wir mischen die Keys, damit nicht immer Key 1 belastet wird
+        # Wir mischen die Keys
         random.shuffle(api_keys)
         
-        # Wir probieren JEDEN Key in deiner Liste durch, bis einer geht
         for key in api_keys:
             try:
                 genai.configure(api_key=key)
                 
-                # HIER IST DER FIX: Wir zwingen ihn auf das Modell 'gemini-1.5-flash'
-                # Dieses Modell hat 1.500 Anfragen pro Tag (statt 20)
-                model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=sys_instr)
+                # Wir nutzen das Modell, das wir oben gefunden haben
+                model = genai.GenerativeModel(active_model_name)
                 
-                response = model.generate_content(prompt, stream=True)
+                # Trick: System-Instruction direkt in den Prompt, falls das Modell alt ist
+                final_prompt = f"{sys_instr}\n\nUSER FRAGE: {prompt}"
+                
+                response = model.generate_content(final_prompt, stream=True)
                 
                 for chunk in response:
                     if chunk.text:
@@ -106,14 +141,11 @@ if prompt := st.chat_input("Frage eingeben..."):
                 placeholder.markdown(full_text)
                 st.session_state.messages.append({"role": "model", "content": full_text})
                 success = True
-                break # Wenn es geklappt hat, hören wir auf zu suchen
+                break 
                 
             except Exception as e:
-                # Wenn Key leer ist (429), merken wir uns das und probieren SOFORT den nächsten
-                last_error = str(e)
-                time.sleep(0.5) # Kurze Atempause für den Server
+                time.sleep(0.5)
                 continue 
 
         if not success:
-            st.error(f"Alle 5 Keys sind gerade ausgelastet oder das Modell spinnt. Fehler: {last_error}")
-            st.info("Tipp: Warte 1 Minute. Wenn das öfter passiert, brauchen wir mehr Keys.")
+            st.error(f"Konnte keine Verbindung herstellen. Modell: {active_model_name}")
