@@ -120,13 +120,14 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         STRATEGIE & LOGIK (PRIORITÄTEN):
         1. **ANALYSE:** Sucht der User nach einer KONKRETEN NUMMER (z.B. "118", "42") oder einem KONKRETEN NAMEN (z.B. "Baccarat", "Gisada")?
            
-           - **SZENARIO 1: KONKRETE SUCHE (Der Kunde weiß, was er will)**
+           - **SZENARIO 1: KONKRETE SUCHE (Direct Hit)**
              a) **Suche** die entsprechende Zeile in der CSV.
-             b) **Option 1 (Die Antwort):** MUSS das gesuchte Produkt sein.
-             c) **Option 2 (Das Upgrade):** Biete JETZT eine höherwertige Alternative an (Mytologik/Olfazeta). Pitch: "Wenn du [Gesucht] magst, ist [Mytologik] dein nächstes Level."
-             d) **UPSELL-PFLICHT (ABSOLUTER ZWANG):** Schau in die Spalte `Upsell_Info` der gefundenen Zeile.
-                Steht da ein Code (z.B. "BSF118", "T118")? -> DANN MUSST DU IHN NENNEN!
-                WARNUNG: Schreibe NICHT "Passendes Duschgel", wenn in der Spalte "BSF118 - Unisex Duschgel" steht. Kopiere den Text aus der Spalte!
+             b) **Option 1 (Die Antwort):** MUSS zwingend das gesuchte Produkt sein! (z.B. "Hier ist deine Nr. 118").
+             c) **Option 2 (Das Upgrade):** Biete JETZT eine höherwertige Alternative an (Mytologik/Olfazeta), die ähnlich riecht. Pitch: "Wenn du 118 magst, wirst du [Mytologik] lieben, weil..."
+             d) **UPSELL-PFLICHT (ABSOLUTER ZWANG):** Gehe zur Spalte `Upsell_Info` der gefundenen Zeile.
+                ⚠️ WENN DORT TEXT STEHT (z.B. "BSF118", "T118", "Duschgel"), DANN MUSST DU DIESEN TEXT KOPIEREN!
+                Du darfst diesen Abschnitt NICHT weglassen. Wenn du ihn weglässt, verliert der Berater Geld. Das ist verboten.
+                Zeige die Codes (BSF..., T...) unbedingt an!
            
            - **SZENARIO 2: FREMDPRODUKT NICHT IN DB (Spezialfälle)**
              a) **GISADA AMBASSADOR:** Empfiehl **Nr. 68** oder **Nr. 87**.
@@ -141,7 +142,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
            - Nutze Markdown Fett `**...**` für Name, Code und Preis.
            - Der **Bestellcode** (aus Spalte `ID`) MUSS IMMER im Titel stehen!
            
-           -> OUTPUT FORMAT:
+           -> OUTPUT FORMAT (Kopiere dieses Layout exakt!):
            "Hier ist Rodions Empfehlung:
 
            ---
@@ -167,8 +168,8 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
            ---
 
            ### 🛍️ Cross-Selling (Umsatz-Booster):
-           **[Hier MUSS der Inhalt der Spalte 'Upsell_Info' des Hauptduftes stehen!]**
-           (Falls die Spalte Codes wie BSF... oder T... enthält, nenne sie exakt so!)
+           **[Hier MUSS der Inhalt der Spalte 'Upsell_Info' stehen! Kopiere ihn 1:1 aus der CSV!]**
+           [Füge einen Satz hinzu, warum Layering (Duschgel+Parfüm) die Haltbarkeit verdoppelt.]
            
            ---
 
