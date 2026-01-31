@@ -15,16 +15,32 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- KEYS & DATEN ---
-# WICHTIG: In Streamlit Secrets muss es API_KEYS = ["key1", "key2"] heißen
+# --- INTELLIGENTES KEY-MANAGEMENT ---
+# Wir prüfen alle möglichen Schreibweisen und Formate
+raw_keys = None
+
 if "API_KEYS" in st.secrets:
-    api_keys = st.secrets["API_KEYS"]
+    raw_keys = st.secrets["API_KEYS"]
 elif "GOOGLE_API_KEY" in st.secrets:
-    api_keys = [st.secrets["GOOGLE_API_KEY"]]
-else:
-    st.error("Bitte 'API_KEYS' in den Streamlit Secrets anlegen!")
+    raw_keys = st.secrets["GOOGLE_API_KEY"]
+elif "api_keys" in st.secrets: # Falls kleingeschrieben
+    raw_keys = st.secrets["api_keys"]
+
+if not raw_keys:
+    st.error("⚠️ Keine Keys gefunden! Bitte überprüfe die Secrets.")
+    st.info("Erwartet wird: GOOGLE_API_KEY = ['key1', 'key2'] in den Secrets.")
     st.stop()
 
+# Wir stellen sicher, dass es immer eine Liste ist (egal ob String oder Liste übergeben wurde)
+if isinstance(raw_keys, str):
+    api_keys = [raw_keys]
+elif isinstance(raw_keys, list):
+    api_keys = raw_keys
+else:
+    st.error("Format der Keys nicht erkannt.")
+    st.stop()
+
+# --- DATEN LADEN ---
 @st.cache_data
 def load_data():
     try:
@@ -61,15 +77,14 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_response = ""
         
-        # System-Wissen als einfacher String (verhindert den 'strip' Fehler)
+        # System-Wissen
         sys_instr = f"Du bist Rodion, Elite-Mentor für Olfazeta. WISSEN: {db['csv'] if db else ''} {db['business'] if db else ''}. REGELN: Nenne NIE Fremdmarken. Preise fett. Sei direkt."
 
         try:
-            # Zufälligen Key wählen
-            client = genai.Client(api_key=random.choice(api_keys))
+            # Zufälligen Key aus deiner Liste wählen
+            chosen_key = random.choice(api_keys)
+            client = genai.Client(api_key=chosen_key)
             
-            # Wir senden KEINE Historie (history), nur den aktuellen Prompt
-            # Das ist die stabilste Methode für die neue Bibliothek
             response = client.models.generate_content_stream(
                 model='gemini-1.5-flash',
                 contents=prompt,
