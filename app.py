@@ -121,24 +121,37 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
            Bau die Liste wie folgt auf:
            1. Start: High-Ticket (Mytologik ~299€) -> Das muss oben stehen!
            2. Mitte: Eigenkreationen (Olfazeta / Scented Love ~60€-25€)
-           3. Ende: Standard-Düfte (Nr. XX ~30-50€)
+           3. Ende: Standard-Düfte (Nr. XX ~30-52€)
            
            WICHTIG: Höre NICHT nach Mytologik auf! Biete Alternativen für jedes Budget.
            Sortiere die finale Liste strikt ABSTEIGEND nach Preis.
            
-        -> OUTPUT FORMAT (Zwingend!):
+           -> OUTPUT FORMAT (WICHTIG: Nutze Markdown fett für Name/Preis und mache IMMER Leerzeilen zwischen den Elementen!):
            "Hier ist Rodions Empfehlung:
+           
+           ---
+
            ### 🏆 Option 1 (Premium): **[Name]** - **[Preis]**
+           
            [Pitch]
+
            ---
-           ### 💎 Option 2: **[Name]** - [Preis]**
+
+           ### ✨ Option 2: **[Name]** - **[Preis]**
+           
            [Pitch]
+
            ---
-           ### ✨ Option 3: **[Name]** - [Preis]**
+
+           ### 💎 Option 3: **[Name]** - **[Preis]**
+           
            [Pitch]
-           ---
+
            [...bis zu 5 Optionen...]
-           ### 🛍️ Cross-Selling: [Upsell]"
+
+           ---
+
+           ### 🛍️ Cross-Selling: **[Upsell]**"
         
         FALL B: USER FRAGT NACH BUSINESS / DOWNLINE / REKRUTIERUNG / MINDSET
         -> Nutze NUR "Network-Marketing-Bibel" und "Business-Wissen".
