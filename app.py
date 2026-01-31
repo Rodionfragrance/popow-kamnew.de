@@ -148,62 +148,53 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ZU GOOGLE GEMINI (ROBUST & DEBUGGING) ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI (ROBUST) ---
         success = False
+        # WICHTIG: Hier sind jetzt nur noch die Namen, die zu 100% existieren
+        # Wir entfernen "latest", da das den 404 Fehler verursacht hat.
+        models_to_check = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
         random.shuffle(api_keys) 
         
         for key in api_keys:
             if success: break
             
-            # Auto-Discovery des Modells
-            available_model = None
-            try:
-                list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
-                list_resp = requests.get(list_url, timeout=5)
-                if list_resp.status_code == 200:
-                    for m in list_resp.json().get('models', []):
-                        if 'generateContent' in m.get('supportedGenerationMethods', []):
-                            m_name = m['name'].replace('models/', '')
-                            if 'flash' in m_name and '1.5' in m_name: available_model = m_name; break
-                            if 'pro' in m_name and '1.5' in m_name: available_model = m_name
-                    if not available_model: available_model = "gemini-1.5-flash-latest" # Fallback 1
-            except: available_model = "gemini-1.5-flash" # Fallback 2
-
-            if not available_model: available_model = "gemini-pro" # Notfall-Fallback
-
-            # Anfrage
-            try:
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/{available_model}:generateContent?key={key}"
-                headers = {'Content-Type': 'application/json'}
-                data = {"contents": [{"parts": [{"text": final_prompt}]}]}
+            # Wir probieren die Modelle der Reihe nach durch
+            for model_name in models_to_check:
+                if success: break
                 
-                response = requests.post(url, headers=headers, json=data, timeout=60)
-                
-                if response.status_code == 200:
-                    try:
-                        answer = response.json()['candidates'][0]['content']['parts'][0]['text']
-                    except: answer = "Format-Fehler."
-
-                    for chunk in answer.split():
-                        full_text += chunk + " "
-                        placeholder.markdown(full_text + "▌")
-                        time.sleep(0.03)
+                try:
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
+                    headers = {'Content-Type': 'application/json'}
+                    data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                     
-                    placeholder.markdown(full_text)
-                    st.session_state.messages.append({"role": "model", "content": full_text})
-                    success = True
-                    break 
-                elif response.status_code == 429:
-                    continue # Rate Limit -> Nächster Key
-                else:
-                    # HIER IST DER DEBUGGER: ZEIGE DEN FEHLER AN!
-                    st.error(f"❌ API Fehler mit Modell {available_model}: {response.status_code}")
-                    st.code(response.text)
-                    continue 
+                    # Timeout 60s
+                    response = requests.post(url, headers=headers, json=data, timeout=60)
+                    
+                    if response.status_code == 200:
+                        try:
+                            answer = response.json()['candidates'][0]['content']['parts'][0]['text']
+                        except: answer = "Format-Fehler."
 
-            except Exception as e:
-                st.error(f"❌ System-Fehler: {e}")
-                continue
+                        for chunk in answer.split():
+                            full_text += chunk + " "
+                            placeholder.markdown(full_text + "▌")
+                            time.sleep(0.03)
+                        
+                        placeholder.markdown(full_text)
+                        st.session_state.messages.append({"role": "model", "content": full_text})
+                        success = True
+                    elif response.status_code == 404:
+                        # Modell nicht gefunden -> Nächstes Modell probieren (leise scheitern)
+                        continue
+                    elif response.status_code == 429:
+                        # Rate Limit -> Schleife bricht ab, nächster Key wird genommen
+                        break 
+                    else:
+                        st.error(f"❌ Fehler bei Key ...{key[-5:]} mit Modell {model_name}: {response.status_code}")
+                        st.code(response.text)
+
+                except Exception as e:
+                    continue
         
         if not success:
-            st.error("⚠️ Wenn du oben rote Fehlermeldungen siehst, schicke diese an Rodion!")
+            st.error("⚠️  Wenn du oben rote Fehlermeldungen siehst, schicke diese an Rodion!")
