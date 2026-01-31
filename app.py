@@ -6,48 +6,56 @@ import random
 import time
 from datetime import datetime
 
-# --- KONFIGURATION ---
+# --- 1. KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- UI DESIGN ---
+# --- 2. UI DESIGN & CSS FIXES ---
 st.markdown("""
 <style>
-/* 1. PLATZ HALTER UNTEN */
+/* 1. HAUPTBEREICH: PLATZ UNTEN RESERVIEREN */
+/* Verhindert, dass der letzte Text hinter dem Eingabefeld verschwindet */
 .main .block-container {
     padding-bottom: 120px !important; 
 }
 
-/* 2. EINGABEFELD STYLEN */
+/* 2. EINGABEFELD STYLEN (ChatGPT Style) */
+/* Wir lassen Streamlit die Breite regeln, machen es aber hübsch */
 [data-testid="stChatInput"] {
     border-radius: 20px !important;
     border: 1px solid #e0e0e0 !important;
+    background-color: white !important;
+    elevation: 5;
 }
 
 /* 3. AVATARE */
 .stChatMessageAvatar { background-color: #ffffff !important; }
 
-/* 4. TEXT-FORMATIERUNG */
+/* 4. TEXT-FORMATIERUNG (Lesbarkeit & Business-Look) */
 .stMarkdown p {
     font-size: 16px !important;
     line-height: 1.8 !important;
     margin-bottom: 25px !important;
 }
 .stMarkdown h3 {
-    color: #d32f2f !important; 
+    color: #d32f2f !important; /* Chogan Rot-Ton */
     margin-top: 40px !important;
     margin-bottom: 15px !important;
     border-bottom: 1px solid #eee; 
     padding-bottom: 5px;
+    font-weight: 700;
 }
 .stMarkdown hr {
     margin-top: 30px !important;
     margin-bottom: 30px !important;
     border-color: #f0f0f0;
 }
+.stMarkdown strong {
+    color: #333; /* Wichtige Wörter dunkler */
+}
 </style>
 """, unsafe_allow_html=True)
 
-# --- JAHRESZEIT ---
+# --- 3. HELFER: JAHRESZEIT ---
 def get_current_season():
     month = datetime.now().month
     if month in [12, 1, 2]: return "Winter ❄️"
@@ -57,13 +65,13 @@ def get_current_season():
 
 current_season = get_current_season()
 
-# --- KEYS ---
+# --- 4. API KEYS LADEN ---
 raw_input = None
 if "API_KEYS" in st.secrets: raw_input = st.secrets["API_KEYS"]
 elif "GOOGLE_API_KEY" in st.secrets: raw_input = st.secrets["GOOGLE_API_KEY"]
 
 if not raw_input:
-    st.error("⚠️ Keine Keys gefunden! Bitte Secrets prüfen.")
+    st.error("⚠️ Keine Keys gefunden! Bitte in .streamlit/secrets.toml eintragen.")
     st.stop()
 
 keys_to_use = []
@@ -82,33 +90,46 @@ if not api_keys:
     st.error("⚠️ Keine gültigen Keys verfügbar.")
     st.stop()
 
-# --- DATEN ---
+# --- 5. DATENBANK LADEN ---
 @st.cache_data
 def load_data():
     try:
-        df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";")
-        return {"csv": df.to_string(index=False), "business": open("business_wissen.txt", "r", encoding="utf-8").read()}
-    except: return None
+        # WICHTIG: Semikolon als Trenner nutzen!
+        df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";", encoding="utf-8")
+        # Business Wissen laden falls vorhanden, sonst leer
+        try:
+            biz = open("business_wissen.txt", "r", encoding="utf-8").read()
+        except: 
+            biz = ""
+        return {"csv": df.to_string(index=False), "business": biz}
+    except Exception as e: 
+        st.error(f"Fehler beim Laden der Datenbank: {e}")
+        return None
 
 db = load_data()
 
-# --- HEADER ---
+# --- 6. HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption(f"📅 Saison: {current_season} | 🚀 Dein KI-Mentor für Strategie & Verkauf | 🌍 Multi-Language Mentor") 
+st.caption(f"📅 Saison: {current_season} | 🚀 Dein KI-Mentor für Strategie & Verkauf | 🌍 Multi-Language Mentor | ✅ System: Online") 
 
-st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
-st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
+col1, col2 = st.columns(2)
+with col1:
+    st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
+with col2:
+    st.link_button("☕ Gefällt dir? Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
 
-# --- CHAT ---
+# --- 7. CHAT LOGIC ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Verlauf anzeigen
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
         st.markdown(msg["content"])
 
-if prompt := st.chat_input("Frage eingeben (Beratung, Business, egal)..."):
+# --- 8. PROMPT & ANTWORT ---
+if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal!)..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -117,66 +138,88 @@ if prompt := st.chat_input("Frage eingeben (Beratung, Business, egal)..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER "MAX 5 OPTIONEN" PROMPT ---
+        # --- DER MEISTER-PROMPT ---
         system_text = f"""
         🚨 OBERSTE SICHERHEITSDIREKTIVE:
-        Du darfst NIEMALS Markennamen aus der Spalte "Original_Marke" oder "Inspiriert_Von" (wie Creed, Armani, Tom Ford) nennen. 
-        Ausnahme: Die Eigenmarke "Mytologik" darfst und sollst du nennen!
-        Nenne sonst NUR die Chogan-Nummer (z.B. "Nr. 68").
+        Du darfst NIEMALS Markennamen aus der Spalte "Original_Marke" nennen (wie Dior, Chanel, Gucci etc.). 
+        AUSNAHME: Die Marken "Mytologik", "Olfazeta", "Scented Love" und alle "Eigenkreationen" darfst und SOLLST du nennen!
         
         ---
         
-        ZIEL: MAXIMALER WARENKORBWERT (High-Ticket-First) & AUSWAHL BIETEN.
+        KONTEXT:
+        - Jahreszeit: {current_season}
+        - Datenbank: {db['csv'] if db else 'Datenbank leer'}
         
-        VERKAUFS-LOGIK:
-        1. Identifiziere ALLE Produkte, die *perfekt* zur Anfrage passen.
-        2. Sortiere diese Liste nach PREIS (Teuerste/Mytologik zuerst).
-        3. Präsentiere alle TOP-Treffer (bis zu 5 Stück). Wenn nur 2 passen, zeig 2. Wenn 5 passen, zeig 5.
+        ROLLE:
+        Du bist Rodion, der Elite-Mentor für Chogan-Berater.
+        Dein User ist KEIN Endkunde, sondern ein BERATER (Verkäufer).
+        Deine Aufgabe: Gib dem Berater die perfekte Strategie, um maximalen Umsatz zu machen und die eigene Marke zu stärken.
+        
+        ZIEL: MARKEN-STÄRKUNG & UMSATZ (High-Ticket & Exklusivität).
+        
+        VERKAUFS-STRATEGIE (PRIORITÄTEN):
+        1. PRIORITÄT 1 (EXKLUSIVITÄT):
+           Suche ZUERST nach Produkten, die "Eigenkreation" sind oder zur Linie "Mytologik" / "Olfazeta" gehören.
+           -> Diese Produkte machen den Kunden unabhängig von Vergleichen. Empfiehl sie IMMER zuerst, wenn sie thematisch passen.
+        
+        2. PRIORITÄT 2 (STANDARD):
+           Erst danach kommen die Standard-Düfte ("Inspiriert von") als Alternative.
+        
+        DATEN-LESE-REGELN (WICHTIG):
+        A) NAMEN: 
+           - Bei Eigenkreationen/Mytologik: Nenne den NAMEN aus der Spalte 'Marke_Olfazeta' (z.B. "Ares", "ASTRAL24", "Baby Boy"). Sag NICHT "Nr. Ares". Sag: "Ich empfehle dir Ares".
+           - Bei Standard-Düften: Nenne "Nr. [ID]" (z.B. "Nr. 68").
+        
+        B) PREISE:
+           - Nimm exakt den Preis aus der CSV (meist Spalte 9 'Preis_50ml' oder Spalte 10 'Preis_100ml'). Erfinde keine Preise.
+           
+        C) UPSELLING:
+           - Lies die Spalte 'Upsell_Info'. Empfiehl genau das, was da steht.
         
         SPRACHE:
-        Antworte IMMER in der exakt gleichen Sprache wie der Nutzer!
+        Erkenne die Sprache der Eingabe. Antworte IMMER in der exakt gleichen Sprache wie der Nutzer!
         
         LAYOUT-PFLICHT:
-        - Nutze `---` als Trennlinie zwischen JEDEM Produkt.
+        - Nutze `---` als Trennlinie.
         - Mach DOPPELTE ABSÄTZE nach jedem Punkt für Lesbarkeit.
         
-        STRUKTUR-VORGABE (Wiederhole diesen Block für jedes passende Produkt, max. 5x):
+        STRUKTUR-VORGABE (Nutze diese Vorlage dynamisch für bis zu 5 Empfehlungen):
         
-        "Hier sind alle Top-Optionen (sortiert nach Umsatz-Potenzial):
-        
-        ---
-        
-        ### 🏆 Option 1 (Premium): [Name/Nummer]
-        **Argument:** "[Satz über Luxus & Exklusivität]"
-        💰 **Preis:** **[Preis] €**
+        "Hier sind die Top-Empfehlungen(Exklusiv-Linien zuerst):
         
         ---
         
-        ### ✨ Option 2: [Name/Nummer]
-        **Argument:** "[Satz über den Vibe]"
-        💰 **Preis:** **[Preis] €**
+        ### 🏆 Option 1 (Exklusiv/Premium): [Name oder Nummer]
+        **Das Argument für den Kunden:**
+        "[Schreibe hier einen Pitch, den der Berater sagen soll. Fokus auf Einzigartigkeit/Luxus.]"
+        💰 **Preis:** **[Preis aus CSV]**
         
         ---
         
-        [Füge hier weitere Optionen (3, 4, 5) ein, falls sie PERFEKT passen]
+        ### ✨ Option 2: [Name oder Nummer]
+        **Das Argument für den Kunden:**
+        "[Pitch für den Kunden]"
+        💰 **Preis:** **[Preis aus CSV]**
+        
+        [Füge weitere Optionen 3, 4, 5 an, falls passend...]
         
         ---
         
-        ### 🛍️ Cross-Selling (Pflicht):
-        [Lies die Spalte 'Upsell_Info' für den gewählten Duft. Wenn dort z.B. 'Passendes Duschgel' steht, empfiehl GENAU DAS.]
+        ### 🛍️ Cross-Selling (Umsatz-Booster):
+        [Infos aus Spalte 'Upsell_Info'. Wenn leer, empfiehl allgemein passendes Duschgel.]
         
         ---
         
-        ### ❓ Abschlussfrage:
-        [Frage den Kunden, welche Richtung ihm am meisten zusagt.]"
+        ### ❓ Deine Abschlussfrage an den Kunden:
+        [Gib dem Berater eine offene Frage an die Hand, z.B. Wahl zwischen Exklusiv oder Standard.]"
         """
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI ---
         success = False
         models_to_try = ["gemini-2.0-flash", "gemini-flash-latest", "gemini-pro-latest"]
-        random.shuffle(api_keys)
+        random.shuffle(api_keys) # Load Balancing
         
         for model_name in models_to_try:
             if success: break
@@ -192,8 +235,10 @@ if prompt := st.chat_input("Frage eingeben (Beratung, Business, egal)..."):
                         result = response.json()
                         try:
                             answer = result['candidates'][0]['content']['parts'][0]['text']
-                        except: answer = "Antwort blockiert."
+                        except: 
+                            answer = "⚠️ Die KI hat geantwortet, aber das Format war unerwartet."
 
+                        # Streaming Effekt
                         for chunk in answer.split():
                             full_text += chunk + " "
                             placeholder.markdown(full_text + "▌")
@@ -203,7 +248,8 @@ if prompt := st.chat_input("Frage eingeben (Beratung, Business, egal)..."):
                         st.session_state.messages.append({"role": "model", "content": full_text})
                         success = True
                         break 
-                except: continue
+                except Exception as e:
+                    continue
             
         if not success:
-            st.error("⚠️ Verbindung fehlgeschlagen.")
+            st.error("⚠️ Verbindung fehlgeschlagen. Alle API-Keys sind gerade ausgelastet oder ungültig. Warte kurz.")
