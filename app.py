@@ -108,7 +108,7 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
         st.markdown(msg["content"])
 
-if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal!)..."):
+if prompt := st.chat_input("Frage eingeben (Egal welche Sprache!)..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
