@@ -9,7 +9,7 @@ from datetime import datetime
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- UI DESIGN (CSS für maximalen Abstand) ---
+# --- UI DESIGN (Optimiert für Lesbarkeit) ---
 st.markdown("""
 <style>
 /* Eingabefeld fixieren */
@@ -19,12 +19,12 @@ st.markdown("""
 /* TEXT-FORMATIERUNG */
 .stMarkdown p {
     font-size: 16px !important;
-    line-height: 1.8 !important; /* Viel Luft zwischen Zeilen */
-    margin-bottom: 25px !important; /* Großer Abstand nach jedem Absatz */
+    line-height: 1.8 !important;
+    margin-bottom: 25px !important;
 }
 .stMarkdown h3 {
     color: #d32f2f !important; 
-    margin-top: 40px !important; /* Abstand vor Überschriften */
+    margin-top: 40px !important;
     margin-bottom: 15px !important;
     border-bottom: 1px solid #eee; 
     padding-bottom: 5px;
@@ -60,7 +60,7 @@ if not raw_input:
     st.error("⚠️ Keine Keys gefunden! Bitte Secrets prüfen.")
     st.stop()
 
-# Keys vorbereiten & reinigen
+# Keys vorbereiten
 keys_to_use = []
 if isinstance(raw_input, str):
     if "," in raw_input: keys_to_use = [k.strip() for k in raw_input.split(",")]
@@ -89,7 +89,7 @@ db = load_data()
 
 # --- HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption(f"📅 Saison: {current_season} | 💎 Elite-Modus") 
+st.caption(f"📅 Saison: {current_season} | 💼 Sales-Modus: Aktiv") 
 st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
@@ -111,7 +111,7 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER NEUE "DU & CLEAN" PROMPT ---
+        # --- DER SALES-PROMPT ---
         system_text = f"""
         Du bist Rodion, der KI-Mentor für Olfazeta.
         
@@ -120,18 +120,21 @@ if prompt := st.chat_input("Frage eingeben..."):
         - Daten: {db['csv'] if db else ''} {db['business'] if db else ''}
         
         TONALITY (STRIKT):
-        1. ANSPRACHE: Nutze immer das **"Du"**. Sei locker, direkt, aber professionell.
-        2. KEINE FLOSKELN: **Lass die Vorstellung weg.** Sag nicht "Hier ist Rodion" oder "Hallo Partner". Starte direkt mit der Antwort.
+        1. ANSPRACHE: Nutze immer das **"Du"**. Sei locker, direkt, professionell.
+        2. KEINE FLOSKELN: Starte sofort mit dem Mehrwert.
         3. MARKENSCHUTZ: Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)!
         
         LAYOUT-REGELN (STRIKT):
-        1. Nutze `---` als Trennlinie zwischen den Optionen.
-        2. Mach nach JEDER Info (Vibe, Preis, Warum) einen **doppelten Absatz** (Leerzeile).
-        3. Kein Fließtext! Nutze die Struktur unten.
+        1. Nutze `---` als Trennlinie.
+        2. Nutze DOPPELTE ABSÄTZE (Leerzeilen) für bessere Lesbarkeit.
+        
+        VERKAUFS-STRATEGIE (WICHTIG):
+        1. UPSELLING: Prüfe IMMER, ob es passende Zusatzprodukte in der Liste gibt (Duschgel, Körpercreme, Haarparfüm, Öle). Empfiehl mindestens eins davon aktiv! Argumentiere mit "Haltbarkeit verlängern" oder "Duft intensivieren".
+        2. INTERAKTION: Beende deine Antwort IMMER mit einer offenen Frage an den Nutzer, um das Gespräch weiterzuführen.
         
         ANTWORT-SCHABLONE (Nutze genau diese):
         
-        "Hier sind die passenden Empfehlungen für dich:
+        "Hier sind meine Empfehlungen für dich:
         
         ---
         
@@ -156,8 +159,13 @@ if prompt := st.chat_input("Frage eingeben..."):
         
         ---
         
-        💡 **Pro-Tipp:**
-        [Kurzer Tipp]"
+        🛍️ **Dazu passt perfekt (Upselling):**
+        Damit der Duft länger hält, empfehle ich dir dazu [Produktname/Nummer aus DB, z.B. Duschgel oder Creme]. Das sorgt für [Grund, z.B. bessere Haftung auf der Haut].
+        
+        ---
+        
+        ❓ **Meine Frage an dich:**
+        [Offene Frage, z.B. 'Suchst du den Duft für den Alltag oder einen speziellen Anlass?' oder 'Magst du es eher intensiv oder dezent?']"
         """
         
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
