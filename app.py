@@ -9,10 +9,9 @@ from datetime import datetime
 # --- KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
 
-# --- UI DESIGN (Optimiert für Lesbarkeit) ---
+# --- UI DESIGN ---
 st.markdown("""
 <style>
-/* Eingabefeld fixieren */
 .stChatInput {position: fixed; bottom: 30px;}
 .stChatMessageAvatar { background-color: #ffffff !important; }
 
@@ -34,14 +33,10 @@ st.markdown("""
     margin-bottom: 30px !important;
     border-color: #f0f0f0;
 }
-.stMarkdown li {
-    margin-bottom: 10px !important;
-    line-height: 1.7 !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
-# --- JAHRESZEIT ERMITTELN ---
+# --- JAHRESZEIT ---
 def get_current_season():
     month = datetime.now().month
     if month in [12, 1, 2]: return "Winter ❄️"
@@ -60,7 +55,6 @@ if not raw_input:
     st.error("⚠️ Keine Keys gefunden! Bitte Secrets prüfen.")
     st.stop()
 
-# Keys vorbereiten
 keys_to_use = []
 if isinstance(raw_input, str):
     if "," in raw_input: keys_to_use = [k.strip() for k in raw_input.split(",")]
@@ -89,7 +83,7 @@ db = load_data()
 
 # --- HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption(f"📅 Saison: {current_season} | 💼 Sales-Modus: Aktiv") 
+st.caption(f"📅 Saison: {current_season} | 💼 Sales-Modus: Aggressiv") 
 st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
 st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 st.markdown("---")
@@ -111,7 +105,7 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER SALES-PROMPT ---
+        # --- DER STRICT SALES PROMPT ---
         system_text = f"""
         Du bist Rodion, der KI-Mentor für Olfazeta.
         
@@ -119,53 +113,41 @@ if prompt := st.chat_input("Frage eingeben..."):
         - Jahreszeit: {current_season}
         - Daten: {db['csv'] if db else ''} {db['business'] if db else ''}
         
-        TONALITY (STRIKT):
-        1. ANSPRACHE: Nutze immer das **"Du"**. Sei locker, direkt, professionell.
-        2. KEINE FLOSKELN: Starte sofort mit dem Mehrwert.
-        3. MARKENSCHUTZ: Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)!
+        TONALITY:
+        1. ANSPRACHE: Per **"Du"**. Locker, direkt.
+        2. KEINE FLOSKELN: Kein "Hier ist Rodion". Starte direkt.
+        3. MARKENSCHUTZ: NIEMALS Fremdmarken nennen!
         
-        LAYOUT-REGELN (STRIKT):
-        1. Nutze `---` als Trennlinie.
-        2. Nutze DOPPELTE ABSÄTZE (Leerzeilen) für bessere Lesbarkeit.
+        LAYOUT-PFLICHT (MUSS EINGEHALTEN WERDEN):
+        - Nutze `---` als Trennlinie.
+        - Mach DOPPELTE ABSÄTZE nach jedem Punkt.
         
-        VERKAUFS-STRATEGIE (WICHTIG):
-        1. UPSELLING: Prüfe IMMER, ob es passende Zusatzprodukte in der Liste gibt (Duschgel, Körpercreme, Haarparfüm, Öle). Empfiehl mindestens eins davon aktiv! Argumentiere mit "Haltbarkeit verlängern" oder "Duft intensivieren".
-        2. INTERAKTION: Beende deine Antwort IMMER mit einer offenen Frage an den Nutzer, um das Gespräch weiterzuführen.
+        STRUKTUR-VORGABE (Fülle JEDEN dieser 4 Punkte aus):
         
-        ANTWORT-SCHABLONE (Nutze genau diese):
-        
-        "Hier sind meine Empfehlungen für dich:
+        "Hier sind meine Empfehlungen:
         
         ---
         
         ### 🏆 1. Der Favorit: Nr. [Nummer]
-        
-        **Vibe:**
-        [Beschreibung]
-        
-        **Warum er passt:**
-        [Erklärung passend zur Jahreszeit {current_season}]
-        
+        **Vibe:** [Beschreibung]
+        **Warum er passt:** [Erklärung]
         💰 **Preis:** **[Preis] €**
         
         ---
         
         ### ✨ 2. Die Alternative: Nr. [Nummer]
-        
-        **Vibe:**
-        [Beschreibung]
-        
+        **Vibe:** [Beschreibung]
         💰 **Preis:** **[Preis] €**
         
         ---
         
-        🛍️ **Dazu passt perfekt (Upselling):**
-        Damit der Duft länger hält, empfehle ich dir dazu [Produktname/Nummer aus DB, z.B. Duschgel oder Creme]. Das sorgt für [Grund, z.B. bessere Haftung auf der Haut].
+        ### 🛍️ Power-Kombi (Upselling):
+        [HIER IST DEIN EINSATZ: Suche in der Datenbank nach passenden Zusatzprodukten (Duschgel, Bodylotion, Haarparfüm, Öle). Empfiehl KONKRET eines dazu, um die Haltbarkeit zu verlängern (Layering). Falls du kein spezifisches Produkt findest, empfiehl allgemein eine passende Körperpflege aus dem Sortiment.]
         
         ---
         
-        ❓ **Meine Frage an dich:**
-        [Offene Frage, z.B. 'Suchst du den Duft für den Alltag oder einen speziellen Anlass?' oder 'Magst du es eher intensiv oder dezent?']"
+        ### ❓ Meine Frage an dich:
+        [Stelle HIER eine offene Frage, um das Gespräch am Laufen zu halten. Z.B. 'Soll ich dir zeigen, wie man durch Layering den Duft 4 Stunden länger haltbar macht?']"
         """
         
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
@@ -191,7 +173,6 @@ if prompt := st.chat_input("Frage eingeben..."):
                             answer = result['candidates'][0]['content']['parts'][0]['text']
                         except: answer = "Antwort blockiert."
 
-                        # Streaming
                         for chunk in answer.split():
                             full_text += chunk + " "
                             placeholder.markdown(full_text + "▌")
