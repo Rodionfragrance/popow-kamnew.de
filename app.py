@@ -218,47 +218,80 @@ if prompt := st.chat_input("Frage eingeben (Deutsch, Englisch, Kroatisch... egal
 
         # --- VERBINDUNG ZU GOOGLE GEMINI ---
         success = False
-        # Wir probieren jetzt ALLE Varianten durch, bis eine klappt
-        models_to_try = ["gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-pro", "gemini-1.0-pro"]
         random.shuffle(api_keys) 
         
-        for model_name in models_to_try:
+        # DEBUG-LOGIC: Wir fragen Google, welche Modelle erlaubt sind
+        for key in api_keys:
             if success: break
-            for key in api_keys:
-                try:
-                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
-                    headers = {'Content-Type': 'application/json'}
-                    data = {"contents": [{"parts": [{"text": final_prompt}]}]}
-                    
-                    response = requests.post(url, headers=headers, json=data, timeout=10)
-                    
-                    if response.status_code == 200:
-                        result = response.json()
-                        try:
-                            answer = result['candidates'][0]['content']['parts'][0]['text']
-                        except: 
-                            answer = "⚠️ Die KI hat geantwortet, aber das Format war unerwartet."
-
-                        # Streaming Effekt
-                        for chunk in answer.split():
-                            full_text += chunk + " "
-                            placeholder.markdown(full_text + "▌")
-                            time.sleep(0.03)
-                        
-                        placeholder.markdown(full_text)
-                        st.session_state.messages.append({"role": "model", "content": full_text})
-                        success = True
-                        break 
-                    else:
-                        # HIER IST DER NEUE DEBUGGER!
-                        # Wenn Google NICHT 200 (OK) sendet, zeigen wir den Fehler an:
-                        st.error(f"❌ API-Fehler bei Key ...{key[-5:]} mit Modell {model_name}")
-                        st.error(f"Status Code: {response.status_code}")
-                        st.code(response.text) # Zeigt die genaue Meldung von Google an
-
-                except Exception as e:
-                    st.error(f"❌ Technischer Absturz bei Key ...{key[-5:]}: {e}")
-                    continue
             
+            # 1. Ermittle verfügbare Modelle für diesen Key
+            available_model = None
+            try:
+                # Wir rufen die Liste der Modelle ab, um Fehler 404 zu vermeiden
+                list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
+                list_resp = requests.get(list_url, timeout=5)
+                
+                if list_resp.status_code == 200:
+                    models_data = list_resp.json().get('models', [])
+                    # Wir suchen ein Modell, das 'generateContent' kann und 'flash' oder 'pro' heißt
+                    for m in models_data:
+                        m_name = m['name'].replace('models/', '') # 'models/gemini-pro' -> 'gemini-pro'
+                        m_methods = m.get('supportedGenerationMethods', [])
+                        
+                        if 'generateContent' in m_methods:
+                            # Priorität: Flash -> Pro -> Irgendeins
+                            if 'flash' in m_name and '1.5' in m_name:
+                                available_model = m_name
+                                break
+                            elif 'pro' in m_name and '1.5' in m_name:
+                                available_model = m_name
+                            elif available_model is None:
+                                available_model = m_name # Fallback
+                else:
+                    st.error(f"❌ Key ...{key[-5:]} konnte Modelle nicht laden. Status: {list_resp.status_code}")
+                    continue
+
+            except Exception as e:
+                st.error(f"Netzwerkfehler beim Modell-Check: {e}")
+                continue
+
+            # Wenn wir kein Modell gefunden haben, springen wir zum nächsten Key
+            if not available_model:
+                st.error(f"⚠️ Key ...{key[-5:]} hat keine Zugriffsberechtigung auf Chat-Modelle.")
+                continue
+
+            # 2. Anfrage mit dem gefundenen Modell senden
+            try:
+                # st.info(f"Benutze Modell: {available_model}") # Optional: Anzeigen welches Modell läuft
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{available_model}:generateContent?key={key}"
+                headers = {'Content-Type': 'application/json'}
+                data = {"contents": [{"parts": [{"text": final_prompt}]}]}
+                
+                response = requests.post(url, headers=headers, json=data, timeout=10)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    try:
+                        answer = result['candidates'][0]['content']['parts'][0]['text']
+                    except: 
+                        answer = "⚠️ Die KI hat geantwortet, aber das Format war unerwartet."
+
+                    for chunk in answer.split():
+                        full_text += chunk + " "
+                        placeholder.markdown(full_text + "▌")
+                        time.sleep(0.03)
+                    
+                    placeholder.markdown(full_text)
+                    st.session_state.messages.append({"role": "model", "content": full_text})
+                    success = True
+                    break 
+                else:
+                    st.error(f"❌ Fehler bei Anfrage mit {available_model}: {response.status_code}")
+                    st.code(response.text)
+
+            except Exception as e:
+                st.error(f"❌ Technischer Absturz bei Key ...{key[-5:]}: {e}")
+                continue
+        
         if not success:
-            st.error("⚠️ Fehler. Bitte Screenshot von den roten Fehlermeldungen oben machen und Rodion schicken!")
+            st.error("⚠️ Bitte Fehler an Rodion schicken")
