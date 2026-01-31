@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import requests
-import json
 import random
 import time
 
@@ -16,7 +15,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- KEYS HOLEN ---
+# --- KEYS HOLEN & REINIGEN (WICHTIG!) ---
 raw_keys = None
 if "API_KEYS" in st.secrets: raw_keys = st.secrets["API_KEYS"]
 elif "GOOGLE_API_KEY" in st.secrets: raw_keys = st.secrets["GOOGLE_API_KEY"]
@@ -25,9 +24,21 @@ if not raw_keys:
     st.error("⚠️ Keine Keys gefunden! Bitte Secrets prüfen.")
     st.stop()
 
-if isinstance(raw_keys, str): api_keys = [raw_keys]
-elif isinstance(raw_keys, list): api_keys = raw_keys
-else: api_keys = []
+if isinstance(raw_keys, str): raw_keys = [raw_keys]
+elif not isinstance(raw_keys, list): raw_keys = []
+
+# --- DIE WASCHMASCHINE FÜR KEYS ---
+api_keys = []
+for k in raw_keys:
+    if isinstance(k, str):
+        # Entfernt Leerzeichen, Zeilenumbrüche und versehentliche Anführungszeichen
+        clean_key = k.strip().replace('"', '').replace("'", "").replace("\n", "")
+        if len(clean_key) > 10: # Nur echte Keys behalten
+            api_keys.append(clean_key)
+
+if not api_keys:
+    st.error("⚠️ Keine gültigen Keys nach der Reinigung übrig.")
+    st.stop()
 
 # --- DATEN LADEN ---
 @st.cache_data
@@ -62,71 +73,65 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- PROMPT ---
+        # PROMPT
         system_text = f"""
         Du bist Rodion, Elite-Mentor für Olfazeta.
         DATEN: {db['csv'] if db else ''} {db['business'] if db else ''}.
-        
-        REGELN:
-        1. Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)! Die Spalte "Original_Marke" ist geheim.
-        2. Sag: "Das ist unsere Nr. XY, eine tolle Alternative..."
-        3. Preise fett.
+        REGELN: 1. KEINE Fremdmarken nennen! 2. Preise fett. 3. Sei direkt.
         """
-        
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
 
-        # --- DIE DIREKTE API ANBINDUNG (REST) ---
+        # --- INTELLIGENTE VERBINDUNG ---
         success = False
-        error_details = []
+        debug_log = []
         
-        # Wir probieren erst Flash (schnell), dann Pro (altes Modell als Backup)
-        # Manchmal ist Flash leer, aber Pro hat noch Quote!
-        models_to_test = ["gemini-1.5-flash", "gemini-pro"]
-        
-        # Keys mischen
+        # Wir testen verschiedene Adressen (Endpoints), falls eine 404 ist
+        endpoints = [
+            ("gemini-1.5-flash", "v1beta"), # Standard Neu
+            ("gemini-1.5-flash", "v1"),     # Alternative Adresse
+            ("gemini-pro", "v1beta"),       # Alt Stabil
+            ("gemini-pro", "v1")            # Alt Alternative
+        ]
+
         random.shuffle(api_keys)
-        
-        for model_name in models_to_test:
+
+        # Wir probieren erst alle Keys am besten Modell, dann alle Keys am zweitbesten...
+        for model_name, version in endpoints:
             if success: break
             
             for key in api_keys:
                 try:
-                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
+                    url = f"https://generativelanguage.googleapis.com/{version}/models/{model_name}:generateContent?key={key}"
                     headers = {'Content-Type': 'application/json'}
                     data = {"contents": [{"parts": [{"text": final_prompt}]}]}
                     
-                    response = requests.post(url, headers=headers, json=data)
+                    response = requests.post(url, headers=headers, json=data, timeout=10)
                     
                     if response.status_code == 200:
-                        # Erfolg!
-                        result_json = response.json()
+                        # TREFFER!
+                        result = response.json()
                         try:
-                            answer = result_json['candidates'][0]['content']['parts'][0]['text']
-                        except:
-                            # Manchmal blockiert der Sicherheitsfilter die Antwort
-                            answer = "Entschuldigung, meine Antwort wurde vom Sicherheitsfilter blockiert. Bitte formuliere die Frage etwas anders."
-
-                        # Streaming Effekt
-                        for word in answer.split():
-                            full_text += word + " "
+                            answer = result['candidates'][0]['content']['parts'][0]['text']
+                        except: answer = "Ich habe eine Antwort, aber der Sicherheitsfilter hat sie blockiert."
+                        
+                        # Stream Output
+                        for chunk in answer.split():
+                            full_text += chunk + " "
                             placeholder.markdown(full_text + "▌")
-                            time.sleep(0.05)
+                            time.sleep(0.04)
                         
                         placeholder.markdown(full_text)
                         st.session_state.messages.append({"role": "model", "content": full_text})
                         success = True
                         break
                     else:
-                        # Fehler protokollieren (aber weitermachen)
-                        error_details.append(f"Modell {model_name} mit Key ...{key[-4:]}: Code {response.status_code}")
-                        continue
-                        
+                        debug_log.append(f"{model_name} ({version}): Code {response.status_code}")
                 except Exception as e:
-                    error_details.append(str(e))
+                    debug_log.append(f"Error: {str(e)}")
                     continue
 
         if not success:
-            st.error("⚠️ Limit erreicht.")
-            with st.expander("Details für Rodion (Hier klicken)"):
-                st.write(error_details)
-                st.info("LÖSUNG: Erstelle ein 'Neues Projekt' in Google AI Studio und generiere dort einen frischen Key.")
+            st.error("⚠️ Verbindung fehlgeschlagen.")
+            with st.expander("Fehleranalyse anzeigen"):
+                st.write(debug_log)
+                st.write("Mögliche Ursachen: 404 = Key/Modell passt nicht zusammen. 429 = Limit.")
