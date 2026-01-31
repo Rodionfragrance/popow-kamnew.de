@@ -129,6 +129,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
         
         FALL B: USER FRAGT NACH BUSINESS / DOWNLINE / REKRUTIERUNG / MINDSET
         -> Nutze NUR "Network-Marketing-Bibel" und "Business-Wissen".
+        -> VERBOT: Empfiehl KEINE konkreten Parfüms, wenn es um Mindset oder Downline-Probleme geht! Konzentriere dich auf Führung und Strategie.
         -> Ignoriere die CSV-Datenbank und Preise.
         -> STRATEGIE: Sei ein gnadenloser Mentor. Gib klare, harte Handlungsempfehlungen. Kein "Blabla", sondern Strategie.
         -> OUTPUT FORMAT: 
@@ -138,7 +139,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
 
         WISSENS-BASIS:
         - Jahreszeit: {current_season}
-        - Datenbank (CSV): {db['csv'][:20000] if db and db['csv'] else 'Leer'} ... (Daten gekürzt für Kontext)
+        - Datenbank (CSV): {db['csv'] if db and db['csv'] else 'Leer'}
         - NETWORK BIBEL & BUSINESS WISSEN: {db['network']} \n {db['business']}
         
         SPRACHE:
@@ -147,7 +148,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
         
         final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
 
-        # --- VERBINDUNG ZU GOOGLE GEMINI (ROBUST) ---
+        # --- VERBINDUNG ZU GOOGLE GEMINI (ROBUST & DEBUGGING) ---
         success = False
         random.shuffle(api_keys) 
         
@@ -165,8 +166,10 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
                             m_name = m['name'].replace('models/', '')
                             if 'flash' in m_name and '1.5' in m_name: available_model = m_name; break
                             if 'pro' in m_name and '1.5' in m_name: available_model = m_name
-                    if not available_model: available_model = "gemini-1.5-flash" # Fallback
-            except: available_model = "gemini-1.5-flash" # Fallback bei Netzwerkfehler
+                    if not available_model: available_model = "gemini-1.5-flash-latest" # Fallback 1
+            except: available_model = "gemini-1.5-flash" # Fallback 2
+
+            if not available_model: available_model = "gemini-pro" # Notfall-Fallback
 
             # Anfrage
             try:
@@ -193,11 +196,14 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps..."):
                 elif response.status_code == 429:
                     continue # Rate Limit -> Nächster Key
                 else:
-                    # Bei echten Fehlern kurz loggen, aber weiterprobieren
+                    # HIER IST DER DEBUGGER: ZEIGE DEN FEHLER AN!
+                    st.error(f"❌ API Fehler mit Modell {available_model}: {response.status_code}")
+                    st.code(response.text)
                     continue 
 
             except Exception as e:
+                st.error(f"❌ System-Fehler: {e}")
                 continue
         
         if not success:
-            st.error("⚠️ Fehler bitte an Rodion schicken.")
+            st.error("⚠️ Wenn du oben rote Fehlermeldungen siehst, schicke diese an Rodion!")
