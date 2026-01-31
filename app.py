@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-import google.generativeai as genai
+import requests
+import json
 import random
 import time
 
@@ -61,51 +62,66 @@ if prompt := st.chat_input("Frage eingeben..."):
         placeholder = st.empty()
         full_text = ""
         
-        # --- DER HARTE MARKENSCHUTZ-PROMPT ---
+        # --- PROMPT MIT MARKENSCHUTZ ---
         system_text = f"""
         Du bist Rodion, Elite-Mentor für Olfazeta.
         DATEN: {db['csv'] if db else ''} {db['business'] if db else ''}.
         
-        !!! WICHTIGE REGELN !!!
-        1. MARKENSCHUTZ: In der Datenbank steht oft "Inspiriert von X". Du darfst diesen Namen "X" (z.B. Dior, Chanel, YSL) NIEMALS im Chat schreiben! Das ist verboten.
-        2. VERKAUF: Nenne NUR unsere Nummer (z.B. "Nr. 20"). Beschreibe den Duft emotional.
-        3. PREISE: Mach Preise immer **fett**.
-        4. STIL: Sei kurz, direkt und motivierend.
+        REGELN:
+        1. Nenne NIEMALS Fremdmarken (Dior, Chanel etc.)! Die Spalte "Original_Marke" ist geheim.
+        2. Sag: "Das ist unsere Nr. XY, eine tolle Alternative..."
+        3. Preise fett.
         """
         
-        # Wir kleben die Anweisung direkt an die Frage. Das versteht auch der alte Server.
         final_prompt = f"{system_text}\n\nUSER FRAGE: {prompt}"
 
-        # --- MODEL: gemini-pro (Das läuft immer) ---
-        model_name = "gemini-pro"
-        
+        # --- DIE DIREKTE API ANBINDUNG (Ohne Bibliothek) ---
         success = False
         
-        # Keys mischen und probieren
+        # Wir nutzen 'gemini-1.5-flash', weil es schnell ist und hohe Limits hat
+        model_name = "gemini-1.5-flash"
+        
+        # Keys mischen
         random.shuffle(api_keys)
         
         for key in api_keys:
             try:
-                genai.configure(api_key=key)
-                model = genai.GenerativeModel(model_name)
+                # Das ist der direkte Link zu Google (funktioniert immer)
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
                 
-                # Generierung
-                response = model.generate_content(final_prompt, stream=True)
+                headers = {'Content-Type': 'application/json'}
+                data = {
+                    "contents": [{
+                        "parts": [{"text": final_prompt}]
+                    }]
+                }
                 
-                for chunk in response:
-                    if chunk.text:
-                        full_text += chunk.text
+                # Wir senden die Post per Internet (requests)
+                response = requests.post(url, headers=headers, json=data)
+                
+                if response.status_code == 200:
+                    # Erfolg! Daten auspacken
+                    result_json = response.json()
+                    answer = result_json['candidates'][0]['content']['parts'][0]['text']
+                    
+                    # Streaming simulieren (für den Effekt)
+                    for word in answer.split():
+                        full_text += word + " "
                         placeholder.markdown(full_text + "▌")
-                
-                if len(full_text) > 0:
+                        time.sleep(0.05)
+                    
                     placeholder.markdown(full_text)
                     st.session_state.messages.append({"role": "model", "content": full_text})
                     success = True
-                    break 
-                        
-            except Exception:
-                time.sleep(0.5)
+                    break
+                else:
+                    # Wenn Google Fehler meldet (z.B. 429 Limit), probieren wir den nächsten Key
+                    # st.write(f"Key Error: {response.status_code}") # Debug
+                    continue
+                    
+            except Exception as e:
                 continue
-        
+
         if not success:
-            st.error("⚠️ Selbst 'gemini-pro' antwortet nicht. Das liegt meist am Google-Tageslimit (429). Warte bis morgen oder nutze neue Keys.")
+            st.error("⚠️ Alle Keys sind aufgebraucht (Limit erreicht) oder gesperrt. Bitte erstelle morgen neue Keys oder nutze ein anderes Google Konto.")
+            st.info("Hinweis: Der Server ist okay, aber Google lässt deine Keys gerade nicht durch.")
