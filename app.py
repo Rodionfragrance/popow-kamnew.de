@@ -51,7 +51,7 @@ if not api_keys:
 # --- 5. DATENBANK & WISSEN LADEN ---
 @st.cache_data
 def load_data():
-    data = {"csv": "", "business": "", "network": ""}
+    data = {"csv": "", "business": "", "network": "", "coaching": ""}
     try:
         # 1. CSV laden
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";", encoding="utf-8")
@@ -66,6 +66,11 @@ def load_data():
     # 3. NETWORK BIBEL LADEN
     try:
         data["network"] = open("network_bible.txt", "r", encoding="utf-8").read()
+    except: pass
+
+    # 4. Coaching Wissen laden
+    try:
+        data["coaching"] = open("coaching_wissen.txt", "r", encoding="utf-8").read()
     except: pass
             
     return data
@@ -191,6 +196,7 @@ if prompt := st.chat_input("Frag mich nach Düften oder Business-Tipps...(Multi-
         - Jahreszeit: {current_season}
         - Datenbank (CSV): {db['csv'] if db and db['csv'] else 'Leer'}
         - NETWORK BIBEL & BUSINESS WISSEN: {db['network']} \n {db['business']}
+        - COACHING WISSEN (Praxis): {db['coaching']}
         
         SPRACHE:
         Antworte IMMER in der Sprache des Nutzers!
