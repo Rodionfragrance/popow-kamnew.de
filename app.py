@@ -17,7 +17,7 @@ except ImportError:
 
 # --- 1. KONFIGURATION ---
 # HIER GEÄNDERT: initial_sidebar_state="expanded" sorgt dafür, dass die Sidebar immer offen ist!
-st.set_page_config(page_title="Rodions Mastermind KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Rodion Chogan KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
 
 # --- 2. UI DESIGN & CSS ---
 st.markdown("""
@@ -109,11 +109,11 @@ with st.sidebar:
 db = load_data()
 
 # --- 6. HEADER (TITEL & INFO) ---
-st.title("🧙‍♂️ Rodions Chogan Mastermind")
-st.caption(f"📅 Saison: {current_season} | 🚀 Dein KI-Mentor für Strategie & Verkauf | 🧠 Business-Brain Active") 
+st.title("🧙‍♂️ Rodions Chogan KI")
+st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
 
 # INFO-BOX:
-st.info("💡 **Insider-Wissen:** Anders als normale KIs kennt dieser Bot unsere **internen Preise, Codes (z.B. BS09) & Coaching-Strategien**. Nutze ihn für Pitches & Analysen!")
+st.info("💡 Anders als normale KIs kennt dieser unsere Produkte & Coachings. Nutze ihn für Pitches & Analysen!")
 
 st.markdown("---")
 
