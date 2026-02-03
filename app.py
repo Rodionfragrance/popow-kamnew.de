@@ -16,7 +16,8 @@ except ImportError:
     TTS_ENABLED = False
 
 # --- 1. KONFIGURATION ---
-st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
+# HIER GEÄNDERT: initial_sidebar_state="expanded" sorgt dafür, dass die Sidebar immer offen ist!
+st.set_page_config(page_title="Rodions Mastermind KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
 
 # --- 2. UI DESIGN & CSS ---
 st.markdown("""
@@ -28,6 +29,8 @@ st.markdown("""
 .stMarkdown h3 { color: #d32f2f !important; margin-top: 40px !important; margin-bottom: 15px !important; border-bottom: 1px solid #eee; padding-bottom: 5px; font-weight: 700; }
 .stMarkdown hr { margin-top: 30px !important; margin-bottom: 30px !important; border-color: #f0f0f0; }
 .stMarkdown strong { color: #333; }
+/* Info-Box Styling im Header */
+.stAlert { margin-top: 10px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -97,16 +100,21 @@ with st.sidebar:
         time.sleep(1)
         st.rerun()
 
+    # --- HIER SIND JETZT DEINE SOCIAL LINKS (VERSTECKT ABER SICHTBAR DURCH EXPANDED) ---
+    st.markdown("---")
+    st.subheader("🔗 Support & Socials")
+    st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
+    st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
+
 db = load_data()
 
-# --- 6. HEADER ---
-st.title("Rodions Chogan KI")
-st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
-st.info("💡 Anders als normale KIs kennt dieser unsere Produkte & Strategien. Nutze ihn für Pitches & Analysen!")
+# --- 6. HEADER (TITEL & INFO) ---
+st.title("🧙‍♂️ Rodions Chogan Mastermind")
+st.caption(f"📅 Saison: {current_season} | 🚀 Dein KI-Mentor für Strategie & Verkauf | 🧠 Business-Brain Active") 
 
-col1, col2 = st.columns(2)
-with col1: st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
-with col2: st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
+# INFO-BOX:
+st.info("💡 **Insider-Wissen:** Anders als normale KIs kennt dieser Bot unsere **internen Preise, Codes (z.B. BS09) & Coaching-Strategien**. Nutze ihn für Pitches & Analysen!")
+
 st.markdown("---")
 
 # --- 7. CHAT LOGIC ---
@@ -127,7 +135,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
         
-        # Anzeige Logik: Nur Bilder anzeigen, keine PDFs (das würde crashen)
+        # Anzeige Logik: Nur Bilder anzeigen, keine PDFs
         if uploaded_file:
             if uploaded_file.type in ["image/jpeg", "image/png", "image/jpg"]:
                 st.image(uploaded_file, caption="Hochgeladenes Bild", width=200)
@@ -186,7 +194,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
            2. Antworte mit einem klaren NEIN zu Heilaussagen (Compliance).
         
         -> OUTPUT FORMAT: 
-           Start mit "🧠 Rodion denkt nach: ...".
+           Start mit "🧠 Laut denken: ...".
            Dann die Antwort in strukturierter Form (Fettungen, Bulletpoints).
            Ende mit einer strategischen Frage.
 
