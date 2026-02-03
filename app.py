@@ -4,7 +4,16 @@ import requests
 import json
 import random
 import time
+import base64
 from datetime import datetime
+from io import BytesIO
+
+# Versuch, Audio-Bibliothek zu laden (Fehler-Toleranz)
+try:
+    from gtts import gTTS
+    TTS_ENABLED = True
+except ImportError:
+    TTS_ENABLED = False
 
 # --- 1. KONFIGURATION ---
 st.set_page_config(page_title="Rodions Chogan KI", page_icon="🧙‍♂️", layout="wide")
@@ -72,9 +81,16 @@ def load_data():
             
     return data
 
-# --- SIDEBAR: RESET BUTTON ---
+# --- SIDEBAR: RESET & DATEI-UPLOAD ---
 with st.sidebar:
-    st.header("⚙️ Verwaltung")
+    st.header("⚙️ Tools & Verwaltung")
+    
+    # DATEI UPLOAD (BILD ODER PDF!)
+    st.subheader("📸 Datei-Analyse")
+    uploaded_file = st.file_uploader("Lade ein Foto oder PDF hoch", type=["jpg", "png", "jpeg", "pdf"])
+    
+    st.markdown("---")
+    
     if st.button("🔄 Datenbank neu laden"):
         st.cache_data.clear()
         st.success("Cache geleert! Neue Daten werden geladen.")
@@ -98,12 +114,24 @@ if "messages" not in st.session_state: st.session_state.messages = []
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
         st.markdown(msg["content"])
+        # Audio Player anzeigen, falls vorhanden
+        if "audio" in msg:
+            st.audio(msg["audio"], format="audio/mp3")
 
 # --- 8. PROMPT & ANTWORT ---
 if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Strategien..."):
+    
+    # User Nachricht anzeigen
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
+        
+        # Anzeige Logik: Nur Bilder anzeigen, keine PDFs (das würde crashen)
+        if uploaded_file:
+            if uploaded_file.type in ["image/jpeg", "image/png", "image/jpg"]:
+                st.image(uploaded_file, caption="Hochgeladenes Bild", width=200)
+            else:
+                st.info(f"📄 PDF hochgeladen: {uploaded_file.name}")
 
     with st.chat_message("model", avatar="🧙‍♂️"):
         placeholder = st.empty()
@@ -138,7 +166,8 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
 
         🧠 STRATEGIE:
         1. **Autorität:** Antworte bestimmt. Entschuldige dich nicht unnötig.
-        2. **Wissen:** Wenn ein Produktname (z.B. "Munozent") fällt, SUCHE ZWINGEND in den "PRODUKT-BESCHREIBUNGEN", auch wenn es eine Rechtsfrage ist!
+        2. **Wissen:** Wenn ein Produktname (z.B. "Munozent") fällt, SUCHE ZWINGEND in den "PRODUKT-BESCHREIBUNGEN"!
+        3. **Datei-Analyse:** Wenn eine Datei (Bild/PDF) dabei ist, analysiere sie präzise (z.B. Inhaltsstoffe erkennen, Text auslesen).
         
         ---
         
@@ -152,9 +181,8 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
         FALL B: BUSINESS / RECHT / MINDSET (Mentor-Modus)
         -> Nutze "Network-Marketing-Bibel", "Business-Wissen" und "Coaching-Wissen".
         -> Wenn nach Heilversprechen gefragt wird:
-           1. Prüfe in "PRODUKT-BESCHREIBUNGEN", was das Produkt wirklich tut (Inhaltsstoffe).
+           1. Prüfe in "PRODUKT-BESCHREIBUNGEN", was das Produkt wirklich tut.
            2. Antworte mit einem klaren NEIN zu Heilaussagen (Compliance).
-           3. Biete die korrekte, rechtssichere Formulierung aus der Beschreibung an.
         
         -> OUTPUT FORMAT: 
            Start mit "🧠 Laut denken: ...".
@@ -165,7 +193,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
 
         WISSENS-BASIS:
         - Jahreszeit: {current_season}
-        - PRODUKT-BESCHREIBUNGEN & STORYS (HIER SUCHEN BEI NAMEN WIE MUNOZENT, PEP...): {produkt_content}
+        - PRODUKT-BESCHREIBUNGEN: {produkt_content}
         - Datenbank (CSV): {db.get('csv', 'Leer')}
         - NETWORK BIBEL: {db.get('network', 'Leer')}
         - BUSINESS WISSEN: {db.get('business', 'Leer')}
@@ -175,7 +203,26 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
         Antworte IMMER in der Sprache des Nutzers!
         """
         
-        final_prompt = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
+        # --- DATEI VERARBEITUNG (BILD ODER PDF) ---
+        file_part = None
+        if uploaded_file:
+            try:
+                bytes_data = uploaded_file.getvalue()
+                mime_type = uploaded_file.type
+                file_part = {
+                    "inline_data": {
+                        "mime_type": mime_type,
+                        "data": base64.b64encode(bytes_data).decode('utf-8')
+                    }
+                }
+            except: pass
+
+        # --- API REQUEST VORBEREITEN ---
+        final_prompt_text = f"{system_text}\n\nEINGABE DES BERATERS: {prompt}"
+        
+        request_contents = [{"text": final_prompt_text}]
+        if file_part:
+            request_contents.append(file_part)
 
         # --- VERBINDUNG ZU GOOGLE GEMINI (AUTO-PILOT ✈️) ---
         success = False
@@ -214,7 +261,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
                 headers = {'Content-Type': 'application/json'}
-                data = {"contents": [{"parts": [{"text": final_prompt}]}]}
+                data = {"contents": [{"parts": request_contents}]}
                 
                 response = requests.post(url, headers=headers, json=data, timeout=60)
                 
@@ -227,7 +274,23 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
                             time.sleep(0.03)
                         
                         placeholder.markdown(full_text)
-                        st.session_state.messages.append({"role": "model", "content": full_text})
+                        
+                        # --- AUDIO GENERIERUNG (TTS) ---
+                        audio_bytes = None
+                        if TTS_ENABLED and len(full_text) > 5:
+                            try:
+                                tts = gTTS(text=full_text, lang='de')
+                                fp = BytesIO()
+                                tts.write_to_fp(fp)
+                                audio_bytes = fp.getvalue()
+                                st.audio(audio_bytes, format="audio/mp3")
+                            except: pass
+                        
+                        # Nachricht Speichern
+                        msg_entry = {"role": "model", "content": full_text}
+                        if audio_bytes: msg_entry["audio"] = audio_bytes
+                        st.session_state.messages.append(msg_entry)
+                        
                         success = True
                     except: pass
             except: continue
@@ -235,4 +298,5 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
         if not success:
             st.error("⚠️ Fehler bitte an Rodion schicken.")
             st.warning(f"🔍 Letzter Fehlergrund: {last_error_message}")
-            st.info("Tipp: Prüfe 'Generative Language API' in der Google Cloud Console.")
+            if not TTS_ENABLED:
+                st.info("Hinweis: Installiere 'gTTS' für Sprachausgabe.")
