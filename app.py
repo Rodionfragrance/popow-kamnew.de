@@ -18,6 +18,7 @@ except ImportError:
 # --- 1. KONFIGURATION ---
 # HIER GEÄNDERT: initial_sidebar_state="expanded" sorgt dafür, dass die Sidebar immer offen ist!
 st.set_page_config(page_title="Rodion Chogan KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
+st.toast("👈 Tipp: Öffne die Sidebar (Pfeil oben links) für Datei-Uploads!", icon="💡")
 
 # --- 2. UI DESIGN & CSS ---
 st.markdown("""
@@ -108,10 +109,12 @@ db = load_data()
 # --- 6. HEADER (TITEL & INFO) ---
 st.title("Rodions Chogan KI")
 st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie | 💡 Anders als normale KIs kennt dieser unsere Produkte & Coachings. Nutze ihn für Pitches & Analysen!") 
-st.markdown("---")
 
 # --- 7. CHAT LOGIC ---
-if "messages" not in st.session_state: st.session_state.messages = []
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n\n**Tipp:** In der Sidebar (links) kannst du **Fotos/PDFs hochladen** und meine Socials finden.\n\nWie kann ich dir heute helfen?"}
+    ]
 
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
