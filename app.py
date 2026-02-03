@@ -91,9 +91,7 @@ with st.sidebar:
     # DATEI UPLOAD (BILD ODER PDF!)
     st.subheader("📸 Datei-Analyse")
     uploaded_file = st.file_uploader("Lade ein Foto oder PDF hoch", type=["jpg", "png", "jpeg", "pdf"])
-    
-    st.markdown("---")
-    
+        
     if st.button("🔄 Datenbank neu laden"):
         st.cache_data.clear()
         st.success("Cache geleert! Neue Daten werden geladen.")
