@@ -99,10 +99,9 @@ with st.sidebar:
         st.rerun()
 
     # --- HIER SIND JETZT DEINE SOCIAL LINKS (VERSTECKT ABER SICHTBAR DURCH EXPANDED) ---
-    st.markdown("---")
     st.subheader("🔗 Support & Socials")
     st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
-    st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
+    st.link_button("☕ Gefällt dir?", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 
 db = load_data()
 
