@@ -152,3 +152,47 @@ Das Strategie-Gespräch (nach Michael Nelson):
 - Annahme: Bei Schäden "unter Vorbehalt" unterschreiben.
 - Mängel: Sofort (24h) Ticket in der App mit Foto. Ware aufbewahren!
 - Rückgabe: 14 Tage Widerruf (nur originalverpackt/versiegelt).
+
+=================================================================
+KONTO-TYPEN & REGISTRIERUNG (DETAIL-LEITFADEN)
+=================================================================
+Quelle: Workbook "Berater vs. Handelskonto"
+
+ES GIBT 3 WEGE ZUR REGISTRIERUNG:
+
+1. PERSÖNLICHES BENUTZERKONTO (Der Standard-Start)
+   - Zielgruppe: Kunden, die zu Beratern werden wollen.
+   - Status: Start als Kunde.
+   - Upgrade: Umwandlung zum Berater durch Kauf eines Probensets (Kit) + Erstbestellung (mind. 100 PT, je nach Promo auch weniger).
+   - Vorteile:
+     * 30-50% Handelsspanne.
+     * Teamaufbau möglich (Network Marketing).
+   - Steuer: Kauft Produkte BRUTTO (inkl. MwSt, z.B. 20% in AT/19% in DE).
+
+2. HANDELSKONTO (Rein kommerziell)
+   - Zielgruppe: Geschäfte, Salons, Firmen, die NUR verkaufen wollen.
+   - Voraussetzung: Zwingend UID-Nummer (Umsatzsteuer-Identifikationsnummer) & MIAS Dokument nötig!
+   - Nachteile (WICHTIG):
+     * KEIN Teamaufbau möglich (Sackgasse für Networker).
+     * Keine Eliminierungsgefahr (Account bleibt auch bei Inaktivität bestehen).
+   - Vorteile:
+     * Kein Probenset Kauf notwendig.
+     * Kauft Produkte NETTO (Steuerfrei, da innergemeinschaftliche Lieferung).
+     * 30-50% Handelsspanne.
+
+3. BERATER KONTO MIT UID-NUMMER (Der Profi-Hybrid)
+   - Zielgruppe: Networker, die ein Gewerbe haben und steuerfrei einkaufen wollen, ABER trotzdem ein Team aufbauen.
+   - Der Trick: Man startet als Berater (Vorteil Teamaufbau) und trägt DANN im Profil seine UID-Nummer ein.
+   - Anleitung (App/Web):
+     1. Profil -> "Meine persönlichen Angaben".
+     2. "VAT Identification number verwalten" auswählen.
+     3. Wähle "Unternehmen" (statt Einzelfirma ohne VAT).
+     4. Gib die UID-Nummer ein.
+     5. Lade das MIAS Dokument hoch.
+   - Ergebnis: Du hast alle Vorteile des Beraters (Teamaufbau) UND kaufst Netto ein (Liquiditätsvorteil).
+
+DOKUMENTE & VERIFIZIERUNG:
+- Identität: Führerschein, Personalausweis oder Reisepass hochladen.
+- MIAS Dokument (VIES): Zwingend nötig für den Netto-Einkauf (Bestätigung, dass deine UID-Nummer für den EU-Handel gültig ist).
+  - Woher?: https://ec.europa.eu/taxation_customs/vies/#/vat-validation
+  - Vorgehen: Eigene UID eingeben -> Validierung abwarten -> Screenshot/PDF machen -> Bei Chogan uploaden.
