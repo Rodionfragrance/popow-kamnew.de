@@ -51,7 +51,7 @@ if not api_keys:
 # --- 5. DATENBANK & WISSEN LADEN ---
 @st.cache_data(show_spinner=False)
 def load_data():
-    data = {"csv": "", "business": "", "network": "", "coaching": ""}
+    data = {"csv": "", "business": "", "network": "", "coaching": "", "produkte": ""}
     try:
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";", encoding="utf-8")
         df = df.fillna("-")
@@ -63,6 +63,8 @@ def load_data():
     try: data["network"] = open("network_bible.txt", "r", encoding="utf-8").read()
     except: pass
     try: data["coaching"] = open("coaching_wissen.txt", "r", encoding="utf-8").read()
+    except: pass
+    try: data["produkte"] = open("produkt_beschreibungen.txt", "r", encoding="utf-8").read()
     except: pass
             
     return data
@@ -106,6 +108,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
         
         # Datensätze sicher abrufen
         coaching_content = db.get('coaching', 'Leer')
+        produkte_content = db.get('produkte', 'Leer')
         
         # --- DER FUSIONIERTE PROMPT (ZEUS + MENTOR + SAFE MODE) ---
         system_text = f"""
@@ -172,6 +175,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
         - NETWORK BIBEL: {db.get('network', 'Leer')}
         - BUSINESS WISSEN: {db.get('business', 'Leer')}
         - COACHING TRANSKRIPTE (Praxis): {coaching_content}
+        - PRODUKT-BESCHREIBUNGEN: {produkte_content}
         
         SPRACHE:
         Antworte IMMER in der Sprache des Nutzers!
