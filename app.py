@@ -109,11 +109,9 @@ with st.sidebar:
 db = load_data()
 
 # --- 6. HEADER (TITEL & INFO) ---
-st.title("🧙‍♂️ Rodions Chogan KI")
+st.title("Rodions Chogan KI")
 st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
-
-# INFO-BOX:
-st.info("💡 Anders als normale KIs kennt dieser unsere Produkte & Coachings. Nutze ihn für Pitches & Analysen!")
+st.caption("f"💡 Anders als normale KIs kennt dieser unsere Produkte & Coachings. Nutze ihn für Pitches & Analysen!")
 
 st.markdown("---")
 
