@@ -147,6 +147,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
         # Datensätze sicher abrufen
         coaching_content = db.get('coaching', 'Leer')
         produkt_content = db.get('produkt', 'Leer')
+        events_content = db.get('events', 'Leer')
         
         # --- DER FUSIONIERTE PROMPT (ZEUS + MENTOR + SAFE MODE) ---
         system_text = f"""
