@@ -101,7 +101,8 @@ db = load_data()
 
 # --- 6. HEADER ---
 st.title("🧙‍♂️ Rodions Chogan KI")
-st.caption(f"📅 Saison: {current_season} | 🚀 Dein KI-Mentor für Strategie & Verkauf | 🧠 Business-Brain Active") 
+st.caption(f"📅 Saison: {current_season} | 🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
+st.info("💡 **Insider-Wissen:** Anders als normale KIs kennt dieser Bot unsere Produkte & Strategien**. Nutze ihn für Pitches & Analysen!")
 
 col1, col2 = st.columns(2)
 with col1: st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
@@ -185,7 +186,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
            2. Antworte mit einem klaren NEIN zu Heilaussagen (Compliance).
         
         -> OUTPUT FORMAT: 
-           Start mit "🧠 Laut denken: ...".
+           Start mit "🧠 Rodion denkt nach: ...".
            Dann die Antwort in strukturierter Form (Fettungen, Bulletpoints).
            Ende mit einer strategischen Frage.
 
