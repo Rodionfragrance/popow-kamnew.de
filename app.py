@@ -64,7 +64,7 @@ if not api_keys:
 # --- 5. DATENBANK & WISSEN LADEN ---
 @st.cache_data(show_spinner=False)
 def load_data():
-    data = {"csv": "", "business": "", "network": "", "coaching": "", "produkt": ""}
+    data = {"csv": "", "business": "", "network": "", "coaching": "", "produkt": "","events": ""}
     
     # 1. CSV laden
     try:
@@ -81,6 +81,8 @@ def load_data():
     try: data["coaching"] = open("coaching_wissen.txt", "r", encoding="utf-8").read()
     except: pass
     try: data["produkt"] = open("produkt_beschreibungen.txt", "r", encoding="utf-8").read()
+    except: pass
+    try: data["events"] = open("events.txt", "r", encoding="utf-8").read()
     except: pass
             
     return data
@@ -203,6 +205,7 @@ if prompt := st.chat_input("Frag mich nach Düften, Produkten oder Business-Stra
         - NETWORK BIBEL: {db.get('network', 'Leer')}
         - BUSINESS WISSEN: {db.get('business', 'Leer')}
         - COACHING TRANSKRIPTE: {coaching_content}
+        - EVENTS & TERMINE 2026: {events_content}
         
         SPRACHE:
         Antworte IMMER in der Sprache des Nutzers!
