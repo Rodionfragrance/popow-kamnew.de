@@ -110,9 +110,7 @@ db = load_data()
 
 # --- 6. HEADER (TITEL & INFO) ---
 st.title("Rodions Chogan KI")
-st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
-st.caption("f"💡 Anders als normale KIs kennt dieser unsere Produkte & Coachings. Nutze ihn für Pitches & Analysen!")
-
+st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie | 💡 Anders als normale KIs kennt dieser unsere Produkte & Coachings. Nutze ihn für Pitches & Analysen!") 
 st.markdown("---")
 
 # --- 7. CHAT LOGIC ---
