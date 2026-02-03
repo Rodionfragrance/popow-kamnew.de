@@ -101,8 +101,8 @@ db = load_data()
 
 # --- 6. HEADER ---
 st.title("Rodions Chogan KI")
-st.caption(f"📅 Saison: {current_season} | 🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
-st.info("💡 **Insider-Wissen:** Anders als normale KIs kennt dieser Bot unsere Produkte & Strategien. Nutze ihn für Pitches & Analysen!")
+st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
+st.info("💡 Anders als normale KIs kennt dieser unsere Produkte & Strategien. Nutze ihn für Pitches & Analysen!")
 
 col1, col2 = st.columns(2)
 with col1: st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
