@@ -100,7 +100,7 @@ with st.sidebar:
 db = load_data()
 
 # --- 6. HEADER ---
-st.title("🧙‍♂️ Rodions Chogan KI")
+st.title("Rodions Chogan KI")
 st.caption(f"📅 Saison: {current_season} | 🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie") 
 st.info("💡 **Insider-Wissen:** Anders als normale KIs kennt dieser Bot unsere Produkte & Strategien. Nutze ihn für Pitches & Analysen!")
 
