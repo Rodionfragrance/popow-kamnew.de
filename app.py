@@ -113,7 +113,7 @@ st.caption(f"🚀 Dein Mentor mit exklusivem Team-Wissen & Strategie | 💡 Ande
 # --- 7. CHAT LOGIC ---
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n\n**Tipp:** In der Sidebar (links) kannst du **Fotos/PDFs hochladen** und meine Socials finden.\n\nWie kann ich dir heute helfen?"}
+        {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n\n**Tipp:** In der Sidebar (links) kannst du **Fotos/PDFs hochladen**.\n\nWie kann ich dir heute helfen?"}
     ]
 
 for msg in st.session_state.messages:
