@@ -196,3 +196,36 @@ DOKUMENTE & VERIFIZIERUNG:
 - MIAS Dokument (VIES): Zwingend nötig für den Netto-Einkauf (Bestätigung, dass deine UID-Nummer für den EU-Handel gültig ist).
   - Woher?: https://ec.europa.eu/taxation_customs/vies/#/vat-validation
   - Vorgehen: Eigene UID eingeben -> Validierung abwarten -> Screenshot/PDF machen -> Bei Chogan uploaden.
+
+=================================================================
+DIE DAUERBESTELLUNG (AUTOSHIP)
+=================================================================
+Quelle: Dokument "Dauerbestellung - Vorteile, Anleitung & Regelungen"
+
+WAS IST DAS?
+Ein automatisierter Prozess für wiederkehrende Bestellungen. Spart Zeit und Geld, da Lieblingsprodukte (z.B. Shampoo, Supplements) automatisch geliefert werden.
+
+DIE 5 HARD-FACTS (VORTEILE):
+1. 10% Rabattbindung für alle Dauerbestellungen.
+2. Reduzierter Versand: Nur 5,00 € fix für Bestellungen zwischen 50,00 € und 99,99 €.
+3. Kostenloser Versand ab 100,00 € Bestellwert.
+4. Priorität: Dauerbestellungen werden vor anderen Bestellungen bearbeitet.
+5. Kostenloser Service: Keine Gebühren für die Nutzung.
+
+REGELN & HÄUFIGKEIT:
+- Frequenz wählbar: Alle 14 Tage (2 Wochen), 30 Tage (Monat) oder 60 Tage (2 Monate).
+- Pausieren/Löschen: Erst möglich, nachdem die ersten 3 Sendungen ausgeführt wurden!.
+- Bezahlung: Kreditkarte wird hinterlegt und für Folgebestellungen genutzt.
+
+SCHRITT-FÜR-SCHRITT ANLEITUNG (BACKOFFICE):
+1. Starten: Menü "Bestellungen" -> "Dauerbestellung" wählen.
+2. Erstellen: Button "Neu" klicken -> Namen für die Bestellung vergeben (z.B. "Monatsbedarf").
+3. Schritt 1 (Produkte): Über "Produkt hinzufügen" Artikel suchen und Anzahl wählen.
+4. Schritt 2 (Frequenz): Intervall wählen (15, 30 oder 60 Tage).
+5. Schritt 3 (Adresse): Lieferadresse wählen. (Hinweis Schweiz: Zollkosten sind bereits enthalten).
+6. Schritt 4 (Abschluss): Nutzungsbedingungen akzeptieren -> "Weiter zur Zahlung" (Kreditkarte).
+
+HÄUFIGE FRAGEN (FAQ):
+- Produkt nicht verfügbar? Wird kostenlos nachgeliefert, sobald wieder da.
+- Aktionsprodukte? Es gelten die Listenpreise (keine Promo-Preise), aber mit den oben genannten Vorteilen.
+- Produkt aus dem Sortiment genommen? Du wirst benachrichtigt, um die Bestellung anzupassen.
