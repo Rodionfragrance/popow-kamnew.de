@@ -19,7 +19,7 @@ except ImportError:
 st.set_page_config(page_title="Rodion Chogan KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
 st.toast("👈 Tipp: Öffne die Sidebar (Pfeil oben links) für Datei-Uploads!", icon="💡")
 
-# --- 2. UI DESIGN & CSS ---
+# --- 2. UI DESIGN & CSS (Back to Black & Clean) ---
 st.markdown("""
 <style>
     /* Chat-Container etwas enger für Lesbarkeit */
@@ -33,15 +33,10 @@ st.markdown("""
     /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
     
-    /* Chat Input Design */
-    [data-testid="stChatInput"] { padding-bottom: 15px !important; background-color: transparent !important; }
-    [data-testid="stChatInput"] textarea {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-        border: 1px solid #d0d0d0 !important;
-        border-radius: 25px !important;
-        padding: 12px 15px !important;
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.1) !important;
+    /* EINGABEFELD: Zurück zum Original-Look (Dunkel), aber mit Abstand */
+    [data-testid="stChatInput"] { 
+        padding-bottom: 30px !important; /* Mehr Platz für Tastatur */
+        background-color: transparent !important; 
     }
 </style>
 """, unsafe_allow_html=True)
@@ -167,7 +162,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
 
-        # --- SYSTEM PROMPT (UPDATE: FORCE LISTS) ---
+        # --- SYSTEM PROMPT (UPDATE: FORCE MARKDOWN LISTS) ---
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
         DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan).
@@ -176,17 +171,21 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         - Direkt, autoritär ("Zeus-Modus"), aber hilfreich.
         - Bleib beim "Du".
         
-        STRUKTUR-BEFEHL (STRENG EINHALTEN):
-        1. Schreibe NIEMALS lange Absätze (max. 2 Zeilen Fließtext).
-        2. Nutze FÜR JEDE ANTWORT Bullet-Points oder nummerierte Listen.
-        3. Nutze Emojis als Aufzählungszeichen (z.B. 👉, ✅, 🚀, 💡), um den Text aufzubrechen.
-        4. Starte direkt mit dem Ergebnis. KEIN "Ich habe analysiert...".
+        FORMATIERUNG (EXTREM WICHTIG):
+        1. Der Output muss visuell gut lesbar sein!
+        2. Nutze ECHTE Markdown-Listen (mit `-` oder `*` am Zeilenanfang).
+        3. Mache nach JEDEM Listenpunkt ZWEI Zeilenumbrüche (Enter), damit der Text nicht zusammenklebt.
+        4. Nutze Fettungen (**Wort**) für wichtige Begriffe.
+        5. Starte direkt mit dem Ergebnis.
         
-        Beispiel für gute Antwort:
-        "Hier ist deine Strategie:
-        ✅ Punkt 1: Mach das...
-        ✅ Punkt 2: Achte auf...
-        🚀 Fazit: Leg los."
+        Beispiel:
+        **Hier ist dein Plan:**
+        
+        - 🚀 **Schritt 1:** Mach dies...
+        
+        - 💡 **Schritt 2:** Beachte das...
+        
+        - ✅ **Fazit:** Leg los.
         
         WISSEN:
         - Saison: {current_season}
@@ -199,7 +198,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         # VERLAUF BAUEN
         api_messages = []
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
-        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich antworte nur in Listen und kurzen Blöcken."}]})
+        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich nutze Markdown-Listen mit doppelten Absätzen."}]})
 
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
