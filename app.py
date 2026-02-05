@@ -15,8 +15,9 @@ try:
 except ImportError:
     TTS_ENABLED = False
 
-# --- 1. KONFIGURATION (ChatGPT Style: Zentriert, aber Sidebar verfügbar) ---
-st.set_page_config(page_title="Rodion Mastermind", page_icon="🧙‍♂️", layout="centered", initial_sidebar_state="collapsed")
+# --- 1. KONFIGURATION ---
+# FIX: Sidebar wieder auf "expanded", damit sie sichtbar bleibt!
+st.set_page_config(page_title="Rodion Mastermind", page_icon="🧙‍♂️", layout="centered", initial_sidebar_state="expanded")
 
 # --- 2. CSS & DESIGN ---
 st.markdown("""
@@ -94,7 +95,9 @@ with st.sidebar:
 
 # --- 7. SESSION STATE (GEDÄCHTNIS) ---
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [
+        {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n**Tipp:** Du kannst hier unten direkt Dateien anhängen.\n\nWie kann ich dir helfen?"}
+    ]
 
 # --- 8. UI: HEADER & UPLOADER ---
 st.title("🧙‍♂️ Rodion Mastermind")
@@ -129,7 +132,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         placeholder = st.empty()
         full_text = ""
 
-        # SYSTEM PROMPT (OHNE DENKPROZESS!)
+        # SYSTEM PROMPT
         coaching_content = db.get('coaching', '')
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
@@ -159,13 +162,22 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         - Bibel & Wissen: {db.get('network', '')} {db.get('business', '')} {db.get('coaching', '')}
         """
 
-        # --- CONTEXT BUILDER (DAS GEDÄCHTNIS) ---
+        # --- CONTEXT BUILDER (DAS GEDÄCHTNIS - FIX FÜR 400 ERROR) ---
         api_messages = []
+        # System-Prompt (User) -> Antwort (Model)
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
         api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich bin bereit."}]})
 
-        # Letzte 6 Nachrichten (Kurzzeitgedächtnis)
-        for msg in st.session_state.messages[-6:]:
+        # History holen, aber die ERSTE Nachricht (Begrüßung) überspringen,
+        # da sie "Model" ist und wir gerade "Model" (Verstanden) hatten.
+        # Gemini braucht immer User -> Model -> User -> Model.
+        
+        relevant_history = st.session_state.messages
+        if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
+            relevant_history = relevant_history[1:] # Begrüßung wegwerfen für die API
+
+        # Letzte 6 echte Nachrichten anhängen
+        for msg in relevant_history[-6:]:
             role = "user" if msg["role"] == "user" else "model"
             api_messages.append({"role": role, "parts": [{"text": msg["content"]}]})
 
@@ -186,7 +198,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             
         api_messages.append({"role": "user", "parts": current_parts})
 
-        # --- API CALL (MIT ROBUSTER SUCHE GEGEN FEHLER) ---
+        # --- API CALL ---
         success = False
         last_error = ""
         random.shuffle(api_keys)
@@ -194,7 +206,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         for key in api_keys:
             if success: break
             
-            # 1. SCAN: Welches Modell ist da? (Verhindert 404 Fehler)
+            # 1. SCAN
             valid_model = None
             try:
                 list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
@@ -212,11 +224,11 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
 
             if not valid_model: continue
 
-            # 2. GENERATE: Anfrage senden
+            # 2. GENERATE
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
                 headers = {'Content-Type': 'application/json'}
-                data = {"contents": api_messages} # Sende gesamten Verlauf
+                data = {"contents": api_messages}
 
                 response = requests.post(url, headers=headers, json=data, timeout=60)
                 
@@ -255,4 +267,4 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
 
         if not success:
             st.error("⚠️ Verbindungsfehler. Bitte Fehler an Rodion schicken.")
-            if last_error: st.caption(f"Details: {last_error}")
+            if last_error: st.code(last_error) # Zeigt den echten Fehler an
