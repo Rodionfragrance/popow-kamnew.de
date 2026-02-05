@@ -15,7 +15,7 @@ try:
 except ImportError:
     TTS_ENABLED = False
 
-# --- 1. KONFIGURATION (ChatGPT Style: Zentriert) ---
+# --- 1. KONFIGURATION (ChatGPT Style: Zentriert, aber Sidebar verfügbar) ---
 st.set_page_config(page_title="Rodion Mastermind", page_icon="🧙‍♂️", layout="centered", initial_sidebar_state="collapsed")
 
 # --- 2. CSS & DESIGN ---
@@ -78,11 +78,25 @@ def load_data():
 
 db = load_data()
 
-# --- 6. SESSION STATE (GEDÄCHTNIS) ---
+# --- 6. SIDEBAR (VERWALTUNG & SUPPORT) ---
+with st.sidebar:
+    st.header("⚙️ Verwaltung")
+    if st.button("🔄 Datenbank neu laden"):
+        st.cache_data.clear()
+        st.success("Cache geleert!")
+        time.sleep(1)
+        st.rerun()
+
+    st.markdown("---")
+    st.subheader("🔗 Support")
+    st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
+    st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
+
+# --- 7. SESSION STATE (GEDÄCHTNIS) ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# --- 7. UI: HEADER & UPLOADER ---
+# --- 8. UI: HEADER & UPLOADER ---
 st.title("🧙‍♂️ Rodion Mastermind")
 st.caption("Dein Business-Mentor. Frag mich alles.")
 
@@ -90,14 +104,14 @@ st.caption("Dein Business-Mentor. Frag mich alles.")
 with st.expander("📎 Datei anhängen (Bild/PDF)", expanded=False):
     uploaded_file = st.file_uploader("Datei auswählen", type=["jpg", "png", "jpeg", "pdf"], label_visibility="collapsed")
 
-# --- 8. CHAT VERLAUF ANZEIGEN ---
+# --- 9. CHAT VERLAUF ANZEIGEN ---
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
         st.markdown(msg["content"])
         if "audio" in msg:
             st.audio(msg["audio"], format="audio/mp3")
 
-# --- 9. LOGIK: PROMPT & HISTORY ---
+# --- 10. LOGIK: PROMPT & HISTORY ---
 if prompt := st.chat_input("Nachricht an Rodion..."):
     
     # 1. User Nachricht anzeigen
@@ -146,21 +160,16 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         """
 
         # --- CONTEXT BUILDER (DAS GEDÄCHTNIS) ---
-        # Wir bauen den Verlauf für die API zusammen
         api_messages = []
-        
-        # System-Prompt (versteckt für die API als Start)
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
         api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich bin bereit."}]})
 
-        # Letzte Nachrichten anhängen (Kurzzeitgedächtnis für Kontext)
-        # Wir nehmen die letzten 6 Nachrichten für den Kontext
+        # Letzte 6 Nachrichten (Kurzzeitgedächtnis)
         for msg in st.session_state.messages[-6:]:
             role = "user" if msg["role"] == "user" else "model"
-            # Einfache Textnachrichten filtern
             api_messages.append({"role": role, "parts": [{"text": msg["content"]}]})
 
-        # Aktueller Prompt + Eventueller Bild-Anhang
+        # Aktueller Prompt + Anhang
         current_parts = [{"text": f"EINGABE: {prompt}"}]
         
         if uploaded_file:
@@ -175,27 +184,46 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                 })
             except: pass
             
-        # Den aktuellen Prompt anhängen
         api_messages.append({"role": "user", "parts": current_parts})
 
-        # --- API CALL ---
+        # --- API CALL (MIT ROBUSTER SUCHE GEGEN FEHLER) ---
         success = False
+        last_error = ""
         random.shuffle(api_keys)
         
         for key in api_keys:
             if success: break
+            
+            # 1. SCAN: Welches Modell ist da? (Verhindert 404 Fehler)
+            valid_model = None
             try:
-                # Wir nutzen hier den chat-endpoint Struktur für History
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={key}"
+                list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
+                list_res = requests.get(list_url, timeout=5)
+                if list_res.status_code == 200:
+                    for m in list_res.json().get('models', []):
+                        if 'generateContent' in m.get('supportedGenerationMethods', []):
+                            m_name = m['name'].replace('models/', '')
+                            if 'flash' in m_name and '1.5' in m_name:
+                                valid_model = m_name
+                                break
+                            if 'pro' in m_name and '1.5' in m_name:
+                                valid_model = m_name
+            except: continue
+
+            if not valid_model: continue
+
+            # 2. GENERATE: Anfrage senden
+            try:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
                 headers = {'Content-Type': 'application/json'}
-                data = {"contents": api_messages} # Hier senden wir den ganzen Verlauf!
+                data = {"contents": api_messages} # Sende gesamten Verlauf
 
                 response = requests.post(url, headers=headers, json=data, timeout=60)
                 
                 if response.status_code == 200:
                     answer = response.json()['candidates'][0]['content']['parts'][0]['text']
                     
-                    # Streaming Simulation
+                    # Streaming
                     for chunk in answer.split():
                         full_text += chunk + " "
                         placeholder.markdown(full_text + "▌")
@@ -219,8 +247,12 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     if audio_bytes: msg_entry["audio"] = audio_bytes
                     st.session_state.messages.append(msg_entry)
                     success = True
+                else:
+                    last_error = f"Status: {response.status_code} - {response.text}"
             except Exception as e: 
+                last_error = str(e)
                 continue
 
         if not success:
-            st.error("Verbindungsfehler. Bitte Fehler an Rodion schicken.")
+            st.error("⚠️ Verbindungsfehler. Bitte Fehler an Rodion schicken.")
+            if last_error: st.caption(f"Details: {last_error}")
