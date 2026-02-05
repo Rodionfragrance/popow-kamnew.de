@@ -19,7 +19,7 @@ except ImportError:
 st.set_page_config(page_title="Rodion Chogan KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
 st.toast("👈 Tipp: Öffne die Sidebar (Pfeil oben links) für Datei-Uploads!", icon="💡")
 
-# --- 2. UI DESIGN & CSS (Back to Black & Clean) ---
+# --- 2. UI DESIGN & CSS ---
 st.markdown("""
 <style>
     /* Chat-Container etwas enger für Lesbarkeit */
@@ -33,9 +33,9 @@ st.markdown("""
     /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
     
-    /* EINGABEFELD: Zurück zum Original-Look (Dunkel), aber mit Abstand */
+    /* EINGABEFELD: Dunkel/Transparent (Original Look) */
     [data-testid="stChatInput"] { 
-        padding-bottom: 30px !important; /* Mehr Platz für Tastatur */
+        padding-bottom: 30px !important; 
         background-color: transparent !important; 
     }
 </style>
@@ -97,22 +97,22 @@ with st.sidebar:
 
     st.markdown("---")
     
-    # 2. CHAT DOWNLOAD
+    # 2. CHAT DOWNLOAD (FIXED)
     st.subheader("💾 Chat Sichern")
-    if "messages" in st.session_state and len(st.session_state.messages) > 1:
-        chat_text = ""
+    
+    # Text generieren
+    chat_text = "--- CHAT PROTOKOLL RODION KI ---\n\n"
+    if "messages" in st.session_state:
         for msg in st.session_state.messages:
             role = "RODION" if msg["role"] == "model" else "DU"
             chat_text += f"{role}:\n{msg['content']}\n\n{'-'*30}\n\n"
-            
-        st.download_button(
-            label="📥 Verlauf herunterladen",
-            data=chat_text,
-            file_name=f"chat_verlauf_{datetime.now().strftime('%Y-%m-%d')}.txt",
-            mime="text/plain"
-        )
-    else:
-        st.caption("Schreibe etwas, um den Chat zu speichern.")
+    
+    st.download_button(
+        label="📥 Verlauf herunterladen",
+        data=chat_text.encode('utf-8'), # WICHTIG: UTF-8 Encoding für Sonderzeichen
+        file_name=f"chat_verlauf_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.txt",
+        mime="text/plain"
+    )
 
     st.markdown("---")
     st.subheader("🔗 Support")
@@ -162,7 +162,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
 
-        # --- SYSTEM PROMPT (UPDATE: FORCE MARKDOWN LISTS) ---
+        # SYSTEM PROMPT
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
         DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan).
@@ -170,22 +170,6 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         TONFALL:
         - Direkt, autoritär ("Zeus-Modus"), aber hilfreich.
         - Bleib beim "Du".
-        
-        FORMATIERUNG (EXTREM WICHTIG):
-        1. Der Output muss visuell gut lesbar sein!
-        2. Nutze ECHTE Markdown-Listen (mit `-` oder `*` am Zeilenanfang).
-        3. Mache nach JEDEM Listenpunkt ZWEI Zeilenumbrüche (Enter), damit der Text nicht zusammenklebt.
-        4. Nutze Fettungen (**Wort**) für wichtige Begriffe.
-        5. Starte direkt mit dem Ergebnis.
-        
-        Beispiel:
-        **Hier ist dein Plan:**
-        
-        - 🚀 **Schritt 1:** Mach dies...
-        
-        - 💡 **Schritt 2:** Beachte das...
-        
-        - ✅ **Fazit:** Leg los.
         
         WISSEN:
         - Saison: {current_season}
@@ -198,7 +182,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         # VERLAUF BAUEN
         api_messages = []
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
-        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich nutze Markdown-Listen mit doppelten Absätzen."}]})
+        api_messages.append({"role": "model", "parts": [{"text": "Verstanden."}]})
 
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
@@ -208,8 +192,11 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             role = "user" if msg["role"] == "user" else "model"
             api_messages.append({"role": role, "parts": [{"text": msg["content"]}]})
 
-        # Aktueller Input + Datei
-        current_parts = [{"text": f"EINGABE: {prompt}"}]
+        # --- TRICK: FORMATIERUNG ERZWINGEN ---
+        # Wir hängen den Befehl JEDES MAL an die User-Nachricht an (unsichtbar für User, sichtbar für KI)
+        forced_prompt = f"{prompt}\n\n(WICHTIG: Antworte in kurzen Markdown-Listen! Nutze Emojis als Aufzählungszeichen. Mache doppelte Absätze zwischen Punkten!)"
+        
+        current_parts = [{"text": f"EINGABE: {forced_prompt}"}]
         
         if uploaded_file:
             try:
