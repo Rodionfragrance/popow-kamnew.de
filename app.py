@@ -102,10 +102,9 @@ with st.sidebar:
 
     st.markdown("---")
     
-    # 2. CHAT DOWNLOAD (NEU!) 📥
+    # 2. CHAT DOWNLOAD
     st.subheader("💾 Chat Sichern")
     if "messages" in st.session_state and len(st.session_state.messages) > 1:
-        # Chat zu Text konvertieren
         chat_text = ""
         for msg in st.session_state.messages:
             role = "RODION" if msg["role"] == "model" else "DU"
@@ -168,7 +167,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
 
-        # --- SYSTEM PROMPT (UPDATE: AGGRESSIVE FORMATIERUNG) ---
+        # --- SYSTEM PROMPT (UPDATE: FORCE LISTS) ---
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
         DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan).
@@ -177,13 +176,17 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         - Direkt, autoritär ("Zeus-Modus"), aber hilfreich.
         - Bleib beim "Du".
         
-        STRUKTUR & FORMATIERUNG (EXTREM WICHTIG):
-        1. Nutze IMMER Markdown!
-        2. Verwende `###` für Zwischenüberschriften.
-        3. Nutze Aufzählungszeichen (`-` oder `1.`) für Listen.
-        4. Mache Absätze nach jedem Gedanken.
-        5. KEINE Textwüsten! Mache es scannbar für das Auge.
-        6. Starte direkt mit dem Ergebnis oder "Rodion empfiehlt:".
+        STRUKTUR-BEFEHL (STRENG EINHALTEN):
+        1. Schreibe NIEMALS lange Absätze (max. 2 Zeilen Fließtext).
+        2. Nutze FÜR JEDE ANTWORT Bullet-Points oder nummerierte Listen.
+        3. Nutze Emojis als Aufzählungszeichen (z.B. 👉, ✅, 🚀, 💡), um den Text aufzubrechen.
+        4. Starte direkt mit dem Ergebnis. KEIN "Ich habe analysiert...".
+        
+        Beispiel für gute Antwort:
+        "Hier ist deine Strategie:
+        ✅ Punkt 1: Mach das...
+        ✅ Punkt 2: Achte auf...
+        🚀 Fazit: Leg los."
         
         WISSEN:
         - Saison: {current_season}
@@ -196,7 +199,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         # VERLAUF BAUEN
         api_messages = []
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
-        api_messages.append({"role": "model", "parts": [{"text": "Verstanden."}]})
+        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich antworte nur in Listen und kurzen Blöcken."}]})
 
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
