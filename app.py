@@ -19,15 +19,17 @@ except ImportError:
 st.set_page_config(page_title="Rodion Chogan KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
 st.toast("👈 Tipp: Öffne die Sidebar (Pfeil oben links) für Datei-Uploads!", icon="💡")
 
-# --- 2. UI DESIGN & CSS (Das neue, schöne Design) ---
+# --- 2. UI DESIGN & CSS ---
 st.markdown("""
 <style>
     /* Chat-Container etwas enger für Lesbarkeit */
     .main .block-container { max-width: 900px; padding-top: 2rem; padding-bottom: 10rem; }
     
-    /* Verstecke Header-Deko */
-    header {visibility: hidden;}
+    /* WICHTIG: Header NICHT komplett verstecken, sonst ist der Sidebar-Knopf weg! */
+    /* Nur das Menü oben rechts (3 Punkte) und Footer verstecken */
     #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    .stAppDeployButton {display: none;}
     
     /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
@@ -100,11 +102,11 @@ if "messages" not in st.session_state:
         {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n**Tipp:** Du kannst hier direkt Dateien anhängen.\n\nWie kann ich dir helfen?"}
     ]
 
-# --- 8. UI HEADER & UPLOAD (NEU: NAH DRAN) ---
+# --- 8. UI HEADER & UPLOAD ---
 st.title("🧙‍♂️ Rodion Chogan KI")
 st.caption("Dein Business-Mentor. Frag mich alles.")
 
-# Datei-Upload direkt im Hauptbereich (Kollabierbar)
+# Datei-Upload direkt im Hauptbereich
 with st.expander("📎 Datei anhängen (Bild/PDF)", expanded=False):
     uploaded_file = st.file_uploader("Datei auswählen", type=["jpg", "png", "jpeg", "pdf"], label_visibility="collapsed")
 
@@ -115,7 +117,7 @@ for msg in st.session_state.messages:
         if "audio" in msg:
             st.audio(msg["audio"], format="audio/mp3")
 
-# --- 10. LOGIK (MIT DEM ALTEN SCANNER!) ---
+# --- 10. LOGIK ---
 if prompt := st.chat_input("Nachricht an Rodion..."):
     
     # User Nachricht
@@ -130,6 +132,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
 
     # KI Antwort
     with st.chat_message("model", avatar="🧙‍♂️"):
+        # PLATZHALTER FÜR STREAMING
         placeholder = st.empty()
         full_text = ""
 
@@ -193,82 +196,86 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             
         api_messages.append({"role": "user", "parts": current_parts})
 
-        # --- DER ALTE, GUTE SCANNER (WIEDER DA!) ---
+        # --- API LOGIK ---
         success = False
         error_log = []
         random.shuffle(api_keys)
         
-        for i, key in enumerate(api_keys):
-            if success: break
+        # HIER IST DER LADEKREIS (SPINNER) ⏳
+        with st.spinner("Rodion analysiert... ⏳"):
             
-            # 1. SCAN: Welches Modell ist wirklich da?
-            valid_model = None
-            try:
-                list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
-                list_res = requests.get(list_url, timeout=5)
+            for i, key in enumerate(api_keys):
+                if success: break
                 
-                if list_res.status_code == 200:
-                    models_data = list_res.json().get('models', [])
-                    for m in models_data:
-                        m_name = m['name'].replace('models/', '')
-                        methods = m.get('supportedGenerationMethods', [])
-                        if 'generateContent' in methods:
-                            # Wir suchen intelligent nach Flash oder Pro
-                            if 'flash' in m_name and '1.5' in m_name:
-                                valid_model = m_name
-                                break
-                            elif 'pro' in m_name and '1.5' in m_name:
-                                valid_model = m_name
-                            elif valid_model is None: 
-                                valid_model = m_name # Fallback
-                else:
-                    error_log.append(f"Key {i} Scan-Fehler: {list_res.status_code}")
+                # 1. SCAN: Welches Modell ist wirklich da?
+                valid_model = None
+                try:
+                    list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
+                    list_res = requests.get(list_url, timeout=5)
+                    
+                    if list_res.status_code == 200:
+                        models_data = list_res.json().get('models', [])
+                        for m in models_data:
+                            m_name = m['name'].replace('models/', '')
+                            methods = m.get('supportedGenerationMethods', [])
+                            if 'generateContent' in methods:
+                                # Wir suchen intelligent nach Flash oder Pro
+                                if 'flash' in m_name and '1.5' in m_name:
+                                    valid_model = m_name
+                                    break
+                                elif 'pro' in m_name and '1.5' in m_name:
+                                    valid_model = m_name
+                                elif valid_model is None: 
+                                    valid_model = m_name # Fallback
+                    else:
+                        error_log.append(f"Key {i} Scan-Fehler: {list_res.status_code}")
+                        continue
+                except Exception as e:
+                    error_log.append(f"Key {i} Scan-Exception: {str(e)}")
                     continue
-            except Exception as e:
-                error_log.append(f"Key {i} Scan-Exception: {str(e)}")
-                continue
 
-            if not valid_model:
-                error_log.append(f"Key {i}: Kein Modell gefunden.")
-                continue
+                if not valid_model:
+                    error_log.append(f"Key {i}: Kein Modell gefunden.")
+                    continue
 
-            # 2. GENERATE: Mit dem gefundenen Modell senden
-            try:
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
-                headers = {'Content-Type': 'application/json'}
-                data = {"contents": api_messages}
+                # 2. GENERATE: Mit dem gefundenen Modell senden
+                try:
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
+                    headers = {'Content-Type': 'application/json'}
+                    data = {"contents": api_messages}
 
-                response = requests.post(url, headers=headers, json=data, timeout=60)
-                
-                if response.status_code == 200:
-                    answer = response.json()['candidates'][0]['content']['parts'][0]['text']
+                    response = requests.post(url, headers=headers, json=data, timeout=60)
                     
-                    for chunk in answer.split():
-                        full_text += chunk + " "
-                        placeholder.markdown(full_text + "▌")
-                        time.sleep(0.02)
-                    
-                    placeholder.markdown(full_text)
-                    
-                    audio_bytes = None
-                    if TTS_ENABLED and len(full_text) > 20:
-                        try:
-                            tts = gTTS(text=full_text, lang='de')
-                            fp = BytesIO()
-                            tts.write_to_fp(fp)
-                            audio_bytes = fp.getvalue()
-                            st.audio(audio_bytes, format="audio/mp3")
-                        except: pass
-                    
-                    msg_entry = {"role": "model", "content": full_text}
-                    if audio_bytes: msg_entry["audio"] = audio_bytes
-                    st.session_state.messages.append(msg_entry)
-                    success = True
-                else:
-                    error_log.append(f"Key {i} ({valid_model}) Error: {response.status_code}")
-            except Exception as e: 
-                error_log.append(f"Key {i} Request-Exception: {str(e)}")
-                continue
+                    if response.status_code == 200:
+                        answer = response.json()['candidates'][0]['content']['parts'][0]['text']
+                        
+                        # Streaming Effekt
+                        for chunk in answer.split():
+                            full_text += chunk + " "
+                            placeholder.markdown(full_text + "▌")
+                            time.sleep(0.02)
+                        
+                        placeholder.markdown(full_text)
+                        
+                        audio_bytes = None
+                        if TTS_ENABLED and len(full_text) > 20:
+                            try:
+                                tts = gTTS(text=full_text, lang='de')
+                                fp = BytesIO()
+                                tts.write_to_fp(fp)
+                                audio_bytes = fp.getvalue()
+                                st.audio(audio_bytes, format="audio/mp3")
+                            except: pass
+                        
+                        msg_entry = {"role": "model", "content": full_text}
+                        if audio_bytes: msg_entry["audio"] = audio_bytes
+                        st.session_state.messages.append(msg_entry)
+                        success = True
+                    else:
+                        error_log.append(f"Key {i} ({valid_model}) Error: {response.status_code}")
+                except Exception as e: 
+                    error_log.append(f"Key {i} Request-Exception: {str(e)}")
+                    continue
 
         if not success:
             st.error("⚠️ Verbindungsfehler.")
