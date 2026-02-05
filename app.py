@@ -33,11 +33,8 @@ st.markdown("""
     /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
     
-    /* EINGABEFELD: Dunkel/Transparent (Original Look) */
-    [data-testid="stChatInput"] { 
-        padding-bottom: 30px !important; 
-        background-color: transparent !important; 
-    }
+    /* Chat Input Design */
+    [data-testid="stChatInput"] { padding-bottom: 30px !important; background-color: transparent !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -66,23 +63,13 @@ api_keys = [str(k).replace("'", "").replace('"', "").strip() for k in keys_to_us
 # --- 5. DATENBANK LADEN ---
 @st.cache_data(show_spinner=False)
 def load_data():
-    data = {"csv": "", "business": "", "network": "", "coaching": "", "produkt": "", "events": "", "olfazeta": ""}
-    
-    # 1. Master DB (Preise, Codes)
+    data = {"csv": "", "business": "", "network": "", "coaching": "", "produkt": "", "events": ""}
     try:
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";", encoding="utf-8")
         df = df.fillna("-")
         data["csv"] = df.to_string(index=False)
     except: pass
 
-    # 2. Olfazeta Finder DB (Matching-Wissen)
-    try:
-        df_olfazeta = pd.read_csv("olfazeta_finder.csv", sep=";", encoding="utf-8")
-        df_olfazeta = df_olfazeta.fillna("-")
-        data["olfazeta"] = df_olfazeta.to_string(index=False)
-    except: pass
-
-    # 3. Text-Dateien
     files = ["business_wissen.txt", "network_bible.txt", "coaching_wissen.txt", "produkt_beschreibungen.txt", "events.txt"]
     keys = ["business", "network", "coaching", "produkt", "events"]
     
@@ -167,49 +154,43 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         placeholder = st.empty()
         full_text = ""
 
-        # WISSEN ZUSAMMENSTELLEN
         coaching_content = db.get('coaching', '')
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
-        olfazeta_content = db.get('olfazeta', '') 
 
-        # --- SYSTEM PROMPT (DER HIRN-TEIL) ---
+        # --- SYSTEM PROMPT (UPDATE: 100% RECHTSSICHERHEIT) ---
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
-        DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan) und maximaler Umsatz.
+        DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan).
         
         TONFALL:
         - Direkt, autoritär ("Zeus-Modus"), aber hilfreich.
         - Bleib beim "Du".
         
-        ⚠️ VERKAUFS-HIERARCHIE (STRENG EINHALTEN):
-        1. 🏆 PRIORITÄT (Eigenkreationen): Prüfe ZUERST, ob eine **Eigenkreation / Limited Edition** (IDs über 2000 oder Namen wie Apollo, Zeus, Ermes, Imperatrix) passt. Diese MÜSSEN an erster Stelle stehen (USP!).
-        2. 🥈 PRIORITÄT (Bestseller): Danach nennst du die starken Standard-Nummern (z.B. Nr. 68, Nr. 16, Nr. 42).
+        FORMATIERUNG (EXTREM WICHTIG):
+        1. Nutze ECHTE Markdown-Listen (mit `-` oder `*`).
+        2. Mache nach JEDEM Listenpunkt ZWEI Zeilenumbrüche (Enter).
+        3. Nutze Fettungen (**Wort**) für wichtige Begriffe.
+        4. Starte direkt mit dem Ergebnis.
         
-        💰 UPSELLING-PFLICHT (BEI JEDER DUFT-EMPFEHLUNG):
-        Erwähne IMMER passende Zusatzprodukte, um das Erlebnis zu steigern ("Fragrance Layering"):
-        - "Tipp: Nimm das passende Duschgel dazu – so hält der Duft den ganzen Tag."
-        - "Für unterwegs: Pack den 35ml Flakon (Taschenduft) ein."
-        - Mache daraus ein "Set-Angebot" im Kopf des Kunden.
-        
-        FORMATIERUNG (VISUELL SCANNBAR):
-        1. Nutze ECHTE Markdown-Listen (`-` oder `*`).
-        2. Mache ZWEI Zeilenumbrüche nach jedem Punkt.
-        3. Nutze Fettungen (**Wort**) für Produkte und Key-Facts.
+        SICHERHEIT (ABSOLUTES GESETZ):
+        1. Nenne NIEMALS Markennamen (kein Dior, kein Creed, kein Chanel).
+        2. Nenne AUCH NICHT die Namen der Original-Parfüms (z.B. KEIN "Aventus", KEIN "Baccarat", KEIN "Sauvage").
+        3. Vergleiche sind VERBOTEN. Beschreibe nur den Duft (z.B. "Legendäre Ananas-Rauch-Note" statt "wie Aventus").
+        4. Halte dich strikt an die Chogan-Nummern und Namen (z.B. "Nr. 68" oder "Glory").
         
         WISSEN:
         - Saison: {current_season}
         - Events 2026: {events_content}
-        - Produkte (Text): {produkt_content}
-        - Haupt-Datenbank (CSV): {db.get('csv', '')}
-        - OLFAZETA PARFÜM FINDER (Spezial-Datenbank): {olfazeta_content}
+        - Produkte: {produkt_content}
+        - Datenbank: {db.get('csv', '')}
         - Bibel & Wissen: {db.get('network', '')} {db.get('business', '')} {db.get('coaching', '')}
         """
 
         # VERLAUF BAUEN
         api_messages = []
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
-        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich priorisiere Eigenkreationen und nutze Upselling."}]})
+        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich befolge die Sicherheitsregeln strikt."}]})
 
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
@@ -219,9 +200,8 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             role = "user" if msg["role"] == "user" else "model"
             api_messages.append({"role": role, "parts": [{"text": msg["content"]}]})
 
-        # --- TRICK: FORMATIERUNG ERZWINGEN ---
-        # Dieser Zusatz-Befehl ist unsichtbar für den User, zwingt die KI aber zur Struktur
-        forced_prompt = f"{prompt}\n\n(SYSTEM: Antworte in Markdown-Listen mit Emojis! Priorisiere Eigenkreationen (Apollo/Zeus) falls passend. Mache Upselling!)"
+        # --- TRICK: FORMATIERUNG & SICHERHEIT ERZWINGEN ---
+        forced_prompt = f"{prompt}\n\n(WICHTIG: Antworte in kurzen Markdown-Listen mit Emojis! Mache doppelte Absätze! WARNUNG: KEINE ORIGINAL-MARKENNAMEN ODER ORIGINAL-PRODUKTNAMEN NENNEN!)"
         
         current_parts = [{"text": f"EINGABE: {forced_prompt}"}]
         
@@ -239,7 +219,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             
         api_messages.append({"role": "user", "parts": current_parts})
 
-        # --- API LOGIK (SCANNER) ---
+        # --- API LOGIK ---
         success = False
         error_log = []
         random.shuffle(api_keys)
