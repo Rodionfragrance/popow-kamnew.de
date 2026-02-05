@@ -66,13 +66,23 @@ api_keys = [str(k).replace("'", "").replace('"', "").strip() for k in keys_to_us
 # --- 5. DATENBANK LADEN ---
 @st.cache_data(show_spinner=False)
 def load_data():
-    data = {"csv": "", "business": "", "network": "", "coaching": "", "produkt": "", "events": ""}
+    data = {"csv": "", "business": "", "network": "", "coaching": "", "produkt": "", "events": "", "olfazeta": ""}
+    
+    # 1. Master DB (Preise, Codes)
     try:
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";", encoding="utf-8")
         df = df.fillna("-")
         data["csv"] = df.to_string(index=False)
     except: pass
 
+    # 2. Olfazeta Finder DB (Matching-Wissen)
+    try:
+        df_olfazeta = pd.read_csv("olfazeta_finder.csv", sep=";", encoding="utf-8")
+        df_olfazeta = df_olfazeta.fillna("-")
+        data["olfazeta"] = df_olfazeta.to_string(index=False)
+    except: pass
+
+    # 3. Text-Dateien
     files = ["business_wissen.txt", "network_bible.txt", "coaching_wissen.txt", "produkt_beschreibungen.txt", "events.txt"]
     keys = ["business", "network", "coaching", "produkt", "events"]
     
@@ -97,10 +107,9 @@ with st.sidebar:
 
     st.markdown("---")
     
-    # 2. CHAT DOWNLOAD (FIXED)
+    # 2. CHAT DOWNLOAD
     st.subheader("💾 Chat Sichern")
     
-    # Text generieren
     chat_text = "--- CHAT PROTOKOLL RODION KI ---\n\n"
     if "messages" in st.session_state:
         for msg in st.session_state.messages:
@@ -109,7 +118,7 @@ with st.sidebar:
     
     st.download_button(
         label="📥 Verlauf herunterladen",
-        data=chat_text.encode('utf-8'), # WICHTIG: UTF-8 Encoding für Sonderzeichen
+        data=chat_text.encode('utf-8'),
         file_name=f"chat_verlauf_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.txt",
         mime="text/plain"
     )
@@ -158,31 +167,49 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         placeholder = st.empty()
         full_text = ""
 
+        # WISSEN ZUSAMMENSTELLEN
         coaching_content = db.get('coaching', '')
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
+        olfazeta_content = db.get('olfazeta', '') 
 
-        # SYSTEM PROMPT
+        # --- SYSTEM PROMPT (DER HIRN-TEIL) ---
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
-        DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan).
+        DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan) und maximaler Umsatz.
         
         TONFALL:
         - Direkt, autoritär ("Zeus-Modus"), aber hilfreich.
         - Bleib beim "Du".
         
+        ⚠️ VERKAUFS-HIERARCHIE (STRENG EINHALTEN):
+        1. 🏆 PRIORITÄT (Eigenkreationen): Prüfe ZUERST, ob eine **Eigenkreation / Limited Edition** (IDs über 2000 oder Namen wie Apollo, Zeus, Ermes, Imperatrix) passt. Diese MÜSSEN an erster Stelle stehen (USP!).
+        2. 🥈 PRIORITÄT (Bestseller): Danach nennst du die starken Standard-Nummern (z.B. Nr. 68, Nr. 16, Nr. 42).
+        
+        💰 UPSELLING-PFLICHT (BEI JEDER DUFT-EMPFEHLUNG):
+        Erwähne IMMER passende Zusatzprodukte, um das Erlebnis zu steigern ("Fragrance Layering"):
+        - "Tipp: Nimm das passende Duschgel dazu – so hält der Duft den ganzen Tag."
+        - "Für unterwegs: Pack den 35ml Flakon (Taschenduft) ein."
+        - Mache daraus ein "Set-Angebot" im Kopf des Kunden.
+        
+        FORMATIERUNG (VISUELL SCANNBAR):
+        1. Nutze ECHTE Markdown-Listen (`-` oder `*`).
+        2. Mache ZWEI Zeilenumbrüche nach jedem Punkt.
+        3. Nutze Fettungen (**Wort**) für Produkte und Key-Facts.
+        
         WISSEN:
         - Saison: {current_season}
         - Events 2026: {events_content}
-        - Produkte: {produkt_content}
-        - Datenbank: {db.get('csv', '')}
+        - Produkte (Text): {produkt_content}
+        - Haupt-Datenbank (CSV): {db.get('csv', '')}
+        - OLFAZETA PARFÜM FINDER (Spezial-Datenbank): {olfazeta_content}
         - Bibel & Wissen: {db.get('network', '')} {db.get('business', '')} {db.get('coaching', '')}
         """
 
         # VERLAUF BAUEN
         api_messages = []
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
-        api_messages.append({"role": "model", "parts": [{"text": "Verstanden."}]})
+        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich priorisiere Eigenkreationen und nutze Upselling."}]})
 
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
@@ -193,8 +220,8 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             api_messages.append({"role": role, "parts": [{"text": msg["content"]}]})
 
         # --- TRICK: FORMATIERUNG ERZWINGEN ---
-        # Wir hängen den Befehl JEDES MAL an die User-Nachricht an (unsichtbar für User, sichtbar für KI)
-        forced_prompt = f"{prompt}\n\n(WICHTIG: Antworte in kurzen Markdown-Listen! Nutze Emojis als Aufzählungszeichen. Mache doppelte Absätze zwischen Punkten!)"
+        # Dieser Zusatz-Befehl ist unsichtbar für den User, zwingt die KI aber zur Struktur
+        forced_prompt = f"{prompt}\n\n(SYSTEM: Antworte in Markdown-Listen mit Emojis! Priorisiere Eigenkreationen (Apollo/Zeus) falls passend. Mache Upselling!)"
         
         current_parts = [{"text": f"EINGABE: {forced_prompt}"}]
         
