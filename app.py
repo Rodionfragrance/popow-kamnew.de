@@ -23,10 +23,9 @@ st.toast("👈 Tipp: Öffne die Sidebar (Pfeil oben links) für Datei-Uploads!",
 st.markdown("""
 <style>
     /* Chat-Container etwas enger für Lesbarkeit */
-    .main .block-container { max-width: 900px; padding-top: 2rem; padding-bottom: 10rem; }
+    .main .block-container { max-width: 900px; padding-top: 2rem; padding-bottom: 150px !important; }
     
-    /* WICHTIG: Header NICHT komplett verstecken, sonst ist der Sidebar-Knopf weg! */
-    /* Nur das Menü oben rechts (3 Punkte) und Footer verstecken */
+    /* Elemente verstecken */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stAppDeployButton {display: none;}
@@ -34,8 +33,16 @@ st.markdown("""
     /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
     
-    /* Chat Input Fixierung */
-    [data-testid="stChatInput"] { margin-bottom: 20px; }
+    /* Chat Input Design */
+    [data-testid="stChatInput"] { padding-bottom: 15px !important; background-color: transparent !important; }
+    [data-testid="stChatInput"] textarea {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #d0d0d0 !important;
+        border-radius: 25px !important;
+        padding: 12px 15px !important;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.1) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -82,14 +89,36 @@ def load_data():
 
 db = load_data()
 
-# --- 6. SIDEBAR (ALT BEWÄHRT) ---
+# --- 6. SIDEBAR (VERWALTUNG & DOWNLOAD) ---
 with st.sidebar:
     st.header("⚙️ Verwaltung")
+    
+    # 1. Datenbank Reset
     if st.button("🔄 Datenbank neu laden"):
         st.cache_data.clear()
         st.success("Cache geleert!")
         time.sleep(1)
         st.rerun()
+
+    st.markdown("---")
+    
+    # 2. CHAT DOWNLOAD (NEU!) 📥
+    st.subheader("💾 Chat Sichern")
+    if "messages" in st.session_state and len(st.session_state.messages) > 1:
+        # Chat zu Text konvertieren
+        chat_text = ""
+        for msg in st.session_state.messages:
+            role = "RODION" if msg["role"] == "model" else "DU"
+            chat_text += f"{role}:\n{msg['content']}\n\n{'-'*30}\n\n"
+            
+        st.download_button(
+            label="📥 Verlauf herunterladen",
+            data=chat_text,
+            file_name=f"chat_verlauf_{datetime.now().strftime('%Y-%m-%d')}.txt",
+            mime="text/plain"
+        )
+    else:
+        st.caption("Schreibe etwas, um den Chat zu speichern.")
 
     st.markdown("---")
     st.subheader("🔗 Support")
@@ -106,7 +135,7 @@ if "messages" not in st.session_state:
 st.title("🧙‍♂️ Rodion Chogan KI")
 st.caption("Dein Business-Mentor. Frag mich alles.")
 
-# Datei-Upload direkt im Hauptbereich
+# Datei-Upload
 with st.expander("📎 Datei anhängen (Bild/PDF)", expanded=False):
     uploaded_file = st.file_uploader("Datei auswählen", type=["jpg", "png", "jpeg", "pdf"], label_visibility="collapsed")
 
@@ -132,30 +161,29 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
 
     # KI Antwort
     with st.chat_message("model", avatar="🧙‍♂️"):
-        # PLATZHALTER FÜR STREAMING
         placeholder = st.empty()
         full_text = ""
 
-        # WISSEN LADEN
         coaching_content = db.get('coaching', '')
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
 
-        # SYSTEM PROMPT
+        # --- SYSTEM PROMPT (UPDATE: AGGRESSIVE FORMATIERUNG) ---
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
-        DEIN ZIEL: Präzise, taktische und gewinnbringende Antworten für dein Team (Chogan).
+        DEIN ZIEL: Präzise, taktische Antworten für dein Team (Chogan).
         
         TONFALL:
-        - Kein Geschwafel. Direkt, autoritär, lösungsorientiert ("Zeus-Modus").
-        - Sprich den User niemals mit Namen an. Bleib beim "Du".
+        - Direkt, autoritär ("Zeus-Modus"), aber hilfreich.
+        - Bleib beim "Du".
         
-        FORMATIERUNG:
-        - KEIN "Laut denken". Starte direkt mit dem Ergebnis.
-        - Nutze Fettungen für Key-Facts.
-        
-        SICHERHEIT:
-        - Keine Markennamen (Dior etc.) nennen -> Umschreiben!
+        STRUKTUR & FORMATIERUNG (EXTREM WICHTIG):
+        1. Nutze IMMER Markdown!
+        2. Verwende `###` für Zwischenüberschriften.
+        3. Nutze Aufzählungszeichen (`-` oder `1.`) für Listen.
+        4. Mache Absätze nach jedem Gedanken.
+        5. KEINE Textwüsten! Mache es scannbar für das Auge.
+        6. Starte direkt mit dem Ergebnis oder "Rodion empfiehlt:".
         
         WISSEN:
         - Saison: {current_season}
@@ -170,7 +198,6 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
         api_messages.append({"role": "model", "parts": [{"text": "Verstanden."}]})
 
-        # History ohne Begrüßung (Fix für 400 Error)
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
             relevant_history = relevant_history[1:]
@@ -196,18 +223,16 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             
         api_messages.append({"role": "user", "parts": current_parts})
 
-        # --- API LOGIK ---
+        # --- API LOGIK (SCANNER) ---
         success = False
         error_log = []
         random.shuffle(api_keys)
         
-        # HIER IST DER LADEKREIS (SPINNER) ⏳
         with st.spinner("Rodion analysiert... ⏳"):
-            
             for i, key in enumerate(api_keys):
                 if success: break
                 
-                # 1. SCAN: Welches Modell ist wirklich da?
+                # 1. SCAN
                 valid_model = None
                 try:
                     list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
@@ -219,14 +244,13 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                             m_name = m['name'].replace('models/', '')
                             methods = m.get('supportedGenerationMethods', [])
                             if 'generateContent' in methods:
-                                # Wir suchen intelligent nach Flash oder Pro
                                 if 'flash' in m_name and '1.5' in m_name:
                                     valid_model = m_name
                                     break
                                 elif 'pro' in m_name and '1.5' in m_name:
                                     valid_model = m_name
                                 elif valid_model is None: 
-                                    valid_model = m_name # Fallback
+                                    valid_model = m_name 
                     else:
                         error_log.append(f"Key {i} Scan-Fehler: {list_res.status_code}")
                         continue
@@ -238,7 +262,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     error_log.append(f"Key {i}: Kein Modell gefunden.")
                     continue
 
-                # 2. GENERATE: Mit dem gefundenen Modell senden
+                # 2. GENERATE
                 try:
                     url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
                     headers = {'Content-Type': 'application/json'}
@@ -249,7 +273,6 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     if response.status_code == 200:
                         answer = response.json()['candidates'][0]['content']['parts'][0]['text']
                         
-                        # Streaming Effekt
                         for chunk in answer.split():
                             full_text += chunk + " "
                             placeholder.markdown(full_text + "▌")
