@@ -15,16 +15,25 @@ try:
 except ImportError:
     TTS_ENABLED = False
 
-# --- 1. KONFIGURATION ---
-st.set_page_config(page_title="Rodion Mastermind", page_icon="🧙‍♂️", layout="centered", initial_sidebar_state="expanded")
+# --- 1. KONFIGURATION (Sidebar expanded!) ---
+st.set_page_config(page_title="Rodion Chogan KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
+st.toast("👈 Tipp: Öffne die Sidebar (Pfeil oben links) für Datei-Uploads!", icon="💡")
 
-# --- 2. CSS & DESIGN ---
+# --- 2. UI DESIGN & CSS (Das neue, schöne Design) ---
 st.markdown("""
 <style>
-    .main .block-container { max-width: 800px; padding-top: 2rem; padding-bottom: 10rem; }
+    /* Chat-Container etwas enger für Lesbarkeit */
+    .main .block-container { max-width: 900px; padding-top: 2rem; padding-bottom: 10rem; }
+    
+    /* Verstecke Header-Deko */
     header {visibility: hidden;}
     #MainMenu {visibility: hidden;}
+    
+    /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
+    
+    /* Chat Input Fixierung */
+    [data-testid="stChatInput"] { margin-bottom: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -71,7 +80,7 @@ def load_data():
 
 db = load_data()
 
-# --- 6. SIDEBAR ---
+# --- 6. SIDEBAR (ALT BEWÄHRT) ---
 with st.sidebar:
     st.header("⚙️ Verwaltung")
     if st.button("🔄 Datenbank neu laden"):
@@ -88,26 +97,28 @@ with st.sidebar:
 # --- 7. SESSION STATE ---
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n**Tipp:** Du kannst hier unten direkt Dateien anhängen.\n\nWie kann ich dir helfen?"}
+        {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n**Tipp:** Du kannst hier direkt Dateien anhängen.\n\nWie kann ich dir helfen?"}
     ]
 
-# --- 8. UI ---
-st.title("🧙‍♂️ Rodion Mastermind")
+# --- 8. UI HEADER & UPLOAD (NEU: NAH DRAN) ---
+st.title("🧙‍♂️ Rodion Chogan KI")
 st.caption("Dein Business-Mentor. Frag mich alles.")
 
+# Datei-Upload direkt im Hauptbereich (Kollabierbar)
 with st.expander("📎 Datei anhängen (Bild/PDF)", expanded=False):
     uploaded_file = st.file_uploader("Datei auswählen", type=["jpg", "png", "jpeg", "pdf"], label_visibility="collapsed")
 
-# --- 9. VERLAUF ---
+# --- 9. CHAT VERLAUF ---
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
         st.markdown(msg["content"])
         if "audio" in msg:
             st.audio(msg["audio"], format="audio/mp3")
 
-# --- 10. LOGIK ---
+# --- 10. LOGIK (MIT DEM ALTEN SCANNER!) ---
 if prompt := st.chat_input("Nachricht an Rodion..."):
     
+    # User Nachricht
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -117,20 +128,31 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             else:
                 st.markdown(f"📄 *Anhang: {uploaded_file.name}*")
 
+    # KI Antwort
     with st.chat_message("model", avatar="🧙‍♂️"):
         placeholder = st.empty()
         full_text = ""
 
+        # WISSEN LADEN
         coaching_content = db.get('coaching', '')
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
 
+        # SYSTEM PROMPT
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
         DEIN ZIEL: Präzise, taktische und gewinnbringende Antworten für dein Team (Chogan).
-        TONFALL: Kein Geschwafel. Direkt, autoritär, lösungsorientiert ("Zeus-Modus"). Sprich den User niemals mit Namen an.
-        FORMATIERUNG: KEIN "Laut denken". Starte direkt. Nutze Fettungen.
-        SICHERHEIT: Keine Markennamen. Keine Heilversprechen.
+        
+        TONFALL:
+        - Kein Geschwafel. Direkt, autoritär, lösungsorientiert ("Zeus-Modus").
+        - Sprich den User niemals mit Namen an. Bleib beim "Du".
+        
+        FORMATIERUNG:
+        - KEIN "Laut denken". Starte direkt mit dem Ergebnis.
+        - Nutze Fettungen für Key-Facts.
+        
+        SICHERHEIT:
+        - Keine Markennamen (Dior etc.) nennen -> Umschreiben!
         
         WISSEN:
         - Saison: {current_season}
@@ -140,10 +162,12 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         - Bibel & Wissen: {db.get('network', '')} {db.get('business', '')} {db.get('coaching', '')}
         """
 
+        # VERLAUF BAUEN
         api_messages = []
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
         api_messages.append({"role": "model", "parts": [{"text": "Verstanden."}]})
 
+        # History ohne Begrüßung (Fix für 400 Error)
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
             relevant_history = relevant_history[1:]
@@ -152,6 +176,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             role = "user" if msg["role"] == "user" else "model"
             api_messages.append({"role": role, "parts": [{"text": msg["content"]}]})
 
+        # Aktueller Input + Datei
         current_parts = [{"text": f"EINGABE: {prompt}"}]
         
         if uploaded_file:
@@ -168,17 +193,48 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             
         api_messages.append({"role": "user", "parts": current_parts})
 
+        # --- DER ALTE, GUTE SCANNER (WIEDER DA!) ---
         success = False
         error_log = []
         random.shuffle(api_keys)
         
-        # --- EINFACHERE API LOGIK (KEIN SCAN MEHR) ---
         for i, key in enumerate(api_keys):
             if success: break
             
+            # 1. SCAN: Welches Modell ist wirklich da?
+            valid_model = None
             try:
-                # Wir zwingen ihn auf 'gemini-1.5-flash', das stabilste Modell
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={key}"
+                list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
+                list_res = requests.get(list_url, timeout=5)
+                
+                if list_res.status_code == 200:
+                    models_data = list_res.json().get('models', [])
+                    for m in models_data:
+                        m_name = m['name'].replace('models/', '')
+                        methods = m.get('supportedGenerationMethods', [])
+                        if 'generateContent' in methods:
+                            # Wir suchen intelligent nach Flash oder Pro
+                            if 'flash' in m_name and '1.5' in m_name:
+                                valid_model = m_name
+                                break
+                            elif 'pro' in m_name and '1.5' in m_name:
+                                valid_model = m_name
+                            elif valid_model is None: 
+                                valid_model = m_name # Fallback
+                else:
+                    error_log.append(f"Key {i} Scan-Fehler: {list_res.status_code}")
+                    continue
+            except Exception as e:
+                error_log.append(f"Key {i} Scan-Exception: {str(e)}")
+                continue
+
+            if not valid_model:
+                error_log.append(f"Key {i}: Kein Modell gefunden.")
+                continue
+
+            # 2. GENERATE: Mit dem gefundenen Modell senden
+            try:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
                 headers = {'Content-Type': 'application/json'}
                 data = {"contents": api_messages}
 
@@ -209,12 +265,11 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     st.session_state.messages.append(msg_entry)
                     success = True
                 else:
-                    error_log.append(f"Key {i} Error: {response.status_code} - {response.text}")
+                    error_log.append(f"Key {i} ({valid_model}) Error: {response.status_code}")
             except Exception as e: 
-                error_log.append(f"Key {i} Exception: {str(e)}")
+                error_log.append(f"Key {i} Request-Exception: {str(e)}")
                 continue
 
         if not success:
             st.error("⚠️ Verbindungsfehler.")
-            st.markdown("**Technisches Protokoll (Screenshot an Rodion senden):**")
             st.code("\n".join(error_log), language="text")
