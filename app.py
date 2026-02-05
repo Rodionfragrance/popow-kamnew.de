@@ -169,39 +169,16 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         api_messages.append({"role": "user", "parts": current_parts})
 
         success = False
-        error_log = [] # Hier sammeln wir alle Fehler
+        error_log = []
         random.shuffle(api_keys)
         
+        # --- EINFACHERE API LOGIK (KEIN SCAN MEHR) ---
         for i, key in enumerate(api_keys):
             if success: break
             
-            # 1. SCAN
-            valid_model = None
             try:
-                list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
-                list_res = requests.get(list_url, timeout=5)
-                if list_res.status_code == 200:
-                    for m in list_res.json().get('models', []):
-                        if 'generateContent' in m.get('supportedGenerationMethods', []):
-                            m_name = m['name'].replace('models/', '')
-                            if 'flash' in m_name and '1.5' in m_name:
-                                valid_model = m_name
-                                break
-                            if 'pro' in m_name and '1.5' in m_name:
-                                valid_model = m_name
-                else:
-                    error_log.append(f"Key {i} Scan-Fehler: Status {list_res.status_code}")
-            except Exception as e:
-                error_log.append(f"Key {i} Scan-Exception: {str(e)}")
-                continue
-
-            if not valid_model:
-                error_log.append(f"Key {i}: Kein Modell gefunden.")
-                continue
-
-            # 2. GENERATE
-            try:
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
+                # Wir zwingen ihn auf 'gemini-1.5-flash', das stabilste Modell
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={key}"
                 headers = {'Content-Type': 'application/json'}
                 data = {"contents": api_messages}
 
@@ -232,11 +209,9 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     st.session_state.messages.append(msg_entry)
                     success = True
                 else:
-                    # HIER WIRD DER FEHLERTEXT VON GOOGLE GELESEN
-                    error_msg = response.text
-                    error_log.append(f"Key {i} API-Fehler: {response.status_code} - {error_msg}")
+                    error_log.append(f"Key {i} Error: {response.status_code} - {response.text}")
             except Exception as e: 
-                error_log.append(f"Key {i} Request-Exception: {str(e)}")
+                error_log.append(f"Key {i} Exception: {str(e)}")
                 continue
 
         if not success:
