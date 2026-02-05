@@ -19,45 +19,23 @@ except ImportError:
 st.set_page_config(page_title="Rodion Chogan KI", page_icon="🧙‍♂️", layout="wide", initial_sidebar_state="expanded")
 st.toast("👈 Tipp: Öffne die Sidebar (Pfeil oben links) für Datei-Uploads!", icon="💡")
 
-# --- 2. UI DESIGN & CSS (CHATGPT STYLE OPTIMIERT FÜR MOBILE) ---
+# --- 2. UI DESIGN & CSS ---
 st.markdown("""
 <style>
-    /* 1. Hauptbereich: Mehr Platz unten lassen, damit nichts verdeckt wird */
-    .main .block-container { 
-        max-width: 900px; 
-        padding-top: 2rem; 
-        padding-bottom: 150px !important; /* WICHTIG: Genug Platz für die Input-Box */
-    }
+    /* Chat-Container etwas enger für Lesbarkeit */
+    .main .block-container { max-width: 900px; padding-top: 2rem; padding-bottom: 10rem; }
     
-    /* 2. Elemente verstecken */
+    /* WICHTIG: Header NICHT komplett verstecken, sonst ist der Sidebar-Knopf weg! */
+    /* Nur das Menü oben rechts (3 Punkte) und Footer verstecken */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stAppDeployButton {display: none;}
     
-    /* 3. Upload Bereich */
+    /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
     
-    /* 4. DAS EINGABEFELD (ChatGPT Style) */
-    /* Container fixieren und Abstand geben */
-    [data-testid="stChatInput"] {
-        padding-bottom: 15px !important;
-        background-color: transparent !important;
-    }
-    
-    /* Das eigentliche Textfeld stylen (Weiß, Rund, Schatten) */
-    [data-testid="stChatInput"] textarea {
-        background-color: #ffffff !important; /* Weißer Hintergrund */
-        color: #000000 !important; /* Schwarzer Text */
-        border: 1px solid #d0d0d0 !important;
-        border-radius: 25px !important; /* Rundungen wie bei iMessage/WhatsApp */
-        padding: 12px 15px !important;
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.1) !important; /* Leichter Schatten */
-    }
-    
-    /* Den Senden-Button anpassen */
-    [data-testid="stChatInput"] button {
-        color: #d32f2f !important; /* Rodion Rot */
-    }
+    /* Chat Input Fixierung */
+    [data-testid="stChatInput"] { margin-bottom: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -104,7 +82,7 @@ def load_data():
 
 db = load_data()
 
-# --- 6. SIDEBAR ---
+# --- 6. SIDEBAR (ALT BEWÄHRT) ---
 with st.sidebar:
     st.header("⚙️ Verwaltung")
     if st.button("🔄 Datenbank neu laden"):
@@ -154,6 +132,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
 
     # KI Antwort
     with st.chat_message("model", avatar="🧙‍♂️"):
+        # PLATZHALTER FÜR STREAMING
         placeholder = st.empty()
         full_text = ""
 
@@ -191,7 +170,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
         api_messages.append({"role": "model", "parts": [{"text": "Verstanden."}]})
 
-        # History ohne Begrüßung
+        # History ohne Begrüßung (Fix für 400 Error)
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
             relevant_history = relevant_history[1:]
@@ -222,13 +201,13 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         error_log = []
         random.shuffle(api_keys)
         
-        # LADEKREIS (SPINNER)
+        # HIER IST DER LADEKREIS (SPINNER) ⏳
         with st.spinner("Rodion analysiert... ⏳"):
             
             for i, key in enumerate(api_keys):
                 if success: break
                 
-                # 1. SCAN (DER BEWÄHRTE SCANNER)
+                # 1. SCAN: Welches Modell ist wirklich da?
                 valid_model = None
                 try:
                     list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
@@ -240,13 +219,14 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                             m_name = m['name'].replace('models/', '')
                             methods = m.get('supportedGenerationMethods', [])
                             if 'generateContent' in methods:
+                                # Wir suchen intelligent nach Flash oder Pro
                                 if 'flash' in m_name and '1.5' in m_name:
                                     valid_model = m_name
                                     break
                                 elif 'pro' in m_name and '1.5' in m_name:
                                     valid_model = m_name
                                 elif valid_model is None: 
-                                    valid_model = m_name 
+                                    valid_model = m_name # Fallback
                     else:
                         error_log.append(f"Key {i} Scan-Fehler: {list_res.status_code}")
                         continue
@@ -258,7 +238,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     error_log.append(f"Key {i}: Kein Modell gefunden.")
                     continue
 
-                # 2. GENERATE
+                # 2. GENERATE: Mit dem gefundenen Modell senden
                 try:
                     url = f"https://generativelanguage.googleapis.com/v1beta/models/{valid_model}:generateContent?key={key}"
                     headers = {'Content-Type': 'application/json'}
@@ -269,7 +249,7 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     if response.status_code == 200:
                         answer = response.json()['candidates'][0]['content']['parts'][0]['text']
                         
-                        # Streaming
+                        # Streaming Effekt
                         for chunk in answer.split():
                             full_text += chunk + " "
                             placeholder.markdown(full_text + "▌")
