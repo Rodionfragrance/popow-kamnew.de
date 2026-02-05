@@ -16,20 +16,14 @@ except ImportError:
     TTS_ENABLED = False
 
 # --- 1. KONFIGURATION ---
-# FIX: Sidebar wieder auf "expanded", damit sie sichtbar bleibt!
 st.set_page_config(page_title="Rodion Mastermind", page_icon="🧙‍♂️", layout="centered", initial_sidebar_state="expanded")
 
 # --- 2. CSS & DESIGN ---
 st.markdown("""
 <style>
-    /* Chat-Container enger und fokussierter */
     .main .block-container { max-width: 800px; padding-top: 2rem; padding-bottom: 10rem; }
-    
-    /* Verstecke Header für cleanen Look */
     header {visibility: hidden;}
     #MainMenu {visibility: hidden;}
-    
-    /* Upload Bereich Styling */
     .stExpander { border: none; box-shadow: none; background-color: transparent; }
 </style>
 """, unsafe_allow_html=True)
@@ -60,14 +54,12 @@ api_keys = [str(k).replace("'", "").replace('"', "").strip() for k in keys_to_us
 @st.cache_data(show_spinner=False)
 def load_data():
     data = {"csv": "", "business": "", "network": "", "coaching": "", "produkt": "", "events": ""}
-    # CSV laden
     try:
         df = pd.read_csv("master_duft_datenbank_ULTIMATE.csv", sep=";", encoding="utf-8")
         df = df.fillna("-")
         data["csv"] = df.to_string(index=False)
     except: pass
 
-    # Text-Dateien laden
     files = ["business_wissen.txt", "network_bible.txt", "coaching_wissen.txt", "produkt_beschreibungen.txt", "events.txt"]
     keys = ["business", "network", "coaching", "produkt", "events"]
     
@@ -79,7 +71,7 @@ def load_data():
 
 db = load_data()
 
-# --- 6. SIDEBAR (VERWALTUNG & SUPPORT) ---
+# --- 6. SIDEBAR ---
 with st.sidebar:
     st.header("⚙️ Verwaltung")
     if st.button("🔄 Datenbank neu laden"):
@@ -93,31 +85,29 @@ with st.sidebar:
     st.link_button("📸 Mein Instagram", "https://www.instagram.com/rodionpopow", use_container_width=True)
     st.link_button("☕ Kaffee spendieren", "https://www.paypal.com/paypalme/RodionPopow", type="primary", use_container_width=True)
 
-# --- 7. SESSION STATE (GEDÄCHTNIS) ---
+# --- 7. SESSION STATE ---
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "model", "content": "👋 Hallo! Ich bin Rodion, dein KI-Mentor.\n**Tipp:** Du kannst hier unten direkt Dateien anhängen.\n\nWie kann ich dir helfen?"}
     ]
 
-# --- 8. UI: HEADER & UPLOADER ---
+# --- 8. UI ---
 st.title("🧙‍♂️ Rodion Mastermind")
 st.caption("Dein Business-Mentor. Frag mich alles.")
 
-# Datei-Upload direkt im Hauptbereich (Aufklappbar)
 with st.expander("📎 Datei anhängen (Bild/PDF)", expanded=False):
     uploaded_file = st.file_uploader("Datei auswählen", type=["jpg", "png", "jpeg", "pdf"], label_visibility="collapsed")
 
-# --- 9. CHAT VERLAUF ANZEIGEN ---
+# --- 9. VERLAUF ---
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🧙‍♂️" if msg["role"] == "model" else "👤"):
         st.markdown(msg["content"])
         if "audio" in msg:
             st.audio(msg["audio"], format="audio/mp3")
 
-# --- 10. LOGIK: PROMPT & HISTORY ---
+# --- 10. LOGIK ---
 if prompt := st.chat_input("Nachricht an Rodion..."):
     
-    # 1. User Nachricht anzeigen
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
@@ -127,12 +117,10 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             else:
                 st.markdown(f"📄 *Anhang: {uploaded_file.name}*")
 
-    # 2. KI Antwort generieren
     with st.chat_message("model", avatar="🧙‍♂️"):
         placeholder = st.empty()
         full_text = ""
 
-        # SYSTEM PROMPT
         coaching_content = db.get('coaching', '')
         produkt_content = db.get('produkt', '')
         events_content = db.get('events', '')
@@ -140,48 +128,30 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
         system_text = f"""
         DU BIST: Rodion, ein Elite-Network-Marketing-Mentor.
         DEIN ZIEL: Präzise, taktische und gewinnbringende Antworten für dein Team (Chogan).
+        TONFALL: Kein Geschwafel. Direkt, autoritär, lösungsorientiert ("Zeus-Modus"). Sprich den User niemals mit Namen an.
+        FORMATIERUNG: KEIN "Laut denken". Starte direkt. Nutze Fettungen.
+        SICHERHEIT: Keine Markennamen. Keine Heilversprechen.
         
-        TONFALL:
-        - Kein Geschwafel. Direkt, autoritär, lösungsorientiert ("Zeus-Modus").
-        - Sprich den User niemals mit Namen an. Bleib beim "Du".
-        
-        WICHTIG - FORMATIERUNG:
-        - KEIN "Laut denken" oder "Ich analysiere...". Das passiert intern.
-        - Starte die Antwort IMMER direkt mit dem Ergebnis oder: "Rodion empfiehlt:"
-        - Nutze Fettungen für Key-Facts.
-        
-        SICHERHEIT:
-        - Keine Markennamen (Dior, Chanel etc.) nennen -> Umschreiben!
-        - Keine Heilversprechen -> Rechtssicher bleiben.
-        
-        WISSEN (KONTEXT):
+        WISSEN:
         - Saison: {current_season}
         - Events 2026: {events_content}
-        - Produkte & Storys: {produkt_content}
+        - Produkte: {produkt_content}
         - Datenbank: {db.get('csv', '')}
         - Bibel & Wissen: {db.get('network', '')} {db.get('business', '')} {db.get('coaching', '')}
         """
 
-        # --- CONTEXT BUILDER (DAS GEDÄCHTNIS - FIX FÜR 400 ERROR) ---
         api_messages = []
-        # System-Prompt (User) -> Antwort (Model)
         api_messages.append({"role": "user", "parts": [{"text": system_text}]})
-        api_messages.append({"role": "model", "parts": [{"text": "Verstanden. Ich bin bereit."}]})
+        api_messages.append({"role": "model", "parts": [{"text": "Verstanden."}]})
 
-        # History holen, aber die ERSTE Nachricht (Begrüßung) überspringen,
-        # da sie "Model" ist und wir gerade "Model" (Verstanden) hatten.
-        # Gemini braucht immer User -> Model -> User -> Model.
-        
         relevant_history = st.session_state.messages
         if len(relevant_history) > 0 and relevant_history[0]["role"] == "model":
-            relevant_history = relevant_history[1:] # Begrüßung wegwerfen für die API
+            relevant_history = relevant_history[1:]
 
-        # Letzte 6 echte Nachrichten anhängen
         for msg in relevant_history[-6:]:
             role = "user" if msg["role"] == "user" else "model"
             api_messages.append({"role": role, "parts": [{"text": msg["content"]}]})
 
-        # Aktueller Prompt + Anhang
         current_parts = [{"text": f"EINGABE: {prompt}"}]
         
         if uploaded_file:
@@ -198,12 +168,11 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
             
         api_messages.append({"role": "user", "parts": current_parts})
 
-        # --- API CALL ---
         success = False
-        last_error = ""
+        error_log = [] # Hier sammeln wir alle Fehler
         random.shuffle(api_keys)
         
-        for key in api_keys:
+        for i, key in enumerate(api_keys):
             if success: break
             
             # 1. SCAN
@@ -220,9 +189,15 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                                 break
                             if 'pro' in m_name and '1.5' in m_name:
                                 valid_model = m_name
-            except: continue
+                else:
+                    error_log.append(f"Key {i} Scan-Fehler: Status {list_res.status_code}")
+            except Exception as e:
+                error_log.append(f"Key {i} Scan-Exception: {str(e)}")
+                continue
 
-            if not valid_model: continue
+            if not valid_model:
+                error_log.append(f"Key {i}: Kein Modell gefunden.")
+                continue
 
             # 2. GENERATE
             try:
@@ -235,7 +210,6 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                 if response.status_code == 200:
                     answer = response.json()['candidates'][0]['content']['parts'][0]['text']
                     
-                    # Streaming
                     for chunk in answer.split():
                         full_text += chunk + " "
                         placeholder.markdown(full_text + "▌")
@@ -243,7 +217,6 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                     
                     placeholder.markdown(full_text)
                     
-                    # Audio
                     audio_bytes = None
                     if TTS_ENABLED and len(full_text) > 20:
                         try:
@@ -254,17 +227,19 @@ if prompt := st.chat_input("Nachricht an Rodion..."):
                             st.audio(audio_bytes, format="audio/mp3")
                         except: pass
                     
-                    # Speichern
                     msg_entry = {"role": "model", "content": full_text}
                     if audio_bytes: msg_entry["audio"] = audio_bytes
                     st.session_state.messages.append(msg_entry)
                     success = True
                 else:
-                    last_error = f"Status: {response.status_code} - {response.text}"
+                    # HIER WIRD DER FEHLERTEXT VON GOOGLE GELESEN
+                    error_msg = response.text
+                    error_log.append(f"Key {i} API-Fehler: {response.status_code} - {error_msg}")
             except Exception as e: 
-                last_error = str(e)
+                error_log.append(f"Key {i} Request-Exception: {str(e)}")
                 continue
 
         if not success:
-            st.error("⚠️ Verbindungsfehler. Bitte Fehler an Rodion schicken.")
-            if last_error: st.code(last_error) # Zeigt den echten Fehler an
+            st.error("⚠️ Verbindungsfehler.")
+            st.markdown("**Technisches Protokoll (Screenshot an Rodion senden):**")
+            st.code("\n".join(error_log), language="text")
