@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impressum | Popow & Kamnew</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #0A0A0A; --black2: #111111; --black3: #1A1A1A;
+  --gold: #C8963E; --gold-dim: #8A6428;
+  --white: #F5F0E8; --gray: #888880; --border: rgba(200,150,62,0.2);
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; }
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px; border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--white); text-decoration: none; }
+.nav-logo span { color: var(--gold); }
+.nav-back { font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); text-decoration: none; transition: color 0.2s; display: flex; align-items: center; gap: 8px; }
+.nav-back:hover { color: var(--gold); }
+.container { max-width: 760px; margin: 0 auto; padding: 80px 40px; }
+.page-label { font-size: 10px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.page-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 80px); line-height: 0.95; letter-spacing: -0.5px; color: var(--white); margin-bottom: 60px; }
+h1 span { color: var(--gold); }
+.block { padding: 36px 0; border-bottom: 1px solid rgba(200,150,62,0.1); }
+.block:last-child { border-bottom: none; }
+.block-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.block p { font-size: 15px; color: var(--gray); line-height: 1.8; margin-bottom: 8px; }
+.block p:last-child { margin-bottom: 0; }
+.block p strong { color: var(--white); font-weight: 600; }
+.block a { color: var(--gold); text-decoration: none; }
+.block a:hover { text-decoration: underline; }
+footer { padding: 32px 40px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 40px; }
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--white); text-decoration: none; }
+.footer-logo span { color: var(--gold); }
+.footer-links { display: flex; gap: 24px; list-style: none; }
+.footer-links a { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--gold); }
+@media (max-width: 600px) { nav, .container, footer { padding-left: 20px; padding-right: 20px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">POPOW<span>&</span>KAMNEW</a>
+  <a href="/" class="nav-back">← Zurück zur Startseite</a>
+</nav>
+
+<div class="container">
+  <p class="page-label">Rechtliches</p>
+  <h1>Impres<span>sum.</span></h1>
+
+  <div class="block">
+    <p class="block-label">Angaben gemäß § 5 TMG</p>
+    <p><strong>Rodion Popow</strong><br>
+    Popow & Kamnew<br>
+    Michaelstraße 20<br>
+    59457 Werl</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Kontakt</p>
+    <p><strong>Telefon:</strong> 015141336341</p>
+    <p><strong>E-Mail:</strong> <a href="mailto:rodion.chogan@proton.me">rodion.chogan@proton.me</a></p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Verbraucherstreitbeilegung</p>
+    <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Quelle</p>
+    <p><a href="https://www.e-recht24.de" target="_blank" rel="noopener">e-recht24.de</a></p>
+  </div>
+</div>
+
+<footer>
+  <a href="/" class="footer-logo">POPOW<span>&</span>KAMNEW</a>
+  <ul class="footer-links">
+    <li><a href="/impressum">Impressum</a></li>
+    <li><a href="/datenschutz">Datenschutz</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
