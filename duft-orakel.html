@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Duft-Orakel – Welches Chogan Parfüm passt zu mir? | Rodion Fragrance</title>
+<meta name="description" content="Finde dein perfektes Chogan Parfüm in 30 Sekunden. Unser Duft-Orakel empfiehlt dir deinen Signature-Duft nach Geschlecht, Anlass und Dufttyp – kostenlos und ohne Registrierung.">
+<meta name="keywords" content="Chogan Parfüm finden, welches Parfüm passt zu mir, Duft-Orakel, Chogan Duft Empfehlung, Parfüm Test online">
+<meta property="og:title" content="Duft-Orakel – Dein perfektes Chogan Parfüm in 30 Sekunden">
+<meta property="og:description" content="Kein stundenlanges Testen. Wähle deinen Dufttyp und erhalte sofort deine persönliche Parfüm-Empfehlung.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ─── Reset & Base ─────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple:       #7C4D9F;
+    --purple-light: #9B6CBD;
+    --purple-pale:  #F3EBF9;
+    --purple-xpale: #FAF5FD;
+    --gold:         #C8963E;
+    --gold-light:   #F5E6C8;
+    --white:        #FFFFFF;
+    --gray-50:      #FAFAFA;
+    --gray-100:     #F4F4F5;
+    --gray-200:     #E4E4E7;
+    --gray-400:     #A1A1AA;
+    --gray-600:     #52525B;
+    --gray-900:     #18181B;
+    --radius-sm:    8px;
+    --radius-md:    14px;
+    --radius-lg:    20px;
+    --radius-pill:  100px;
+    --shadow-sm:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:    0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
+    --shadow-lg:    0 16px 48px rgba(124,77,159,0.16), 0 6px 16px rgba(0,0,0,0.08);
+    --transition:   0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(160deg, #F8F1FC 0%, #FFFFFF 50%, #F0F4FF 100%);
+    min-height: 100vh;
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Page Wrapper ─────────────────────────────────────────── */
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+
+  /* ─── Header ───────────────────────────────────────────────── */
+  .header {
+    text-align: center;
+    padding: 48px 24px 36px;
+    position: relative;
+  }
+
+  .header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--purple-light));
+    border-radius: 2px;
+    margin: 20px auto 0;
+  }
+
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--purple-light);
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+  }
+
+  .header h1 span {
+    color: var(--purple);
+  }
+
+  .header-sub {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--gray-600);
+    font-weight: 400;
+  }
+
+  /* ─── Progress Steps ───────────────────────────────────────── */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0 24px 32px;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 100px;
+    position: relative;
+  }
+
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-200);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+    transition: var(--transition);
+    position: relative;
+    z-index: 1;
+  }
+
+  .step.active .step-dot {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: white;
+    box-shadow: 0 0 0 4px rgba(124,77,159,0.15);
+  }
+
+  .step.done .step-dot {
+    background: var(--purple-pale);
+    border-color: var(--purple);
+    color: var(--purple);
+  }
+
+  .step-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--gray-400);
+    letter-spacing: 0.3px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .step.active .step-label { color: var(--purple); font-weight: 600; }
+
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--gray-200);
+    margin-bottom: 20px;
+    max-width: 40px;
+    transition: var(--transition);
+  }
+
+  .step-line.done { background: var(--purple); }
+
+  /* ─── Filter Panel ─────────────────────────────────────────── */
+  .filter-panel {
+    margin: 0 16px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid rgba(124,77,159,0.08);
+  }
+
+  .filter-section {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-100);
+    transition: background var(--transition);
+  }
+
+  .filter-section:last-child { border-bottom: none; }
+
+  .filter-section.locked {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .section-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--purple-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--purple);
+  }
+
+  .section-hint {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-left: auto;
+  }
+
+  /* ─── Buttons (Pills) ──────────────────────────────────────── */
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-height: 40px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .pill:active {
+    transform: scale(0.96);
+  }
+
+  .pill:hover {
+    border-color: var(--purple-light);
+    color: var(--purple);
+    background: var(--purple-xpale);
+  }
+
+  .pill.selected {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: var(--white);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(124,77,159,0.3);
+  }
+
+  .pill.selected:hover {
+    background: var(--purple-light);
+    border-color: var(--purple-light);
+    color: white;
+  }
+
+  /* Geschlecht bigger */
+  .pill-gender {
+    padding: 10px 20px;
+    font-size: 15px;
+    min-height: 46px;
+  }
+
+  /* ─── Footer Bar ───────────────────────────────────────────── */
+  .filter-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-100);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  }
+
+  .count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+  }
+
+  .count-badge strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    background: var(--purple);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 100px;
+  }
+
+  .btn-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .btn-reset:hover {
+    border-color: #EF4444;
+    color: #EF4444;
+    background: #FEF2F2;
+  }
+
+  /* ─── Results Section ──────────────────────────────────────── */
+  .results-section {
+    margin: 32px 16px 0;
+  }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 24px;
+    animation: fadeSlideUp 0.4s ease both;
+  }
+
+  .results-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gray-900);
+  }
+
+  .results-header p {
+    font-size: 14px;
+    color: var(--gray-400);
+    margin-top: 4px;
+  }
+
+  /* ─── Oracle Message ───────────────────────────────────────── */
+  .oracle-message {
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1.5px dashed var(--gray-200);
+    margin: 32px 16px 0;
+  }
+
+  .oracle-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .oracle-message p {
+    font-size: 15px;
+    color: var(--gray-600);
+    max-width: 280px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ─── Product Cards ────────────────────────────────────────── */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    border: 1.5px solid var(--gray-100);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform var(--transition), box-shadow var(--transition);
+    animation: fadeSlideUp 0.4s ease both;
+    cursor: default;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Winner card */
+  .card.winner {
+    border-color: var(--purple);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(145deg, #FFFFFF 0%, var(--purple-xpale) 100%);
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 540px) {
+    .card.winner {
+      grid-column: span 1;
+    }
+  }
+
+  .winner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: var(--purple);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
+    width: fit-content;
+  }
+
+  /* Runner-up card */
+  .card.runner-up {
+    border-color: rgba(124,77,159,0.25);
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.3;
+  }
+
+  .card-score {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .score-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--gray-100);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--purple-light));
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--purple);
+    white-space: nowrap;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  /* Match tags */
+  .match-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .match-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .match-tag.hit {
+    background: var(--purple-pale);
+    color: var(--purple);
+  }
+
+  .match-tag.miss {
+    background: var(--gray-100);
+    color: var(--gray-400);
+    text-decoration: line-through;
+  }
+
+  /* CTA Button */
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: var(--radius-pill);
+    background: var(--purple);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    margin-top: auto;
+  }
+
+  .card-cta:hover {
+    background: var(--purple-light);
+    box-shadow: 0 4px 12px rgba(124,77,159,0.3);
+  }
+
+  .card.winner .card-cta {
+    background: var(--purple);
+  }
+
+  /* WhatsApp CTA Button */
+  .card-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+  }
+
+  .card-wa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 11px 18px;
+    border-radius: var(--radius-pill);
+    background: #25D366;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    box-shadow: 0 3px 10px rgba(37,211,102,0.35);
+  }
+
+  .card-wa:hover {
+    background: #1ebe5d;
+    box-shadow: 0 5px 16px rgba(37,211,102,0.45);
+    transform: translateY(-1px);
+  }
+
+  .card-wa svg {
+    width: 15px;
+    height: 15px;
+    fill: white;
+    flex-shrink: 0;
+  }
+
+  .card-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    border: 1.5px solid var(--purple-light);
+    color: var(--purple);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .card-cta-secondary:hover {
+    background: var(--purple-pale);
+  }
+
+  /* SEO Text Block */
+  .seo-description {
+    margin: 48px 24px 0;
+    padding: 28px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(124,77,159,0.08);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .seo-description h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--gray-900);
+    margin-bottom: 12px;
+  }
+
+  .seo-description p {
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .seo-description p:last-child { margin-bottom: 0; }
+
+  /* ─── Footer ───────────────────────────────────────────────── */
+  .site-footer {
+    text-align: center;
+    padding: 40px 24px 20px;
+  }
+
+  .social-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .social-link:hover {
+    border-color: var(--purple-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .social-link img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  .copyright {
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.3px;
+  }
+
+  /* ─── Animations ───────────────────────────────────────────── */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.10s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.20s; }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  .card:nth-child(6) { animation-delay: 0.30s; }
+
+  /* ─── iPad / Responsive ────────────────────────────────────── */
+  @media (min-width: 768px) {
+    .page { padding: 0 0 80px 0; }
+    .filter-panel { margin: 0 24px; }
+    .results-section { margin: 40px 24px 0; }
+    .oracle-message { margin: 32px 24px 0; }
+    .results-grid { grid-template-columns: repeat(3, 1fr); }
+    .card.winner { grid-column: span 1; }
+  }
+
+  @media (max-width: 480px) {
+    .progress-bar { padding: 0 12px 24px; }
+    .filter-section { padding: 16px 18px; }
+    .filter-footer { padding: 12px 18px; }
+    .pill { font-size: 13px; padding: 7px 13px; }
+    .pill-gender { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ─── Header ─── -->
+  <header class="header">
+    <p class="header-eyebrow">Rodion Fragrance</p>
+    <h1>Dein Duft-<span>Orakel</span> 🔮</h1>
+    <p class="header-sub">Finde deinen perfekten Signature-Duft in Sekunden.</p>
+  </header>
+
+  <!-- ─── Progress ─── -->
+  <div class="progress-bar" id="progressBar">
+    <div class="step active" id="step1">
+      <div class="step-dot">1</div>
+      <div class="step-label">Geschlecht</div>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step active" id="step2">
+      <div class="step-dot">2</div>
+      <div class="step-label">Filter</div>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3">
+      <div class="step-dot">3</div>
+      <div class="step-label">Ergebnis</div>
+    </div>
+  </div>
+
+  <!-- ─── Filter Panel ─── -->
+  <div class="filter-panel">
+
+    <!-- Geschlecht -->
+    <div class="filter-section" id="sec-geschlecht">
+      <div class="section-header">
+        <div class="section-icon">👤</div>
+        <span class="section-label">Geschlecht</span>
+        <span class="section-hint">Pflichtfeld</span>
+      </div>
+      <div class="pill-group">
+        <button class="pill pill-gender" data-cat="geschlecht" data-val="Mann" onclick="toggleFilter('geschlecht','Mann')">Mann 👨</button>
+        <button class="pill pill-gender" data-cat="geschlecht" data-val="Frau" onclick="toggleFilter('geschlecht','Frau')">Frau 👩</button>
+        <button class="pill pill-gender" data-cat="geschlecht" data-val="Unisex" onclick="toggleFilter('geschlecht','Unisex')">Unisex ⚧</button>
+        <button class="pill pill-gender" data-cat="geschlecht" data-val="Kids" onclick="toggleFilter('geschlecht','Kids')">Kids 🧸</button>
+      </div>
+    </div>
+
+    <!-- Entdecken -->
+    <div class="filter-section locked" id="sec-entdecken">
+      <div class="section-header">
+        <div class="section-icon">✨</div>
+        <span class="section-label">Entdecken</span>
+        <span class="section-hint">Optional</span>
+      </div>
+      <div class="pill-group">
+        <button class="pill" data-cat="entdecken" data-val="Topliste" onclick="toggleFilter('entdecken','Topliste')">Topliste 👍</button>
+        <button class="pill" data-cat="entdecken" data-val="Trends" onclick="toggleFilter('entdecken','Trends')">Trends 📈</button>
+      </div>
+    </div>
+
+    <!-- Anlass -->
+    <div class="filter-section locked" id="sec-anlass">
+      <div class="section-header">
+        <div class="section-icon">🎯</div>
+        <span class="section-label">Anlass</span>
+        <span class="section-hint">Optional</span>
+      </div>
+      <div class="pill-group">
+        <button class="pill" data-cat="anlass" data-val="Allrounder" onclick="toggleFilter('anlass','Allrounder')">Allrounder ✨</button>
+        <button class="pill" data-cat="anlass" data-val="Freizeit" onclick="toggleFilter('anlass','Freizeit')">Freizeit 🌳</button>
+        <button class="pill" data-cat="anlass" data-val="Ausgehen" onclick="toggleFilter('anlass','Ausgehen')">Ausgehen 🌙</button>
+        <button class="pill" data-cat="anlass" data-val="Date" onclick="toggleFilter('anlass','Date')">Date 💖</button>
+        <button class="pill" data-cat="anlass" data-val="Arbeit" onclick="toggleFilter('anlass','Arbeit')">Arbeit 💼</button>
+      </div>
+    </div>
+
+    <!-- Jahreszeit -->
+    <div class="filter-section locked" id="sec-jahreszeit">
+      <div class="section-header">
+        <div class="section-icon">🌤</div>
+        <span class="section-label">Jahreszeit</span>
+        <span class="section-hint">Optional</span>
+      </div>
+      <div class="pill-group">
+        <button class="pill" data-cat="jahreszeit" data-val="Frühling" onclick="toggleFilter('jahreszeit','Frühling')">Frühling 🌷</button>
+        <button class="pill" data-cat="jahreszeit" data-val="Sommer" onclick="toggleFilter('jahreszeit','Sommer')">Sommer 🌞</button>
+        <button class="pill" data-cat="jahreszeit" data-val="Herbst" onclick="toggleFilter('jahreszeit','Herbst')">Herbst 🍁</button>
+        <button class="pill" data-cat="jahreszeit" data-val="Winter" onclick="toggleFilter('jahreszeit','Winter')">Winter ❄️</button>
+      </div>
+    </div>
+
+    <!-- Dufttyp -->
+    <div class="filter-section locked" id="sec-dufttyp">
+      <div class="section-header">
+        <div class="section-icon">🌸</div>
+        <span class="section-label">Dufttyp</span>
+        <span class="section-hint">Wichtigster Filter</span>
+      </div>
+      <div class="pill-group">
+        <button class="pill" data-cat="dufttyp" data-val="Blumig" onclick="toggleFilter('dufttyp','Blumig')">Blumig 🌸</button>
+        <button class="pill" data-cat="dufttyp" data-val="Zitrus" onclick="toggleFilter('dufttyp','Zitrus')">Zitrus 🍊</button>
+        <button class="pill" data-cat="dufttyp" data-val="Würzig" onclick="toggleFilter('dufttyp','Würzig')">Würzig 🌶️</button>
+        <button class="pill" data-cat="dufttyp" data-val="Süß" onclick="toggleFilter('dufttyp','Süß')">Süß 🍭</button>
+        <button class="pill" data-cat="dufttyp" data-val="Pudrig" onclick="toggleFilter('dufttyp','Pudrig')">Pudrig ☁️</button>
+        <button class="pill" data-cat="dufttyp" data-val="Fruchtig" onclick="toggleFilter('dufttyp','Fruchtig')">Fruchtig 🍓</button>
+        <button class="pill" data-cat="dufttyp" data-val="Frisch" onclick="toggleFilter('dufttyp','Frisch')">Frisch 🧼</button>
+        <button class="pill" data-cat="dufttyp" data-val="Cremig" onclick="toggleFilter('dufttyp','Cremig')">Cremig 🍦</button>
+        <button class="pill" data-cat="dufttyp" data-val="Holzig" onclick="toggleFilter('dufttyp','Holzig')">Holzig 🌲</button>
+        <button class="pill" data-cat="dufttyp" data-val="Orientalisch" onclick="toggleFilter('dufttyp','Orientalisch')">Orientalisch 🌴</button>
+        <button class="pill" data-cat="dufttyp" data-val="Aquatisch" onclick="toggleFilter('dufttyp','Aquatisch')">Aquatisch 🌊</button>
+        <button class="pill" data-cat="dufttyp" data-val="Ledrig" onclick="toggleFilter('dufttyp','Ledrig')">Ledrig 🧥</button>
+        <button class="pill" data-cat="dufttyp" data-val="Rauchig" onclick="toggleFilter('dufttyp','Rauchig')">Rauchig 🔥</button>
+        <button class="pill" data-cat="dufttyp" data-val="Gourmand" onclick="toggleFilter('dufttyp','Gourmand')">Gourmand 🍯</button>
+        <button class="pill" data-cat="dufttyp" data-val="Grün" onclick="toggleFilter('dufttyp','Grün')">Grün 🍀</button>
+        <button class="pill" data-cat="dufttyp" data-val="Erdig" onclick="toggleFilter('dufttyp','Erdig')">Erdig 🌱</button>
+        <button class="pill" data-cat="dufttyp" data-val="Harzig" onclick="toggleFilter('dufttyp','Harzig')">Harzig 🪵</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="filter-footer">
+      <div class="count-badge" id="countBadge">
+        <span>Wähle zuerst ein Geschlecht</span>
+      </div>
+      <button class="btn-reset" onclick="resetFilters()">
+        ↺ Zurücksetzen
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ─── Results ─── -->
+  <div id="resultsArea">
+    <div class="oracle-message">
+      <span class="oracle-icon">🔮</span>
+      <p>Wähle dein Geschlecht, um das Orakel zu befragen.</p>
+    </div>
+  </div>
+
+  <!-- ─── SEO Text Block ─── -->
+  <div class="seo-description">
+    <h2>Dein persönlicher Parfüm-Berater – kostenlos & ohne Registrierung</h2>
+    <p>Das Duft-Orakel hilft dir, deinen perfekten Signature-Duft aus dem Chogan-Sortiment zu finden – ohne stundenlang Teststreifen zu schnuppern. Wähle einfach Geschlecht, Anlass, Jahreszeit und Dufttyp, und du bekommst sofort passende Empfehlungen aus über 200 Düften.</p>
+    <p>Chogan bietet hochwertige Parfüms mit einem Duftölanteil von 30% – vergleichbar mit Luxusdüften namhafter Marken, zu einem Bruchteil des Preises. Von blumig-fruchtig über holzig-orientalisch bis hin zu aquatisch-frisch ist für jeden Geschmack etwas dabei.</p>
+    <p>Hast du deinen Duft gefunden? Schreib mir direkt per WhatsApp – kein Login, kein Umweg, keine komplizierte Registrierung. Ich bestelle für dich und liefere direkt nach Hause.</p>
+  </div>
+
+  <!-- ─── Footer ─── -->
+  <footer class="site-footer">
+    <div class="social-row">
+      <a class="social-link" href="https://www.instagram.com/rodionpopow/" target="_blank" rel="noopener">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+      </a>
+      <a class="social-link" href="https://www.tiktok.com/@rodionfragrance" target="_blank" rel="noopener">
+        <img src="https://www.citypng.com/public/uploads/preview/round-tiktok-icon-logo-transparent-background-701751695033010oraha4pc0r.png" alt="TikTok">
+      </a>
+      <a class="social-link" href="https://www.youtube.com/@rodionfragrance" target="_blank" rel="noopener">
+        <img src="https://www.citypng.com/public/uploads/preview/hd-youtube-yt-triangle-symbol-logo-icon-sign-png-701751695118564ln4ifqdive.png" alt="YouTube">
+      </a>
+    </div>
+    <p class="copyright">© 2025 Rodion Popow · Alle Rechte vorbehalten</p>
+  </footer>
+
+</div>
+
+<script>
+/* ─── Parfüm-Datenbank (alle Bugs gefixt) ─────────────────────── */
+const parfums = [
+  // UNISEX
+  { id:"ARES", name:"ARES (Limited Edition)", link:"https://www.chogangroupspa.com/product_referral/9903/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Herbst","Winter"], dufttyp:["Würzig","Orientalisch","Ledrig","Holzig","Harzig"], description:"Ein warmer, kraftvoller Duft, der Stärke und Leidenschaft verkörpert. Würzige Frische mündet in eine tiefe, ledrig-ambrierte Basis." },
+  { id:"44", name:"44 Frozen Crest", link:"https://www.chogangroupspa.com/product_referral/9041/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Frisch","Zitrus","Aquatisch","Grün","Fruchtig"], description:"Ein positiver, ausgeglichener Duft, der an kristallklares Wasser aus den Alpen erinnert." },
+  { id:"155", name:"155U True Self", link:"https://www.chogangroupspa.com/product_referral/10978/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Frisch","Zitrus","Aquatisch","Blumig"], description:"Ein minimalistischer, androgyner Duft, inspiriert von Gleichberechtigung, der zwischenmenschliche Beziehungen feiert." },
+  { id:"54", name:"54 Night Flower", link:"https://www.chogangroupspa.com/product_referral/8773/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Date","Ausgehen"], jahreszeit:["Herbst","Winter"], dufttyp:["Blumig","Orientalisch","Süß","Würzig"], description:"Ein opulenter Duft mit warmen, dunklen Noten und einer Orchideenherznote für anspruchsvolle Persönlichkeiten." },
+  { id:"72", name:"72 Earth Memory", link:"https://www.chogangroupspa.com/product_referral/1875/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Herbst","Winter"], dufttyp:["Erdig","Würzig","Holzig","Harzig","Orientalisch"], description:"Ein vielseitiges Parfüm, das Freiheit und Boheme-Eleganz ausstrahlt." },
+  { id:"73", name:"73 The Summit", link:"https://www.chogangroupspa.com/product_referral/2123/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Frisch","Würzig","Zitrus","Holzig"], description:"Warme Holznoten, frische Zitrusfrüchte und sinnlicher Moschus, der Dynamik und Stärke verkörpert." },
+  { id:"99", name:"99 Orange Sun", link:"https://www.chogangroupspa.com/product_referral/9109/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste"], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Frisch","Zitrus","Aquatisch","Fruchtig"], description:"Die Zitrusfrüchte und Natur der Amalfiküste in einer spritzigen, magischen Komposition." },
+  { id:"100", name:"100 Mystic Woods", link:"https://www.chogangroupspa.com/product_referral/3638/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Herbst","Winter","Frühling"], dufttyp:["Blumig","Holzig","Orientalisch","Süß","Würzig"], description:"Rose, Gewürze, Agarholz, Ambra, Sandelholz und ein Hauch Vanille." },
+  { id:"101", name:"101 Soft Caress", link:"https://www.chogangroupspa.com/product_referral/3643/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Herbst","Winter","Frühling"], dufttyp:["Würzig","Pudrig","Süß","Orientalisch","Harzig","Holzig"], description:"Orientalischer Amber-Duft, der mediterrane und arabische Noten vereint. Bergamot, Lavendel, Iris und Leder." },
+  { id:"102", name:"102 Soft Rays", link:"https://www.chogangroupspa.com/product_referral/3644/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Herbst","Winter"], dufttyp:["Harzig","Würzig","Süß","Rauchig","Orientalisch","Holzig"], description:"Moderner, raffinierter Amber-Duft mit exotischem Ylang-Ylang, Vanille, Sandelholz und Amberholz." },
+  { id:"105", name:"105 Expresso", link:"https://www.chogangroupspa.com/product_referral/8775/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Herbst","Winter","Frühling"], dufttyp:["Blumig","Süß","Gourmand","Orientalisch","Würzig","Holzig"], description:"Blumige Akzente, eine Herznote aus Rose und schwarzem Arabica-Kaffee, Ambra, Vanille und weißer Moschus." },
+  { id:"106", name:"106 Rebel Icon", link:"https://www.chogangroupspa.com/product_referral/3696/ROD2B753D", geschlecht:"Unisex", entdecken:["Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Würzig","Süß","Ledrig","Cremig","Holzig"], description:"Ein intensiver, dekadenter Amber-Leder-Duft, der die Sinne verführt und Sehnsüchte wahr werden lässt." },
+  { id:"110", name:"110 Mystic Spell", link:"https://www.chogangroupspa.com/product_referral/8777/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Herbst","Winter","Frühling"], dufttyp:["Süß","Fruchtig","Blumig","Frisch"], description:"Sinnlicher Unisexduft mit fruchtigen, sandigen Noten, Maiglöckchen, Moschus und Hölzern." },
+  { id:"111", name:"111 Ruby Love", link:"https://www.chogangroupspa.com/product_referral/4414/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Fruchtig","Süß","Gourmand"], description:"Süße Kirsche, Likör, Bittermandel, türkische Rose, Jasmin und eine warme, würzige Basisnote." },
+  { id:"112", name:"112 Riviera", link:"https://www.chogangroupspa.com/product_referral/4415/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Frisch","Zitrus","Blumig","Aquatisch"], description:"Frischer, spritziger Duft mit zitrischen, aromatischen und blumigen Akkorden, der an die italienische Küste erinnert." },
+  { id:"114", name:"114 Desert Whisper", link:"https://www.chogangroupspa.com/product_referral/8779/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date"], jahreszeit:["Herbst","Winter"], dufttyp:["Rauchig","Orientalisch","Ledrig","Holzig","Würzig"], description:"Orientalische Noten und Agarholz – Stärke und Mystik ferner Dünen." },
+  { id:"117", name:"117 Velvet Smoke", link:"https://www.chogangroupspa.com/product_referral/6771/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date"], jahreszeit:["Herbst","Winter"], dufttyp:["Gourmand","Würzig","Süß","Rauchig","Orientalisch"], description:"Opulenter, warmer Duft mit Tabakblüte, Tonkabohne, Kakao und Vanille, der in getrockneten Früchten und Holz endet." },
+  { id:"118", name:"118 Scarlet Fire", link:"https://www.chogangroupspa.com/product_referral/6808/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Süß","Blumig","Würzig","Holzig"], description:"Intensiver, blumiger Duft mit Jasmin, Ambergris und Zedernholz, der die Haut sinnlich umhüllt." },
+  { id:"124", name:"124 Everlasting", link:"https://www.chogangroupspa.com/product_referral/6954/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date","Allrounder","Arbeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Gourmand"], description:"Außergewöhnlicher, grenzenloser Duft mit tiefem, dunklem Charakter." },
+  { id:"125", name:"125 Mediterraneo", link:"https://www.chogangroupspa.com/product_referral/7394/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Blumig","Frisch","Grün","Aquatisch"], description:"Die italienische Küste mit Zitrusnoten, Orangenblüten, Jasmin und Maiglöckchen, abgerundet von sinnlichem Moschus." },
+  { id:"126", name:"126 Lumière Dorée", link:"https://www.chogangroupspa.com/product_referral/6767/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste"], anlass:["Ausgehen","Freizeit","Date","Arbeit","Allrounder"], jahreszeit:["Frühling","Sommer"], dufttyp:["Blumig","Süß","Cremig","Frisch","Pudrig"], description:"Sonnige Inseln: Kardamom, Pfeffer, Jasmin, Ylang-Ylang, abgerundet von Benzoe, Tonkabohne und Kokosnuss." },
+  { id:"127", name:"127 Agar Forest", link:"https://www.chogangroupspa.com/product_referral/6765/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Holzig","Harzig","Orientalisch"], description:"Agarholz, Szechuanpfeffer, Kardamom, warme Hölzer, abgerundet von Vanille, Tonkabohne und Ambra." },
+  { id:"128", name:"128 Sugar Poison", link:"https://www.chogangroupspa.com/product_referral/6769/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Gourmand","Cremig"], description:"Frische Zitrusnoten, Rum, Myrrhe, Blumiges und Kaffee, Tabak und Wildleder." },
+  { id:"129", name:"129 Chlorophyll", link:"https://www.chogangroupspa.com/product_referral/7125/ROD2B753D", geschlecht:"Unisex", entdecken:["Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Süß","Fruchtig","Frisch"], description:"Frische mediterrane fruchtige Noten mit sinnlichem Amber und Vanille – für Lebensfreude." },
+  { id:"130", name:"130 Oceanic Pulse", link:"https://www.chogangroupspa.com/product_referral/7419/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Aquatisch","Würzig","Frisch","Holzig"], description:"Schönheit und Kraft des Meeres mit süßen, würzigen, sonnigen und salzigen Noten." },
+  { id:"134", name:"134 Orange Nectar", link:"https://www.chogangroupspa.com/product_referral/7435/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Süß","Fruchtig","Gourmand","Würzig"], description:"Pfirsich, Jasmin, Rum und Cognac, abgerundet von Patschuli, Sandelholz, Vanille und Tonkabohne." },
+  { id:"135", name:"135 Mystic Forest", link:"https://www.chogangroupspa.com/product_referral/7521/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date","Arbeit","Allrounder"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Würzig","Süß","Pudrig","Holzig"], description:"Geheimnisvoller Duft mit Kontrasten, der Energie, Sinnlichkeit und Charme verleiht." },
+  { id:"137", name:"137 Sicilian Garden", link:"https://www.chogangroupspa.com/product_referral/7661/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Zitrus","Würzig","Süß","Gourmand","Cremig"], description:"Üppiger Duft mit Zitrus-, Würz- und Blumennoten – sinnliche Essenz Siziliens." },
+  { id:"138", name:"138 Woodland", link:"https://www.chogangroupspa.com/product_referral/7676/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date","Arbeit","Allrounder"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Süß","Blumig","Holzig","Cremig","Fruchtig","Orientalisch"], description:"Süße Sandelholznoten, holzige, amberartige und blumige Akkorde – Charme und Mystik." },
+  { id:"139", name:"139 Sahara Blush", link:"https://www.chogangroupspa.com/product_referral/7965/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Holzig","Würzig","Orientalisch","Süß"], description:"Rosen-Akkorde mit Agarholz – Magie ferner Oasen." },
+  { id:"141", name:"141 Sands of Time", link:"https://www.chogangroupspa.com/product_referral/8421/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Date"], jahreszeit:["Herbst","Winter"], dufttyp:["Fruchtig","Orientalisch","Süß","Würzig","Holzig"], description:"Fruchtige, würzige und holzige Akkorde – Zauber orientalischer Nächte und Mystik der Wüste." },
+  { id:"142", name:"142 Dark Eclipse", link:"https://www.chogangroupspa.com/product_referral/8493/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Ledrig","Rauchig","Holzig"], description:"Intensiver Unisex-Duft mit ledrigen Noten, der den wilden Westen und den Geist der Cowboys einfängt." },
+  { id:"143", name:"143 Sweet Dust", link:"https://www.chogangroupspa.com/product_referral/8651/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Cremig","Süß","Holzig","Pudrig","Gourmand"], description:"Verspielt und lebendig – Vanille und köstliche Gourmand-Noten verführen die Sinne." },
+  { id:"144", name:"144 Creamy Dream", link:"https://www.chogangroupspa.com/product_referral/8863/ROD2B753D", geschlecht:"Unisex", entdecken:[], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Herbst","Winter","Frühling"], dufttyp:["Cremig","Süß","Gourmand"], description:"Sanfte Umarmung mit intensiven gourmandigen Noten, die an die Cremigkeit von Milch erinnern." },
+  { id:"146", name:"146 Scarlet Flame", link:"https://www.chogangroupspa.com/product_referral/13266/ROD2B753D", geschlecht:"Unisex", entdecken:["Trends"], anlass:["Ausgehen","Freizeit","Date","Allrounder","Arbeit"], jahreszeit:["Herbst","Winter","Frühling","Sommer"], dufttyp:["Würzig","Süß","Holzig","Blumig"], description:"Blumige Komposition, die die Haut wie schwereloser Samt umhüllt – Blütenblätter und edle Hölzer." },
+  { id:"EVENT22", name:"EVENT22 Édition Europe", link:"https://www.chogangroupspa.com/product_referral/7462/ROD2B753D", geschlecht:"Unisex", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Freizeit","Date","Allrounder","Arbeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Würzig","Holzig","Pudrig","Orientalisch"], description:"Innovativ orientalischer Duft – Rosenblüten und frisch gemahlener Kaffee." },
+
+  // MANN
+  { id:"APOLLO", name:"APOLLO (Limited Edition)", link:"https://www.chogangroupspa.com/product_referral/9923/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Freizeit","Arbeit","Date","Ausgehen"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Holzig","Würzig","Zitrus","Grün","Harzig"], description:"Strahlend-aromatischer Duft: Frische Zitrusnoten treffen auf edle Harze, Weihrauch und warmes Holz – Kraft und Klarheit der Sonne." },
+  { id:"ERMES", name:"ERMES (Limited Edition)", link:"https://www.chogangroupspa.com/product_referral/9913/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst"], dufttyp:["Holzig","Würzig","Frisch","Erdig","Zitrus"], description:"Dynamisch, holzig-würzig: Zitrus und exotische Papaya treffen auf Gewürze und erdige Basis aus Vetiver und Moschus." },
+  { id:"ZEUS", name:"ZEUS (Limited Edition)", link:"https://www.chogangroupspa.com/product_referral/9933/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Winter","Herbst"], dufttyp:["Würzig","Holzig","Orientalisch","Süß","Rauchig"], description:"Intensiver, würzig-holziger Duft: Gewürze und Rum, Tabak und Vanille, getragen von tiefem Patschuli." },
+  { id:"1", name:"1 Prestige for Him", link:"https://www.chogangroupspa.com/product_referral/8753/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Orientalisch","Holzig"], description:"Sinnlicher Duft mit frischen, würzigen und fruchtigen Noten, warmen Hölzern und süßem Leder." },
+  { id:"2", name:"2 Deep Blue", link:"https://www.chogangroupspa.com/product_referral/8755/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Aquatisch","Frisch"], description:"Frischer, raffinierter Duft, inspiriert von Pantelleria – mineralische Frische von Meer und Fels." },
+  { id:"3", name:"3 Fireborn", link:"https://www.chogangroupspa.com/product_referral/8906/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Freizeit","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Ledrig","Rauchig","Holzig","Orientalisch"], description:"Voller Widersprüche: frisch und kraftvoll, wie die Begegnung von Wasser und Feuer." },
+  { id:"4", name:"4 Pure Ego", link:"https://www.chogangroupspa.com/product_referral/8902/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Holzig","Orientalisch"], description:"Eleganter Duft für den selbstbewussten Mann, der Stil und Gelassenheit ausstrahlt." },
+  { id:"150", name:"150 Unbending Man", link:"https://www.chogangroupspa.com/product_referral/11083/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Ausgehen","Date"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Würzig","Holzig","Frisch"], description:"Frische Äpfel und Zitrusfrüchte, blumige Akzenten und intensive Basis aus Fichte, Zeder und Patschuli." },
+  { id:"12", name:"12 Revenant", link:"https://www.chogangroupspa.com/product_referral/8923/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Würzig","Holzig","Frisch","Grün"], description:"Zeitloser Klassiker – kühn, frisch und intensiv mit modernem Charakter." },
+  { id:"15", name:"15 Urbe", link:"https://www.chogangroupspa.com/product_referral/9025/ROD2B753D", geschlecht:"Mann", entdecken:["Trends"], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Zitrus","Würzig","Holzig","Orientalisch","Fruchtig"], description:"Von ewiger Schönheit inspiriert – warm, sinnlich, geheimnisvoll." },
+  { id:"16", name:"16 Sailor", link:"https://www.chogangroupspa.com/product_referral/8757/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Würzig","Süß","Pudrig","Orientalisch","Frisch"], description:"Magnetischer Klassiker mit Lavendel und süßen Vanillenoten – einzigartig und unwiderstehlich." },
+  { id:"152", name:"152 To The Edge For Him", link:"https://www.chogangroupspa.com/product_referral/11038/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Würzig","Süß","Zitrus","Frisch","Holzig"], description:"Attraktiver, sinnlicher Duft für den unangepassten, selbstbewussten, virilen Mann." },
+  { id:"18", name:"18 Revelation", link:"https://www.chogangroupspa.com/product_referral/9027/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Würzig","Zitrus","Frisch","Holzig","Grün"], description:"Basilikum, Bergamotte, Grapefruit, Jasmin, Wacholder und sinnliche Basis aus Patchouli, Sandelholz und Zeder." },
+  { id:"20", name:"20 Obscuro", link:"https://www.chogangroupspa.com/product_referral/8759/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Würzig","Süß","Orientalisch","Holzig","Frisch"], description:"Verführerisch, intensiv und sinnlich – für den geheimnisvollen Mann." },
+  { id:"21", name:"21 Aqua Soul", link:"https://www.chogangroupspa.com/product_referral/8894/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste"], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Frisch","Aquatisch"], description:"Zeitlose Sinnlichkeit des Mittelmeers – die ewige Kulisse für Verführung." },
+  { id:"22", name:"22 Elemental", link:"https://www.chogangroupspa.com/product_referral/8896/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Zitrus","Würzig","Holzig","Frisch","Erdig"], description:"Die mythischen Elemente der Antike – eine Reise durch Erde, Luft und Wasser." },
+  { id:"30", name:"30 Maverick", link:"https://www.chogangroupspa.com/product_referral/8904/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Würzig","Süß","Gourmand","Fruchtig"], description:"Lebendig, spontan – Rock&Roll-Energie für den individualistischen Mann." },
+  { id:"31", name:"31 Real Man", link:"https://www.chogangroupspa.com/product_referral/9033/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Frisch","Würzig","Holzig"], description:"Kraft und Frische: vom fernen Orient in eine pulsierende Metropole." },
+  { id:"32", name:"32 Explosive", link:"https://www.chogangroupspa.com/product_referral/9035/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Würzig","Süß","Orientalisch","Holzig"], description:"Für geheimnisvolle Männer: charismatisch, raffiniert und sexy." },
+  { id:"33", name:"33 Nightfall", link:"https://www.chogangroupspa.com/product_referral/8761/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Allrounder","Date","Arbeit","Ausgehen","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Würzig","Süß","Orientalisch","Holzig","Frisch"], description:"Natürlicher Charme und fesselndes Geheimnis – magnetisch und modern." },
+  { id:"37", name:"37 Gentleman", link:"https://www.chogangroupspa.com/product_referral/892/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Winter","Herbst"], dufttyp:["Zitrus","Würzig","Holzig","Grün","Frisch"], description:"Herrenparfüms neu definiert – für den anspruchsvollen, entschlossenen, kreativen Mann." },
+  { id:"38", name:"38 Abyss", link:"https://www.chogangroupspa.com/product_referral/8763/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Winter","Herbst"], dufttyp:["Zitrus","Würzig","Holzig","Frisch"], description:"Befreit von Konventionen – stark, unabhängig und unerwartet." },
+  { id:"48", name:"48 Sublime", link:"https://www.chogangroupspa.com/product_referral/8925/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Winter","Herbst"], dufttyp:["Zitrus","Würzig","Süß","Holzig","Frisch"], description:"Intensiv, frisch – der Mann, der sich selbst treu bleibt." },
+  { id:"160", name:"160 British Charm for him", link:"https://www.chogangroupspa.com/product_referral/10953/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Würzig","Holzig","Frisch","Fruchtig"], description:"Verkörperung des modernen britischen Geistes: elegant, leidenschaftlich, sexy und lässig." },
+  { id:"52", name:"52 Arabian Mirage", link:"https://www.chogangroupspa.com/product_referral/1333/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Allrounder","Ausgehen","Date","Arbeit","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Würzig","Holzig","Süß","Harzig"], description:"Eleganter Fougère-Akkord – Gelassenheit und die Kraft der Verführung." },
+  { id:"60", name:"60 Majesty", link:"https://www.chogangroupspa.com/product_referral/9049/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Zitrus","Holzig","Fruchtig","Frisch","Aquatisch"], description:"Warmer, romantischer Duft aus edelsten Essenzen – ein märchenhafter Palast." },
+  { id:"61", name:"61 Triumph", link:"https://www.chogangroupspa.com/product_referral/8765/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Süß","Fruchtig","Frisch","Aquatisch"], description:"Frisch, sinnlich – moderne Vision von Männlichkeit mit holziger Sinnlichkeit in der Basis." },
+  { id:"62", name:"62 Extreme", link:"https://www.chogangroupspa.com/product_referral/9051/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Würzig","Süß","Holzig","Frisch"], description:"Holzig-aromatisch – Kraft eines entschlossenen Mannes, traditionell und modern." },
+  { id:"157", name:"157M Aftertouch", link:"https://www.chogangroupspa.com/product_referral/11098/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Holzig","Fruchtig","Ledrig"], description:"Eleganz und Verführung – für den Mann, der seine Erfolge feiert." },
+  { id:"66", name:"66 Rock Soul", link:"https://www.chogangroupspa.com/product_referral/1459/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Würzig","Süß","Holzig","Harzig","Blumig"], description:"Geheimnis und zeitlose Energie – Individualität und Verführung." },
+  { id:"68", name:"68 Glory", link:"https://www.chogangroupspa.com/product_referral/8767/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Zitrus","Rauchig","Holzig","Fruchtig","Frisch"], description:"Entschlossen, anziehend – Einzigartigkeit mit Stolz getragen." },
+  { id:"69", name:"69 Seaside", link:"https://www.chogangroupspa.com/product_referral/9057/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Aquatisch","Frisch","Würzig","Grün","Holzig"], description:"Salzige Meeresfrische und Mittelmeer-Urlaub in einem Sprühstoß." },
+  { id:"74", name:"74 Essence Noire", link:"https://www.chogangroupspa.com/product_referral/1788/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Herbst","Winter"], dufttyp:["Holzig","Rauchig","Orientalisch","Würzig","Harzig","Grün"], description:"Intensiver, hypnotischer Duft mit holzigen und rauchigen Noten – Tabak, Cannabis und Kaffee." },
+  { id:"75", name:"75 Xcellence", link:"https://www.chogangroupspa.com/product_referral/1792/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Holzig","Würzig","Grün","Blumig"], description:"Geheimnisvoll, modern und exotisch – zeitloser Duft für den abenteuerlustigen Mann." },
+  { id:"78", name:"78 Extreme Purple", link:"https://www.chogangroupspa.com/product_referral/1878/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Aquatisch","Frisch","Würzig","Süß"], description:"Maskulin, intensiv: frische Minze, würziger Pfeffer, sinnlicher Moschus." },
+  { id:"83", name:"83 Uomo", link:"https://www.chogangroupspa.com/product_referral/7869/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Würzig","Süß","Holzig","Blumig"], description:"Exklusive Essenz des aromatischen, orientalischen und holzigen Charakters – italienische Raffinesse." },
+  { id:"84", name:"84 Indigo", link:"https://www.chogangroupspa.com/product_referral/9075/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Zitrus","Aquatisch","Würzig","Frisch"], description:"Unerbittliche Kraft wie Meereswellen – sinnliche Düfte des Mittelmeers." },
+  { id:"86", name:"86 Titan", link:"https://www.chogangroupspa.com/product_referral/9079/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Würzig","Frisch","Süß","Holzig"], description:"Essenz der Männlichkeit: Stärke und Zartheit, Spontaneität und Geheimnis." },
+  { id:"87", name:"87 Wildman", link:"https://www.chogangroupspa.com/product_referral/8898/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Würzig","Frisch","Süß","Holzig","Zitrus"], description:"Für den mutigen, verführerischen Mann – holzige Noten zelebrieren Leben und Intensität." },
+  { id:"88", name:"88 Midnight Man", link:"https://www.chogangroupspa.com/product_referral/9081/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Ausgehen","Date"], jahreszeit:["Winter","Herbst"], dufttyp:["Würzig","Süß","Holzig","Orientalisch","Ledrig"], description:"Kühn-orientalisch: warme, intensive Noten verkörpern die Energie und das Geheimnis des Feuers." },
+  { id:"91", name:"91 Bond", link:"https://www.chogangroupspa.com/product_referral/9002/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Frisch","Aquatisch"], description:"Lebensfreude und Freiheit – inspiriert von der Frische azurblauen Wassers." },
+  { id:"94", name:"94 Revenant Intense", link:"https://www.chogangroupspa.com/product_referral/8769/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Winter","Herbst"], dufttyp:["Zitrus","Würzig","Holzig","Frisch"], description:"Jenseits von Trends – seiner eigenen Identität treu, wild und bewusst." },
+  { id:"108", name:"108 Emerald Meadow", link:"https://www.chogangroupspa.com/product_referral/8892/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Grün","Holzig","Würzig","Frisch","Aquatisch"], description:"Frische der irischen Landschaft mit der Eleganz eines englischen Gentlemans." },
+  { id:"113", name:"113 Your Journey", link:"https://www.chogangroupspa.com/product_referral/9111/ROD2B753D", geschlecht:"Mann", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Grün","Zitrus","Würzig","Ledrig","Frisch"], description:"Zitrusfrüchte, Pfeffer und Kräuter, abgerundet durch warme, holzige Noten." },
+  { id:"136", name:"136 Modern Man", link:"https://www.chogangroupspa.com/product_referral/8900/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Date","Ausgehen"], jahreszeit:["Herbst","Winter"], dufttyp:["Blumig","Holzig","Pudrig","Süß"], description:"Raffiniert: Iris, Lavendel, Birne, Ambrette, Zeder und Vetiver." },
+  { id:"140", name:"140 Cupid", link:"https://www.chogangroupspa.com/product_referral/8771/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Zitrus","Süß","Fruchtig","Frisch"], description:"Frisch, aromatisch – Kraft und Leidenschaft mit sinnlicher, maskuliner Präsenz." },
+  { id:"147", name:"147 Dark Nectar", link:"https://www.chogangroupspa.com/product_referral/11278/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Herbst","Winter"], dufttyp:["Würzig","Süß","Rauchig","Ledrig","Holzig","Harzig"], description:"Intensiv, magnetisch – für Männer mit starker, charismatischer Persönlichkeit." },
+  { id:"162", name:"162 Eternal Love For Him", link:"https://www.chogangroupspa.com/product_referral/11466/ROD2B753D", geschlecht:"Mann", entdecken:["Trends"], anlass:["Freizeit","Ausgehen","Date","Arbeit","Allrounder"], jahreszeit:["Herbst","Winter","Frühling"], dufttyp:["Süß","Frisch"], description:"Frisch, sinnlich – zelebriert romantische und zugleich mutige Männer." },
+  { id:"Multiverse", name:"Multiverse Édition Futur", link:"https://www.chogangroupspa.com/product_referral/8654/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Arbeit","Freizeit","Ausgehen"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Süß","Würzig","Gourmand","Cremig","Holzig"], description:"Für Männer, die mutig das Unbekannte erforschen – parallele Dimensionen und Grenzen der Realität." },
+  { id:"EVENT23M", name:"EVENT23M Mystére Édition Paris", link:"https://www.chogangroupspa.com/product_referral/7905/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Date","Ausgehen"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Holzig","Blumig","Süß","Pudrig","Zitrus","Fruchtig"], description:"Kontrastreicher Herrenparfüm: Zitrus und Lavendel, Kardamom, süße und sinnliche Wärme in der Basis." },
+  { id:"NADIR", name:"NADIR 10-Year Anniversary Edition", link:"https://www.chogangroupspa.com/product_referral/9843/ROD2B753D", geschlecht:"Mann", entdecken:["Topliste","Trends"], anlass:["Allrounder","Date","Arbeit","Freizeit","Ausgehen"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Orientalisch","Würzig","Zitrus","Süß"], description:"Orientalisch-würzig: Zitrus und Koriander, weiße Blüten, Ambra, Tonkabohne und Vanille." },
+
+  // FRAU
+  { id:"AFRODITE", name:"AFRODITE (Limited Edition)", link:"https://www.chogangroupspa.com/product_referral/9963/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Winter","Herbst"], dufttyp:["Blumig","Orientalisch","Süß","Cremig","Gourmand"], description:"Opulent, orientalisch-blumig: saftige Früchte und Gourmetnoten, verführerische Blüten, Vanille, Ambra und Sandelholz." },
+  { id:"ARTEMIDE", name:"ARTEMIDE (Limited Edition)", link:"https://www.chogangroupspa.com/product_referral/9953/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Allrounder","Arbeit","Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Herbst"], dufttyp:["Holzig","Orientalisch","Ledrig","Erdig","Frisch"], description:"Modern, holzig-orientalisch: Kräuter und Mandarine, ledrig-blumiges Herz auf erdiger Basis aus Moos und Ambra." },
+  { id:"MEDUSA", name:"MEDUSA (Limited Edition)", link:"https://www.chogangroupspa.com/product_referral/9943/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Aquatisch","Zitrus","Frisch","Blumig","Holzig"], description:"Zitrisch-aquatisch: Algen, Meersalz, Zitrone, Wasserblüten, Ambra, Moschus und Sandelholz." },
+  { id:"6", name:"6 Addiction", link:"https://www.chogangroupspa.com/product_referral/9021/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Date","Ausgehen"], jahreszeit:["Herbst","Winter"], dufttyp:["Orientalisch","Würzig","Holzig"], description:"Mehr als ein Duft – eine verführerische Spur in eine geheimnisvolle Welt voller Magie." },
+  { id:"7", name:"7 Pure Gold", link:"https://www.chogangroupspa.com/product_referral/8781/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Freizeit","Arbeit","Date","Ausgehen"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Blumig","Süß","Fruchtig","Frisch"], description:"Essenz von Luxus und Weiblichkeit – Spaziergang durch eine blühende Blumenwiese." },
+  { id:"10", name:"10 Stranger", link:"https://www.chogangroupspa.com/product_referral/8783/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Date","Ausgehen"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Süß","Holzig","Orientalisch"], description:"Geheimnisvolle Aura: magisches Elixier mit Energie und Sinnlichkeit." },
+  { id:"11", name:"11 Aqua Soul", link:"https://www.chogangroupspa.com/product_referral/9023/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Aquatisch","Frisch","Fruchtig"], description:"Vollkommene Balance aus aristokratischer Eleganz, zarter Weiblichkeit und Raffinesse." },
+  { id:"13", name:"13 / 151W To the edge for her", link:"https://www.chogangroupspa.com/product_referral/11053/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Blumig","Süß","Fruchtig"], description:"Warm und verführerisch: Mandarine, rosa Pfeffer, Pfirsich, Flieder und Amber." },
+  { id:"14", name:"14 Statement", link:"https://www.chogangroupspa.com/product_referral/8915/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste"], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Süß","Fruchtig","Gourmand","Pudrig"], description:"Für die mutige Frau, die ihre Freiheit lebt und Weiblichkeit selbstbewusst ausdrückt." },
+  { id:"19", name:"19 Prestige for Her", link:"https://www.chogangroupspa.com/product_referral/8882/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Süß","Fruchtig"], description:"Neroli, Amalfi-Zitrone, Himbeere, Orangenblüte, Jasmin, Gardenie, Honig und Patschuli." },
+  { id:"23", name:"23 Fatale", link:"https://www.chogangroupspa.com/product_referral/8785/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Date","Ausgehen"], jahreszeit:["Herbst","Winter"], dufttyp:["Süß","Pudrig","Gourmand","Orientalisch"], description:"Betörend, sinnlich – für die selbstbewusste Frau, die im Mittelpunkt steht." },
+  { id:"24", name:"24 The Essence", link:"https://www.chogangroupspa.com/product_referral/9015/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste"], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Süß","Pudrig","Blumig","Frisch"], description:"Das unvergessliche, unsichtbare Modeaccessoire, das Ankunft ankündigt und Abgang verzögert." },
+  { id:"25", name:"25 Her Secret", link:"https://www.chogangroupspa.com/product_referral/9013/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Allrounder","Arbeit","Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Süß","Pudrig","Blumig"], description:"Moschus balanciert die Süße von Orangenblüte und Vanille – langanhaltende, umhüllende Sinnlichkeit." },
+  { id:"26", name:"26 Wild Poppy", link:"https://www.chogangroupspa.com/product_referral/9029/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Arbeit","Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Süß","Pudrig","Blumig"], description:"Weißdorn, Johannisbeere, Rose, Jasmin, Veilchen, Vanille und weißer Moschus." },
+  { id:"27", name:"27 L'Amour Rare", link:"https://www.chogangroupspa.com/product_referral/8884/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Süß","Pudrig","Blumig","Fruchtig","Orientalisch"], description:"Warme orientalische und blumige Noten – die Rose als Symbol für alle Formen der Liebe." },
+  { id:"28", name:"28 Etherea", link:"https://www.chogangroupspa.com/product_referral/9011/ROD2B753D", geschlecht:"Frau", entdecken:["Trends"], anlass:["Date","Ausgehen"], jahreszeit:["Herbst","Winter"], dufttyp:["Süß","Gourmand","Orientalisch"], description:"Gewagt: orientalische Vanille und Patschuli mit Schokolade, Karamell und frischen Früchten." },
+  { id:"29", name:"29 Rêve Parisien", link:"https://www.chogangroupspa.com/product_referral/9031/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Würzig","Holzig","Frisch","Aquatisch","Pudrig"], description:"Leichtigkeit von Blütenblättern im Wasser – eine olfaktorische Odyssee." },
+  { id:"39", name:"39 Darling", link:"https://www.chogangroupspa.com/product_referral/8913/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Ausgehen","Date","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Süß","Fruchtig","Frisch","Blumig","Pudrig"], description:"Frisch, zart – Lebensfreude einer freien Frau auf einer blühenden Frühlingswiese." },
+  { id:"40", name:"40 Magnetic", link:"https://www.chogangroupspa.com/product_referral/9039/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Ausgehen","Date","Freizeit","Arbeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Süß","Fruchtig","Blumig","Orientalisch","Pudrig"], description:"Für anspruchsvolle, elegante Frauen mit Charme und geheimnisvoller Aura." },
+  { id:"41", name:"41 / 153W Rose Dust", link:"https://www.chogangroupspa.com/product_referral/10993/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Süß","Pudrig","Blumig","Frisch"], description:"Elegant, kühn – unterstreicht die Individualität jeder Frau im Alltag." },
+  { id:"42", name:"42 Bonheur Supreme", link:"https://www.chogangroupspa.com/product_referral/8787/ROD2B753D", geschlecht:"Frau", entdecken:["Trends"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Süß","Pudrig","Blumig","Gourmand","Fruchtig"], description:"Anmut und Freiheit – die charmante, kultivierte Frau: Quintessenz des Lächelns." },
+  { id:"43", name:"43 / 154W Liaison Rose", link:"https://www.chogangroupspa.com/product_referral/11008/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Arbeit","Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Sommer","Winter","Herbst"], dufttyp:["Süß","Pudrig","Blumig"], description:"Frisch, lebendig – umhüllt Frauen mit einer Aura der Zartheit." },
+  { id:"47", name:"47 Night Gem", link:"https://www.chogangroupspa.com/product_referral/881/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Sommer","Winter","Herbst"], dufttyp:["Würzig","Süß","Cremig","Orientalisch","Blumig"], description:"Prachtvoll, exzentrisch – für die selbstbewusste Frau, inspiriert von einem Abendkleid." },
+  { id:"49", name:"49 Pearl Bloom", link:"https://www.chogangroupspa.com/product_referral/8917/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Grün","Blumig","Frisch"], description:"Frisch, feminin – Unschuld der ersten Liebe mit moderner Eleganz und weißen Blüten Siziliens." },
+  { id:"51", name:"51 Miss Bijou", link:"https://www.chogangroupspa.com/product_referral/8998/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Allrounder","Arbeit","Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Sommer","Winter","Herbst"], dufttyp:["Süß","Pudrig","Blumig","Frisch","Fruchtig","Zitrus"], description:"Frisch, blumig mit orientalischen Akzenten – rebellische Sinnlichkeit." },
+  { id:"53", name:"53 Vanité", link:"https://www.chogangroupspa.com/product_referral/9009/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Arbeit","Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Holzig","Pudrig"], description:"Sinnlicher Duft mit Ambra, Moschus und der natürlichen Eleganz von Hölzern." },
+  { id:"55", name:"55 Black Addiction", link:"https://www.chogangroupspa.com/product_referral/8789/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Orientalisch","Gourmand","Süß","Würzig","Blumig"], description:"Schwarz wie Kaffee, süchtig machend durch weiße Blüten und Vanille." },
+  { id:"56", name:"56 Light & Dark", link:"https://www.chogangroupspa.com/product_referral/8919/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Freizeit","Ausgehen","Date"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Würzig","Süß","Pudrig","Orientalisch","Holzig"], description:"Charismatisch, orientalisch – unschuldig und doch sinnlich." },
+  { id:"57", name:"57 Pure Purple", link:"https://www.chogangroupspa.com/product_referral/9047/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Süß","Pudrig","Holzig","Frisch"], description:"Verspielt, raffiniert: Zitrusnoten, Rose und holzige Basis – moderne Schmuckstücke." },
+  { id:"156", name:"156 Unbending Woman", link:"https://www.chogangroupspa.com/product_referral/11068/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Blumig","Süß","Fruchtig","Frisch"], description:"Samtig, suggestiv, strahlend und süß – Hommage an die Frau von heute." },
+  { id:"64", name:"64 Talisman", link:"https://www.chogangroupspa.com/product_referral/1440/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Blumig","Süß","Fruchtig","Frisch"], description:"Abenteuerliche olfaktorische Reise zu den Düften und Farben Indiens." },
+  { id:"67", name:"67 Victoria", link:"https://www.chogangroupspa.com/product_referral/9019/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst","Winter","Sommer"], dufttyp:["Süß","Orientalisch","Blumig"], description:"Göttliche Spur für starke Frauen – Stolz, Weiblichkeit und Zartheit." },
+  { id:"70", name:"70 Pure Ego", link:"https://www.chogangroupspa.com/product_referral/9059/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Pudrig","Fruchtig","Süß","Orientalisch","Blumig"], description:"Verführerisch mit süßen, kontrastreichen Noten – leidenschaftlich und geheimnisvoll." },
+  { id:"71", name:"71 Sublime", link:"https://www.chogangroupspa.com/product_referral/1874/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Blumig","Süß","Pudrig"], description:"Blumig-fruchtig – charismatische, raffinierte Frauen mit unwiderstehlicher Weiblichkeit." },
+  { id:"76", name:"76 Deep Blue", link:"https://www.chogangroupspa.com/product_referral/1876/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Freizeit","Arbeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Zitrus","Blumig","Frisch","Aquatisch"], description:"Von Erde und Meer inspiriert – unwiderstehliche Frische." },
+  { id:"158", name:"158 Wild Bloom", link:"https://www.chogangroupspa.com/product_referral/11023/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Blumig","Frisch","Aquatisch","Fruchtig","Süß"], description:"Osmanthus, Rose, Pfingstrose, Sandelholz und Patschuli – stark und sinnlich." },
+  { id:"80", name:"80 Absolutely", link:"https://www.chogangroupspa.com/product_referral/8791/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Freizeit","Arbeit"], jahreszeit:["Frühling","Herbst","Sommer","Winter"], dufttyp:["Blumig","Süß","Fruchtig"], description:"Moderner Chypre: schwarze Johannisbeere, moschusartiges Holz – süß, intensiv, elegant." },
+  { id:"81", name:"81 Allure Éternelle", link:"https://www.chogangroupspa.com/product_referral/9071/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste"], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer","Winter"], dufttyp:["Süß","Pudrig","Orientalisch","Fruchtig"], description:"Explosiv: Schlagsahne, Jasmin und warme Holznoten – unwiderstehlicher Kontrast." },
+  { id:"82", name:"82 Jeunesse", link:"https://www.chogangroupspa.com/product_referral/2097/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Süß","Pudrig","Frisch","Blumig","Fruchtig"], description:"Rosa Pfeffer, Jasmin, Rose und zarte Süße von Panacotta." },
+  { id:"85", name:"85 Serendipity", link:"https://www.chogangroupspa.com/product_referral/2173/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Zitrus","Süß","Fruchtig","Frisch","Blumig"], description:"Blumige und Vanille-Noten – für Frauen, die das Besondere suchen." },
+  { id:"89", name:"89 Ville Lumière", link:"https://www.chogangroupspa.com/product_referral/9000/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Zitrus","Süß","Fruchtig","Frisch","Blumig"], description:"Sinnlich, charmant – inspiriert von einer Liebesgeschichte in Paris." },
+  { id:"90", name:"90 Femme Fatale", link:"https://www.chogangroupspa.com/product_referral/2127/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Süß","Gourmand","Fruchtig","Blumig"], description:"Für moderne, freie Frauen – süchtig machende, köstliche Verführung." },
+  { id:"93", name:"93 Glory", link:"https://www.chogangroupspa.com/product_referral/9017/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Blumig","Süß","Holzig","Fruchtig","Frisch"], description:"Für die moderne Frau: für sich selbst eintreten und dabei Anmut bewahren." },
+  { id:"159", name:"159 British Charm for her", link:"https://www.chogangroupspa.com/product_referral/10948/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Süß","Holzig","Fruchtig"], description:"Elegant, zeitlos: britische Tradition und Charme Londons mit anpassungsfähigen sinnlichen Nuancen." },
+  { id:"96", name:"96 The Muse", link:"https://www.chogangroupspa.com/product_referral/9085/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Blumig","Süß","Zitrus","Fruchtig","Frisch"], description:"Rebellischer Geist – gibt jeder Frau eine Stimme für ihre einzigartige Identität." },
+  { id:"97", name:"97 Vita", link:"https://www.chogangroupspa.com/product_referral/3698/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Date","Ausgehen","Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Winter","Sommer"], dufttyp:["Süß","Gourmand","Fruchtig","Frisch","Cremig","Blumig"], description:"Kühn, üppig – moderne, mutige und lebensfreudige Weiblichkeit." },
+  { id:"98", name:"98 Euphoria", link:"https://www.chogangroupspa.com/product_referral/3701/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Süß","Frisch","Cremig","Blumig"], description:"Einzigartiges Gefühl der Freude – olfaktorische Interpretation des Lichts." },
+  { id:"109", name:"109 Pure Gold Intense", link:"https://www.chogangroupspa.com/product_referral/4413/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Blumig","Süß","Pudrig","Orientalisch"], description:"Edel, sinnlich: Jasmin, Rose, Vanille und Tonkabohne – süß und unwiderstehlich." },
+  { id:"115", name:"115 Icon", link:"https://www.chogangroupspa.com/product_referral/6287/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Arbeit","Freizeit"], jahreszeit:["Frühling","Herbst","Sommer"], dufttyp:["Blumig","Süß","Fruchtig","Frisch"], description:"Sanft aber intensiv – für starke, ehrliche Frauen mit großen Träumen." },
+  { id:"116", name:"116 Declare", link:"https://www.chogangroupspa.com/product_referral/8886/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Cremig","Blumig","Fruchtig","Süß","Gourmand"], description:"Für unabhängige Frauen – blumig-fruchtig und äußerst sinnlich." },
+  { id:"119", name:"119 Dark Affair", link:"https://www.chogangroupspa.com/product_referral/8795/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Orientalisch","Süß","Gourmand","Fruchtig","Blumig"], description:"Unwiderstehliche Duftspur – macht die Trägerin faszinierend ohne ein Wort." },
+  { id:"120", name:"120 Haute Couture", link:"https://www.chogangroupspa.com/product_referral/9095/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Herbst","Winter"], dufttyp:["Orientalisch","Gourmand","Pudrig","Süß","Fruchtig","Blumig"], description:"Rose, Amarena und Tee, verfeinert mit Patschuli – perfekt für elegante Frauen." },
+  { id:"121", name:"121 Secret Desire", link:"https://www.chogangroupspa.com/product_referral/8797/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Pudrig","Würzig","Grün","Frisch","Blumig"], description:"Für mutige Frauen, die den Tag lieben und keine Angst vor der Nacht haben." },
+  { id:"122", name:"122 Volare", link:"https://www.chogangroupspa.com/product_referral/8799/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Süß","Blumig","Cremig","Frisch"], description:"Mutig, unwiderstehlich – die rebellische Frau, die Freiheit kompromisslos lebt." },
+  { id:"123", name:"123 Sweet Rebel", link:"https://www.chogangroupspa.com/product_referral/7127/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Blumig","Süß","Frisch","Fruchtig"], description:"Pure Sinnlichkeit: zarte und üppige Nuancen – für die schüchterne, aber sinnliche Frau." },
+  { id:"131", name:"131 Chica Mala", link:"https://www.chogangroupspa.com/product_referral/8801/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Blumig","Süß","Gourmand"], description:"Gewagt: blumige Eleganz und berauschende Noten – facettenreiche moderne Frau." },
+  { id:"132", name:"132 My Rules", link:"https://www.chogangroupspa.com/product_referral/8803/ROD2B753D", geschlecht:"Frau", entdecken:[], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Blumig","Süß","Frisch","Fruchtig"], description:"Für neugierige, mutige Frauen, die nach ihren eigenen Regeln leben." },
+  { id:"133", name:"133 Enigma", link:"https://www.chogangroupspa.com/product_referral/8722/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste"], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst"], dufttyp:["Blumig","Süß","Fruchtig"], description:"Kontrastierende Elemente für die facettenreiche, einzigartige Persönlichkeit." },
+  { id:"145", name:"145 Forever Yours", link:"https://www.chogangroupspa.com/product_referral/9243/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste"], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Sommer","Herbst","Winter"], dufttyp:["Zitrus","Süß","Gourmand","Cremig"], description:"Süß, verlockend – strahlende, lebendige Weiblichkeit." },
+  { id:"148", name:"148 Divine Aura", link:"https://www.chogangroupspa.com/product_referral/11293/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Blumig","Süß","Würzig","Cremig","Gourmand"], description:"Strahlend, verführerisch: Vanille in moderner Komposition – goldene Duftspur voller Sinnlichkeit." },
+  { id:"161", name:"161 Eternal Love For Her", link:"https://www.chogangroupspa.com/product_referral/11481/ROD2B753D", geschlecht:"Frau", entdecken:["Trends"], anlass:["Allrounder","Arbeit","Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Blumig","Süß","Fruchtig"], description:"Raffiniert, intensiv: elegante Komposition für romantische und mutige Frauen." },
+  { id:"EVENT23W", name:"EVENT23W Séduction Édition Paris", link:"https://www.chogangroupspa.com/product_referral/7907/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Blumig","Süß","Fruchtig"], description:"Kunst der Verführung: fruchtige Süße, magnetische Hölzer, Vanille-Moschus-Akkorde." },
+  { id:"Astral24", name:"Astral24 Édition Futur", link:"https://www.chogangroupspa.com/product_referral/8656/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst","Sommer"], dufttyp:["Fruchtig","Holzig","Blumig","Zitrus"], description:"Für Frauen, die groß träumen – inspiriert von einer Reise zu den Sternen." },
+  { id:"IMPERATIRX", name:"IMPERATIRX 10-Year Anniversary Edition", link:"https://www.chogangroupspa.com/product_referral/9858/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst","Sommer"], dufttyp:["Blumig","Fruchtig","Süß","Gourmand","Orientalisch","Cremig"], description:"Luxuriös, königlich: Brombeere, Johannisbeere, Jasmin, Karamell, Kokos, Ambra und Vanille." },
+  { id:"LOVE22", name:"LOVE22", link:"https://www.chogangroupspa.com/product_referral/6961/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Date","Ausgehen","Freizeit"], jahreszeit:["Herbst","Winter","Frühling"], dufttyp:["Blumig","Orientalisch","Süß","Gourmand"], description:"Sinnlich, süß: Rose, Kirsche, Mandel, Vanille und Moschus – perfekt für romantische Momente." },
+  { id:"LOVE23", name:"LOVE23", link:"https://www.chogangroupspa.com/product_referral/7130/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst","Sommer"], dufttyp:["Blumig","Fruchtig","Holzig","Gourmand","Orientalisch"], description:"Fruchtig-blumig: Himbeere, Gardenie, Jasmin, Ingwer, Weihrauch – sinnlich und verführerisch." },
+  { id:"LOVE24", name:"LOVE24", link:"https://www.chogangroupspa.com/product_referral/7551/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst"], dufttyp:["Blumig","Süß","Gourmand","Orientalisch"], description:"Sinnlich-orientalisch: Himbeere, Bergamotte, Jasmin, Rose, Vanille und Karamell." },
+  { id:"LOVE25", name:"LOVE25", link:"https://www.chogangroupspa.com/product_referral/7562/ROD2B753D", geschlecht:"Frau", entdecken:["Topliste","Trends"], anlass:["Ausgehen","Date","Freizeit"], jahreszeit:["Frühling","Winter","Herbst","Sommer"], dufttyp:["Blumig","Süß","Gourmand","Orientalisch"], description:"Orientalisch-vanillig: Aprikose, Kokos, Jasmin, Rose, Mandel und Moschus." },
+
+  // KIDS
+  { id:"59", name:"59 Baby Joy", link:"https://www.chogangroupspa.com/product_referral/2187/ROD2B753D", geschlecht:"Kids", entdecken:["Topliste","Trends"], anlass:["Allrounder","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Blumig","Frisch","Zitrus"], description:"Leichter, frischer Duft mit blumigen und zitrischen Noten – sanft und hypoallergen." },
+  { id:"58", name:"58 Baby Girl", link:"https://www.chogangroupspa.com/product_referral/2188/ROD2B753D", geschlecht:"Kids", entdecken:["Topliste","Trends"], anlass:["Allrounder","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Blumig","Frisch","Fruchtig"], description:"Frischer, blumig-fruchtiger Duft – sanft und hypoallergen für kleine Mädchen." },
+  { id:"45", name:"45 Baby Boy", link:"https://www.chogangroupspa.com/product_referral/2186/ROD2B753D", geschlecht:"Kids", entdecken:["Topliste","Trends"], anlass:["Allrounder","Freizeit"], jahreszeit:["Frühling","Sommer"], dufttyp:["Holzig","Frisch"], description:"Frischer, sanft-holziger Duft – hypoallergen und mild für Jungen." }
+];
+
+/* ─── State ────────────────────────────────────────────────────── */
+let selectedFilters = {};
+
+const weights = { dufttyp:3, jahreszeit:1, anlass:1, entdecken:0.5 };
+
+/* ─── Filter Logic ─────────────────────────────────────────────── */
+function toggleFilter(cat, val) {
+  if (cat === 'geschlecht') {
+    const prev = selectedFilters.geschlecht?.[0];
+    if (prev === val) {
+      delete selectedFilters.geschlecht;
+    } else {
+      selectedFilters = { geschlecht: [val] }; // clear others on gender change
+    }
+  } else {
+    if (!selectedFilters.geschlecht?.length) return;
+    if (!selectedFilters[cat]) selectedFilters[cat] = [];
+    const idx = selectedFilters[cat].indexOf(val);
+    if (idx === -1) selectedFilters[cat].push(val);
+    else selectedFilters[cat].splice(idx, 1);
+  }
+  syncButtons();
+  updateProgress();
+  unlockSections();
+  filterResults();
+}
+
+function syncButtons() {
+  document.querySelectorAll('.pill[data-cat]').forEach(btn => {
+    const cat = btn.dataset.cat;
+    const val = btn.dataset.val;
+    const active = selectedFilters[cat]?.includes(val);
+    btn.classList.toggle('selected', !!active);
+  });
+}
+
+function unlockSections() {
+  const hasGender = !!selectedFilters.geschlecht?.length;
+  ['sec-entdecken','sec-anlass','sec-jahreszeit','sec-dufttyp'].forEach(id => {
+    document.getElementById(id).classList.toggle('locked', !hasGender);
+  });
+}
+
+function updateProgress() {
+  const hasGender = !!selectedFilters.geschlecht?.length;
+  const hasFilters = hasGender && Object.keys(selectedFilters).length > 1;
+  const hasResults = document.querySelectorAll('.card').length > 0;
+
+  document.getElementById('step1').className = 'step ' + (hasGender ? 'done' : 'active');
+  document.getElementById('step2').className = 'step ' + (hasFilters ? 'done' : hasGender ? 'active' : '');
+  document.getElementById('step3').className = 'step ' + (hasResults ? 'active' : '');
+  document.getElementById('line1').className = 'step-line ' + (hasGender ? 'done' : '');
+  document.getElementById('line2').className = 'step-line ' + (hasResults ? 'done' : '');
+}
+
+function resetFilters() {
+  selectedFilters = {};
+  syncButtons();
+  unlockSections();
+  updateProgress();
+  document.getElementById('countBadge').innerHTML = '<span>Wähle zuerst ein Geschlecht</span>';
+  document.getElementById('resultsArea').innerHTML = `
+    <div class="oracle-message">
+      <span class="oracle-icon">🔮</span>
+      <p>Wähle dein Geschlecht, um das Orakel zu befragen.</p>
+    </div>`;
+}
+
+/* ─── Scoring ──────────────────────────────────────────────────── */
+function calcScore(parfum) {
+  let score = 0, max = 0;
+  const details = [];
+
+  for (const cat in selectedFilters) {
+    if (cat === 'geschlecht') continue;
+    const vals = selectedFilters[cat];
+    if (!vals?.length) continue;
+    const w = weights[cat] || 1;
+    const data = parfum[cat] || [];
+    vals.forEach(v => {
+      max += w;
+      const hit = data.includes(v);
+      if (hit) score += w;
+      details.push({ cat, val: v, hit });
+    });
+  }
+
+  return { raw: score, pct: max ? Math.round((score/max)*100) : 0, details };
+}
+
+/* ─── Render ───────────────────────────────────────────────────── */
+function filterResults() {
+  const area = document.getElementById('resultsArea');
+  const badge = document.getElementById('countBadge');
+
+  if (!selectedFilters.geschlecht?.length) {
+    area.innerHTML = `<div class="oracle-message"><span class="oracle-icon">🔮</span><p>Wähle dein Geschlecht, um das Orakel zu befragen.</p></div>`;
+    badge.innerHTML = '<span>Wähle zuerst ein Geschlecht</span>';
+    return;
+  }
+
+  // Filter by gender
+  let list = parfums
+    .filter(p => selectedFilters.geschlecht.includes(p.geschlecht))
+    .map(p => ({ ...p, sc: calcScore(p) }));
+
+  // If no other filters, show all (sorted by name)
+  const hasOtherFilters = Object.keys(selectedFilters).some(k => k !== 'geschlecht' && selectedFilters[k].length);
+
+  if (hasOtherFilters) {
+    list = list.filter(p => p.sc.pct >= 60);
+    list.sort((a, b) => b.sc.raw - a.sc.raw || b.sc.pct - a.sc.pct);
+
+    if (!list.length) {
+      area.innerHTML = `<div class="oracle-message"><span class="oracle-icon">🤔</span><p>Keine passenden Düfte gefunden. Versuche weniger Filter.</p></div>`;
+      badge.innerHTML = '<strong>0</strong><span>Matches</span>';
+      updateProgress();
+      return;
+    }
+
+    // Normalize to 100%
+    const best = list[0].sc.raw;
+    list.forEach((p, i) => {
+      p.sc.display = i === 0 ? 100 : Math.round((p.sc.raw / best) * 99);
+    });
+  } else {
+    list.sort((a, b) => a.name.localeCompare(b.name));
+    list.forEach(p => p.sc.display = null);
+  }
+
+  badge.innerHTML = `<strong>${list.length}</strong><span>${hasOtherFilters ? 'Matches gefunden' : 'Düfte verfügbar'}</span>`;
+
+  const cards = list.map((p, i) => buildCard(p, i, hasOtherFilters)).join('');
+  area.innerHTML = `
+    <div class="results-section">
+      <div class="results-header">
+        <h2>${hasOtherFilters ? '🏆 Deine Empfehlungen' : '✨ Alle Düfte'}</h2>
+        <p>${hasOtherFilters ? 'Sortiert nach Übereinstimmung' : 'Wähle Filter für personalisierte Empfehlungen'}</p>
+      </div>
+      <div class="results-grid">${cards}</div>
+    </div>`;
+
+  updateProgress();
+
+  if (hasOtherFilters) {
+    setTimeout(() => {
+      area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+}
+
+function buildCard(p, i, showScore) {
+  const isWinner = showScore && i === 0;
+  const isRunnerUp = showScore && i > 0 && i < 3;
+  let cls = 'card';
+  if (isWinner) cls += ' winner';
+  else if (isRunnerUp) cls += ' runner-up';
+
+  const winnerBadge = isWinner
+    ? `<div class="winner-badge">⭐ Beste Wahl</div>`
+    : '';
+
+  const scoreBar = showScore && p.sc.display !== null ? `
+    <div class="card-score">
+      <div class="score-bar"><div class="score-fill" style="width:${p.sc.display}%"></div></div>
+      <div class="score-num">${p.sc.display}%</div>
+    </div>` : '';
+
+  const tags = showScore && p.sc.details.length ? `
+    <div class="match-tags">
+      ${p.sc.details.map(d => `<span class="match-tag ${d.hit ? 'hit' : 'miss'}">${d.hit ? '✓' : '✗'} ${d.val}</span>`).join('')}
+    </div>` : '';
+
+  const waMsg = encodeURIComponent(`Hey Rodion, ich habe das Duft-Orakel benutzt und möchte diesen Duft bestellen: ${p.name}`);
+  const waLink = `https://wa.me/4915141336341?text=${waMsg}`;
+
+  return `
+    <div class="${cls}">
+      ${winnerBadge}
+      <div class="card-name">${p.name}</div>
+      ${scoreBar}
+      <p class="card-desc">${p.description}</p>
+      ${tags}
+      <div class="card-buttons">
+        <a class="card-wa" href="${waLink}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Jetzt direkt bestellen
+        </a>
+        <a class="card-cta-secondary" href="${p.link}" target="_blank" rel="noopener">Produktseite ansehen →</a>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
