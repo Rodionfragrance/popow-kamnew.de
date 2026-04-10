@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Popow & Kamnew — Parfüm ist der Schlüssel zur Freiheit</title>
+<meta name="description" content="Echte italienische Düfte mit 30% Duftöl. Direkt vom Hersteller. Kein Zwischenhändler. Finde deinen Signature-Duft in 30 Sekunden.">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          gold: '#C8963E',
+          gold2: '#E8B84B',
+          'gold-dim': '#8A6428',
+          'off-white': '#F5F0E8',
+          ink: '#0A0A0A',
+          ink2: '#111111',
+          ink3: '#181818',
+          muted: '#888880',
+        },
+        fontFamily: {
+          display: ['"Bebas Neue"', 'sans-serif'],
+          body: ['"DM Sans"', 'sans-serif'],
+        },
+        letterSpacing: {
+          widest2: '0.25em',
+          widest3: '0.35em',
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  body { font-family: 'DM Sans', sans-serif; background: #0A0A0A; color: #F5F0E8; }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+
+  /* Marquee */
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-track { animation: marquee 22s linear infinite; }
+
+  /* Pulse dot */
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+  .pulse-dot { animation: pulse-dot 2s infinite; }
+
+  /* Fade up on load */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+  .fade-1 { animation: fadeUp .8s .1s both; }
+  .fade-2 { animation: fadeUp .8s .28s both; }
+  .fade-3 { animation: fadeUp .8s .46s both; }
+  .fade-4 { animation: fadeUp .8s .64s both; }
+  .fade-5 { animation: fadeUp .8s .82s both; }
+
+  /* Hover lift */
+  .card-lift { transition: transform .25s ease, border-color .25s ease; }
+  .card-lift:hover { transform: translateY(-4px); }
+
+  /* Gold line reveal on hover */
+  .line-reveal::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: #C8963E; transform: scaleX(0); transform-origin: left;
+    transition: transform .35s ease;
+  }
+  .line-reveal:hover::before { transform: scaleX(1); }
+
+  /* Ghost text */
+  .ghost-text {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200,150,62,0.08);
+  }
+
+  /* Nav blur */
+  .nav-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+  /* Sharp btn base */
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: all .22s; cursor: pointer; border: none; }
+  .btn-gold { background: #C8963E; color: #0A0A0A; padding: 16px 32px; font-size: 13px; }
+  .btn-gold:hover { background: #E8B84B; box-shadow: 0 8px 28px rgba(200,150,62,.28); transform: translateY(-2px); }
+  .btn-outline { border: 1.5px solid rgba(245,240,232,.18); color: #F5F0E8; padding: 15px 32px; font-size: 12px; }
+  .btn-outline:hover { border-color: #C8963E; color: #C8963E; }
+  .btn-wa { background: #25D366; color: #000; padding: 16px 32px; font-size: 13px; }
+  .btn-wa:hover { background: #1ebe5d; box-shadow: 0 8px 28px rgba(37,211,102,.28); transform: translateY(-2px); }
+  .btn-sm { padding: 10px 20px; font-size: 11px; }
+
+  /* Section label */
+  .sec-label { font-size: 10px; font-weight: 600; letter-spacing: .35em; text-transform: uppercase; color: #C8963E; display: flex; align-items: center; gap: 12px; }
+  .sec-label::before { content: ''; width: 28px; height: 1px; background: #C8963E; flex-shrink: 0; }
+
+  /* Product card */
+  .product-card { background: #111111; border: 1px solid rgba(200,150,62,.14); position: relative; overflow: hidden; }
+  .product-card:hover { border-color: #C8963E; }
+  .product-card .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #C8963E; transform: scaleX(0); transform-origin: left; transition: transform .35s; }
+  .product-card:hover .top-bar { transform: scaleX(1); }
+
+  /* Divider */
+  .gold-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(200,150,62,.3), transparent); }
+
+  /* Scroll indicator */
+  @keyframes scrollBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+  .scroll-bounce { animation: scrollBounce 2s infinite; }
+
+  /* FAQ */
+  .faq-answer { display: none; }
+  .faq-item.open .faq-answer { display: block; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-icon { transition: transform .3s; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 1px solid rgba(200,150,62,.3); color: #C8963E; font-size: 18px; flex-shrink: 0; }
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-ink/90 border-b border-gold/10">
+  <div class="max-w-7xl mx-auto px-5 lg:px-10 h-16 flex items-center justify-between">
+
+    <a href="/" class="font-display text-xl tracking-widest text-off-white">
+      POPOW<span class="text-gold">&</span>KAMNEW
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden lg:flex items-center gap-8">
+      <li><a href="#produkte" class="text-xs font-medium tracking-widest2 uppercase text-muted hover:text-gold transition-colors">Produkte</a></li>
+      <li><a href="#orakel" class="text-xs font-medium tracking-widest2 uppercase text-muted hover:text-gold transition-colors">Duft-Orakel</a></li>
+      <li><a href="#story" class="text-xs font-medium tracking-widest2 uppercase text-muted hover:text-gold transition-colors">Über uns</a></li>
+      <li><a href="/business" class="text-xs font-medium tracking-widest2 uppercase text-muted hover:text-gold transition-colors">Business</a></li>
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <a href="https://wa.me/4915141336341?text=Hey%2C%20ich%20m%C3%B6chte%20bestellen:" class="btn btn-gold btn-sm hidden sm:inline-flex" target="_blank">
+        Jetzt bestellen
+      </a>
+      <!-- Mobile menu toggle -->
+      <button id="menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2" onclick="toggleMenu()">
+        <span class="w-6 h-px bg-off-white block transition-all"></span>
+        <span class="w-4 h-px bg-gold block transition-all"></span>
+        <span class="w-6 h-px bg-off-white block transition-all"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-ink2 border-t border-gold/10 px-5 py-6">
+    <ul class="flex flex-col gap-5">
+      <li><a href="#produkte" class="text-sm font-medium tracking-widest uppercase text-muted" onclick="toggleMenu()">Produkte</a></li>
+      <li><a href="#orakel" class="text-sm font-medium tracking-widest uppercase text-muted" onclick="toggleMenu()">Duft-Orakel</a></li>
+      <li><a href="#story" class="text-sm font-medium tracking-widest uppercase text-muted" onclick="toggleMenu()">Über uns</a></li>
+      <li><a href="/business" class="text-sm font-medium tracking-widest uppercase text-muted" onclick="toggleMenu()">Business</a></li>
+      <li><a href="https://wa.me/4915141336341" class="btn btn-gold btn-sm w-full justify-center" target="_blank">Jetzt bestellen</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section class="min-h-screen flex flex-col justify-end pb-16 lg:pb-24 pt-32 px-5 lg:px-16 relative overflow-hidden">
+
+  <!-- BG layers -->
+  <div class="absolute inset-0 bg-gradient-to-br from-ink via-ink to-[#120F05]"></div>
+  <div class="absolute inset-0" style="background: radial-gradient(ellipse 55% 60% at 75% 35%, rgba(200,150,62,0.07) 0%, transparent 65%), radial-gradient(ellipse 40% 50% at 15% 85%, rgba(200,150,62,0.04) 0%, transparent 60%);"></div>
+
+  <!-- Vertical gold line (desktop) -->
+  <div class="hidden lg:block absolute top-0 bottom-0 left-[58%] w-px bg-gradient-to-b from-transparent via-gold/20 to-transparent"></div>
+
+  <!-- Ghost number -->
+  <div class="ghost-text font-display absolute bottom-0 right-0 lg:right-8 text-[160px] lg:text-[280px] leading-none pointer-events-none select-none" style="-webkit-text-stroke: 1px rgba(200,150,62,0.06);">30%</div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-5xl">
+
+    <div class="flex items-center gap-3 mb-8 fade-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-gold pulse-dot"></span>
+      <span class="text-gold text-xs font-semibold tracking-widest3 uppercase">Rodion & Margarita Popow-Kamnew · Werl</span>
+    </div>
+
+    <h1 class="font-display leading-[0.88] tracking-tight mb-8 fade-2" style="font-size: clamp(64px, 12vw, 160px);">
+      Parfüm<br>
+      ist der<br>
+      <span class="text-gold">Schlüssel</span><br>
+      <span class="ghost-text" style="-webkit-text-stroke: 2px rgba(245,240,232,0.55);">zur Freiheit.</span>
+    </h1>
+
+    <p class="text-muted font-light text-base lg:text-lg leading-relaxed max-w-lg mb-10 fade-3">
+      Echte italienische Düfte mit <strong class="text-off-white font-semibold">30% Duftöl</strong>. Direkt vom Hersteller. Kein Zwischenhändler. Kein Aufschlag. Nur echter Duft — der hält.
+    </p>
+
+    <div class="flex flex-wrap gap-4 fade-4">
+      <a href="https://rodionfragrance.github.io/Duft-Orakel/" class="btn btn-gold" target="_blank">
+        🔮 Duft finden in 30 Sek.
+      </a>
+      <a href="https://wa.me/4915141336341?text=Hey%2C%20ich%20m%C3%B6chte%20bestellen:" class="btn btn-wa" target="_blank">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="#000"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Direkt bestellen
+      </a>
+    </div>
+
+    <!-- Proof bar -->
+    <div class="flex flex-wrap gap-8 lg:gap-14 mt-12 pt-10 fade-5" style="border-top: 1px solid rgba(200,150,62,0.12);">
+      <div>
+        <span class="font-display text-4xl text-gold block leading-none">30%</span>
+        <span class="text-xs text-muted uppercase tracking-widest mt-1 block">Duftöl-Anteil</span>
+      </div>
+      <div>
+        <span class="font-display text-4xl text-gold block leading-none">200+</span>
+        <span class="text-xs text-muted uppercase tracking-widest mt-1 block">Düfte</span>
+      </div>
+      <div>
+        <span class="font-display text-4xl text-gold block leading-none">🇮🇹</span>
+        <span class="text-xs text-muted uppercase tracking-widest mt-1 block">Made in Italy</span>
+      </div>
+      <div>
+        <span class="font-display text-4xl text-gold block leading-none">0€</span>
+        <span class="text-xs text-muted uppercase tracking-widest mt-1 block">Registrierung nötig</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="hidden lg:flex absolute bottom-8 right-10 flex-col items-center gap-2 scroll-bounce">
+    <span class="text-muted text-[10px] uppercase tracking-widest3" style="writing-mode:vertical-rl">Scroll</span>
+    <div class="w-px h-10 bg-gradient-to-b from-gold/40 to-transparent"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ MARQUEE ═══════════════════════════════ -->
+<div class="overflow-hidden border-y border-gold/15 bg-ink2 py-4">
+  <div class="marquee-track flex w-max gap-0">
+    <div class="flex gap-0">
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ 30% DUFTÖL</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ DIREKT VOM HERSTELLER</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ MADE IN ITALY</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ 200+ DÜFTE</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ KEIN ZWISCHENHÄNDLER</span>
+      <span class="font-display text-sm tracking-widest2 text-gold px-10">✦ PARFÜM IST FREIHEIT</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ COLLAGEN · SUPPLEMENTS</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ HAUTPFLEGE · BEAUTY</span>
+    </div>
+    <!-- duplicate for seamless loop -->
+    <div class="flex gap-0">
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ 30% DUFTÖL</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ DIREKT VOM HERSTELLER</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ MADE IN ITALY</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ 200+ DÜFTE</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ KEIN ZWISCHENHÄNDLER</span>
+      <span class="font-display text-sm tracking-widest2 text-gold px-10">✦ PARFÜM IST FREIHEIT</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ COLLAGEN · SUPPLEMENTS</span>
+      <span class="font-display text-sm tracking-widest2 text-muted px-10">✦ HAUTPFLEGE · BEAUTY</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ KATEGORIEN ═══════════════════════════════ -->
+<section class="py-24 lg:py-32 px-5 lg:px-16 bg-ink2" id="produkte">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-14 gap-6">
+      <div>
+        <p class="sec-label mb-4">Das Sortiment</p>
+        <h2 class="font-display leading-none tracking-tight text-off-white" style="font-size: clamp(48px, 7vw, 88px);">
+          Mehr als<br><span class="text-gold">nur Parfüm.</span>
+        </h2>
+      </div>
+      <p class="text-muted text-sm leading-relaxed max-w-xs">Alle Produkte direkt vom Hersteller. Keine Mindestbestellmenge. Lieferung nach Hause.</p>
+    </div>
+
+    <!-- Category grid — Apple-style large tiles -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/10">
+
+      <!-- Parfüm – featured large -->
+      <div class="product-card card-lift line-reveal col-span-1 md:col-span-2 lg:col-span-2 p-8 lg:p-12 min-h-72 flex flex-col justify-between group cursor-pointer" onclick="window.open('https://rodionfragrance.github.io/Duft-Orakel/','_blank')">
+        <div class="top-bar"></div>
+        <div>
+          <span class="text-4xl block mb-6">🧴</span>
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="font-display text-4xl lg:text-5xl tracking-tight text-off-white mb-3">Parfüm</h3>
+              <p class="text-muted text-sm leading-relaxed max-w-sm">Über 200 Düfte für Damen, Herren, Unisex und Kids. 30% Duftöl — vergleichbar mit Luxusmarken wie Sauvage, Baccarat oder Black Orchid.</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mt-8">
+          <span class="text-xs text-gold font-semibold uppercase tracking-widest border border-gold/30 px-3 py-1">Bestseller</span>
+          <span class="text-muted text-sm group-hover:text-gold transition-colors">Duft finden →</span>
+        </div>
+      </div>
+
+      <!-- Raumdüfte -->
+      <div class="product-card card-lift line-reveal p-8 min-h-64 flex flex-col justify-between group cursor-pointer" onclick="window.open('https://wa.me/4915141336341?text=Hey%2C%20ich%20interessiere%20mich%20f%C3%BCr%20Raumduft.','_blank')">
+        <div class="top-bar"></div>
+        <span class="text-3xl block mb-4">🏠</span>
+        <div>
+          <h3 class="font-display text-3xl tracking-tight text-off-white mb-2">Raum&shy;düfte</h3>
+          <p class="text-muted text-xs leading-relaxed">12 intensive Kreationen. 100–500 ml. Blumig bis orientalisch-holzig.</p>
+        </div>
+        <div class="flex items-center justify-between mt-6">
+          <span class="text-xs text-gold font-semibold uppercase tracking-widest border border-gold/30 px-3 py-1">Ab 24€</span>
+          <span class="text-muted text-xs group-hover:text-gold transition-colors">Anfragen →</span>
+        </div>
+      </div>
+
+      <!-- Collagen -->
+      <div class="product-card card-lift line-reveal p-8 min-h-64 flex flex-col justify-between group cursor-pointer" onclick="window.open('https://wa.me/4915141336341?text=Hey%2C%20ich%20interessiere%20mich%20f%C3%BCr%20Collagen.','_blank')">
+        <div class="top-bar"></div>
+        <span class="text-3xl block mb-4">💊</span>
+        <div>
+          <h3 class="font-display text-3xl tracking-tight text-off-white mb-2">Collagen</h3>
+          <p class="text-muted text-xs leading-relaxed">Skinail: 12,4g Kollagen + Vitamine + Zink. All-in-One. Ersetzt 5 Einzelprodukte.</p>
+        </div>
+        <div class="flex items-center justify-between mt-6">
+          <span class="text-xs text-gold font-semibold uppercase tracking-widest border border-gold/30 px-3 py-1">Top Seller</span>
+          <span class="text-muted text-xs group-hover:text-gold transition-colors">Anfragen →</span>
+        </div>
+      </div>
+
+      <!-- Hautpflege -->
+      <div class="product-card card-lift line-reveal p-8 min-h-64 flex flex-col justify-between group cursor-pointer" onclick="window.open('https://rodionfragrance.github.io/Hautberatung/','_blank')">
+        <div class="top-bar"></div>
+        <span class="text-3xl block mb-4">🌿</span>
+        <div>
+          <h3 class="font-display text-3xl tracking-tight text-off-white mb-2">Hautpflege</h3>
+          <p class="text-muted text-xs leading-relaxed">Tägliche Routine für Gesicht, Körper und Haare. Persönliche Hautberatung inklusive.</p>
+        </div>
+        <div class="flex items-center justify-between mt-6">
+          <span class="text-xs text-gold font-semibold uppercase tracking-widest border border-gold/30 px-3 py-1">Beratung free</span>
+          <span class="text-muted text-xs group-hover:text-gold transition-colors">Beratung →</span>
+        </div>
+      </div>
+
+      <!-- Aloe Vera -->
+      <div class="product-card card-lift line-reveal p-8 min-h-64 flex flex-col justify-between group cursor-pointer" onclick="window.open('https://wa.me/4915141336341?text=Hey%2C%20ich%20interessiere%20mich%20f%C3%BCr%20Aloe%20Vera.','_blank')">
+        <div class="top-bar"></div>
+        <span class="text-3xl block mb-4">🍃</span>
+        <div>
+          <h3 class="font-display text-3xl tracking-tight text-off-white mb-2">Aloe Vera</h3>
+          <p class="text-muted text-xs leading-relaxed">Hochwertige Aloe Vera Getränke und Detox-Produkte für deine innere Balance.</p>
+        </div>
+        <div class="flex items-center justify-between mt-6">
+          <span class="text-xs text-gold font-semibold uppercase tracking-widest border border-gold/30 px-3 py-1">Wellness</span>
+          <span class="text-muted text-xs group-hover:text-gold transition-colors">Anfragen →</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="https://wa.me/4915141336341?text=Hey%2C%20ich%20m%C3%B6chte%20den%20Gesamtkatalog%20sehen." class="btn btn-outline" target="_blank">
+        Gesamtkatalog anfragen
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ DUFT-ORAKEL ═══════════════════════════════ -->
+<section class="py-24 lg:py-36 px-5 lg:px-16 relative overflow-hidden" id="orakel">
+  <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink to-[#120F05]"></div>
+  <div class="absolute inset-0" style="background: radial-gradient(ellipse 60% 80% at 100% 50%, rgba(200,150,62,0.06) 0%, transparent 65%)"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+    <!-- Left: visual -->
+    <div class="relative">
+      <div class="border border-gold/20 bg-ink2 p-10 lg:p-14 relative">
+        <!-- Corner accent -->
+        <div class="absolute top-0 right-0 w-16 h-16 border-t border-r border-gold/40"></div>
+        <div class="absolute bottom-0 left-0 w-16 h-16 border-b border-l border-gold/40"></div>
+
+        <span class="text-7xl block mb-6 text-center">🔮</span>
+        <h3 class="font-display text-4xl lg:text-5xl tracking-tight text-center text-off-white mb-4">Duft-Orakel</h3>
+        <p class="text-muted text-sm text-center leading-relaxed mb-8">Kein stundenlanges Testen. 30 Sekunden. Dein perfekter Signature-Duft — gefunden durch KI.</p>
+
+        <a href="https://rodionfragrance.github.io/Duft-Orakel/" class="btn btn-gold w-full justify-center" target="_blank">
+          Jetzt starten →
+        </a>
+      </div>
+
+      <!-- Floating stat -->
+      <div class="absolute -bottom-5 -right-5 lg:-right-8 bg-gold p-5 hidden sm:block">
+        <span class="font-display text-3xl text-ink block leading-none">200+</span>
+        <span class="text-ink text-xs font-semibold uppercase tracking-wider">Düfte</span>
+      </div>
+    </div>
+
+    <!-- Right: steps -->
+    <div>
+      <p class="sec-label mb-5">Wie es funktioniert</p>
+      <h2 class="font-display leading-none tracking-tight text-off-white mb-6" style="font-size: clamp(40px, 6vw, 72px);">
+        Dein Duft.<br><span class="text-gold">30 Sekunden.</span>
+      </h2>
+      <p class="text-muted text-sm leading-relaxed mb-10">Kein Login. Keine Registrierung. Du wählst deinen Typ — ich bestelle direkt für dich per WhatsApp.</p>
+
+      <ul class="space-y-0 divide-y divide-white/5">
+        <li class="flex gap-5 py-5">
+          <span class="font-display text-3xl text-gold/50 leading-none w-10 flex-shrink-0">01</span>
+          <div>
+            <p class="text-sm font-semibold text-off-white mb-1">Geschlecht & Anlass wählen</p>
+            <p class="text-xs text-muted leading-relaxed">Mann, Frau, Unisex oder Kids — für jeden Moment passend.</p>
+          </div>
+        </li>
+        <li class="flex gap-5 py-5">
+          <span class="font-display text-3xl text-gold/50 leading-none w-10 flex-shrink-0">02</span>
+          <div>
+            <p class="text-sm font-semibold text-off-white mb-1">Dufttyp bestimmen</p>
+            <p class="text-xs text-muted leading-relaxed">Blumig, holzig, orientalisch, frisch — über 17 Kategorien zur Auswahl.</p>
+          </div>
+        </li>
+        <li class="flex gap-5 py-5">
+          <span class="font-display text-3xl text-gold/50 leading-none w-10 flex-shrink-0">03</span>
+          <div>
+            <p class="text-sm font-semibold text-off-white mb-1">Direkt per WhatsApp bestellen</p>
+            <p class="text-xs text-muted leading-relaxed">Kein Umweg. Dein Duft kommt zu dir — in 5–7 Werktagen nach Hause.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ STORY / ÜBER UNS ═══════════════════════════════ -->
+<section class="py-24 lg:py-36 px-5 lg:px-16 bg-ink2" id="story">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="max-w-2xl mb-16 lg:mb-24">
+      <p class="sec-label mb-5">Unsere Geschichte</p>
+      <h2 class="font-display leading-none tracking-tight" style="font-size: clamp(48px, 7vw, 92px);">
+        Vom<br><span class="text-gold">IT-ler</span><br>zum<br>Unternehmer.
+      </h2>
+    </div>
+
+    <!-- Two col layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+      <div>
+        <blockquote class="text-xl lg:text-2xl font-light italic text-off-white leading-relaxed pl-6 mb-8" style="border-left: 3px solid #C8963E;">
+          „Parfümherstellung kostet fast nichts. Und trotzdem liebt es jeder Mensch. Das ist kein Zufall — das ist ein Geschäftsmodell."
+        </blockquote>
+        <p class="text-muted text-sm leading-relaxed mb-4">Ich bin Rodion — IT-ler aus Werl, Familienvater, Unternehmer. Zusammen mit meiner Frau Margarita habe ich erkannt, dass Parfüm das unterschätzteste Produkt der Welt ist. Jeder nutzt es. Jeder entscheidet in Sekunden ob er einen Duft mag.</p>
+        <p class="text-muted text-sm leading-relaxed mb-10">Heute liefern wir echte Düfte mit 30% Duftöl direkt zum Kunden — ohne Zwischenhändler, ohne Aufschlag. Und wir zeigen Menschen, die wollen, wie daraus ein eigenes Business wird.</p>
+
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-ink3 border-2 border-gold flex items-center justify-center font-display text-lg text-ink flex-shrink-0">RP</div>
+          <div>
+            <p class="text-sm font-semibold text-off-white">Rodion Popow</p>
+            <p class="text-xs text-muted">IT-ler · Familienvater · Chogan Berater · Werl</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="grid grid-cols-2 gap-px bg-gold/10">
+        <div class="bg-gold p-8 lg:p-10">
+          <span class="font-display text-6xl text-ink block leading-none">30%</span>
+          <span class="text-ink text-xs font-semibold uppercase tracking-widest mt-3 block">Duftöl-Anteil</span>
+          <p class="text-ink/60 text-xs mt-2 leading-relaxed">Vergleichbar mit Luxusparfüms, die 10× mehr kosten.</p>
+        </div>
+        <div class="bg-ink3 border border-gold/15 p-8 lg:p-10">
+          <span class="font-display text-6xl text-gold block leading-none">200+</span>
+          <span class="text-muted text-xs uppercase tracking-widest mt-3 block">Düfte</span>
+          <p class="text-muted text-xs mt-2 leading-relaxed">Für Damen, Herren, Unisex und Kids.</p>
+        </div>
+        <div class="bg-ink3 border border-gold/15 p-8 lg:p-10">
+          <span class="font-display text-6xl text-gold block leading-none">50%</span>
+          <span class="text-muted text-xs uppercase tracking-widest mt-3 block">Marge möglich</span>
+          <p class="text-muted text-xs mt-2 leading-relaxed">Beim Direktverkauf als Berater/in.</p>
+        </div>
+        <div class="bg-ink3 border border-gold/15 p-8 lg:p-10">
+          <span class="font-display text-6xl text-gold block leading-none">🇮🇹</span>
+          <span class="text-muted text-xs uppercase tracking-widest mt-3 block">Made in Italy</span>
+          <p class="text-muted text-xs mt-2 leading-relaxed">Chogan Group S.p.A., Barletta.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ BUSINESS TEASER ═══════════════════════════════ -->
+<section class="py-24 lg:py-36 px-5 lg:px-16 relative overflow-hidden">
+  <div class="absolute inset-0" style="background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(200,150,62,0.055) 0%, transparent 70%), #0A0A0A;"></div>
+  <!-- Ghost word -->
+  <div class="ghost-text font-display absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap pointer-events-none select-none" style="font-size: clamp(80px, 16vw, 220px); -webkit-text-stroke: 1px rgba(200,150,62,0.05);">FREEDOM</div>
+
+  <div class="relative z-10 max-w-3xl mx-auto text-center">
+    <p class="sec-label justify-center mb-5">Eigenes Business</p>
+    <h2 class="font-display leading-none tracking-tight mb-6" style="font-size: clamp(52px, 9vw, 110px);">
+      Parfüm<br>verkaufen.<br><span class="text-gold">Frei sein.</span>
+    </h2>
+    <p class="text-muted text-base leading-relaxed mb-4 max-w-lg mx-auto">Jeder nutzt Parfüm. Jeder entscheidet in Sekunden. Das macht es zum einfachsten Einstieg in ein eigenes Business — nebenberuflich oder hauptberuflich.</p>
+    <p class="text-muted text-sm mb-12">Berater verdienen bis zu <span class="text-off-white font-semibold">50% Marge</span> beim Direktverkauf — und bauen durch ihr Team ein passives Einkommen auf.</p>
+
+    <!-- Provision row -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-px bg-gold/10 mb-12">
+      <div class="bg-ink3 border border-gold/15 p-6 text-center">
+        <span class="font-display text-3xl text-gold block">2.500€</span>
+        <span class="text-muted text-xs uppercase tracking-widest mt-2 block">Amethyst</span>
+      </div>
+      <div class="bg-gold p-6 text-center">
+        <span class="font-display text-3xl text-ink block">7.000€</span>
+        <span class="text-ink/70 text-xs uppercase tracking-widest mt-2 block">Sapphire</span>
+      </div>
+      <div class="bg-ink3 border border-gold/15 p-6 text-center">
+        <span class="font-display text-3xl text-gold block">13.000€</span>
+        <span class="text-muted text-xs uppercase tracking-widest mt-2 block">Emerald</span>
+      </div>
+      <div class="bg-ink3 border border-gold/15 p-6 text-center">
+        <span class="font-display text-3xl text-gold block">40.000€</span>
+        <span class="text-muted text-xs uppercase tracking-widest mt-2 block">Diamond</span>
+      </div>
+    </div>
+    <p class="text-muted/50 text-xs mb-10">* Richtwerte laut offiziellem Chogan Karriereplan. Kein Einkommensversprechen.</p>
+
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="/business" class="btn btn-gold">Business entdecken →</a>
+      <a href="https://wa.me/4915141336341?text=Hey%20Rodion%2C%20ich%20interessiere%20mich%20f%C3%BCr%20das%20Business." class="btn btn-outline" target="_blank">Gespräch anfragen</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ FAQ ═══════════════════════════════ -->
+<section class="py-20 lg:py-28 px-5 lg:px-16 bg-ink2">
+  <div class="max-w-3xl mx-auto">
+    <p class="sec-label mb-5">Häufige Fragen</p>
+    <h2 class="font-display leading-none tracking-tight text-off-white mb-14" style="font-size: clamp(44px, 6vw, 72px);">FAQ.</h2>
+
+    <div class="divide-y divide-white/5">
+
+      <div class="faq-item py-0">
+        <button class="faq-q w-full flex items-center justify-between py-5 text-left gap-4" onclick="toggleFaq(this)">
+          <span class="text-sm font-semibold text-off-white">Wie lange dauert die Lieferung?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer pb-5 text-sm text-muted leading-relaxed">5–7 Werktage nach Deutschland. Ab 150€ Bestellwert übernehme ich die Versandkosten für dich.</div>
+      </div>
+
+      <div class="faq-item py-0">
+        <button class="faq-q w-full flex items-center justify-between py-5 text-left gap-4" onclick="toggleFaq(this)">
+          <span class="text-sm font-semibold text-off-white">Wie bestelle ich — gibt es einen Onlineshop?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer pb-5 text-sm text-muted leading-relaxed">Nutze das Duft-Orakel um deinen Duft zu finden — dann schreibst du mir direkt per WhatsApp. Ich bestelle über mein Konto, du zahlst mir, Chogan liefert direkt zu dir. Kein Login, kein Aufwand.</div>
+      </div>
+
+      <div class="faq-item py-0">
+        <button class="faq-q w-full flex items-center justify-between py-5 text-left gap-4" onclick="toggleFaq(this)">
+          <span class="text-sm font-semibold text-off-white">Welcher Duft passt zu mir?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer pb-5 text-sm text-muted leading-relaxed">Genau dafür gibt es das Duft-Orakel — 30 Sekunden, keine Registrierung, sofortiges Ergebnis. Oder schreib mir auf WhatsApp, ich berate dich persönlich kostenlos.</div>
+      </div>
+
+      <div class="faq-item py-0">
+        <button class="faq-q w-full flex items-center justify-between py-5 text-left gap-4" onclick="toggleFaq(this)">
+          <span class="text-sm font-semibold text-off-white">Kann ich auch selbst Berater werden?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer pb-5 text-sm text-muted leading-relaxed">Ja — und das ist mein liebstes Thema. Schau dir die Business-Seite an oder schreib mir direkt. Ich erkläre dir in 20 Minuten ehrlich ob Chogan zu dir passt — ohne Druck, ohne Pitch.</div>
+      </div>
+
+      <div class="faq-item py-0">
+        <button class="faq-q w-full flex items-center justify-between py-5 text-left gap-4" onclick="toggleFaq(this)">
+          <span class="text-sm font-semibold text-off-white">Sind die Düfte wirklich mit Luxusmarken vergleichbar?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer pb-5 text-sm text-muted leading-relaxed">Chogan arbeitet mit demselben Rohstofflieferanten wie bekannte Luxushäuser. Der Unterschied: 30% Duftöl, kein Marketingbudget für Celebrities, kein Zwischenhändler. Das Resultat: vergleichbare Qualität, komplett anderer Preis.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ FINAL CTA ═══════════════════════════════ -->
+<section class="py-28 lg:py-40 px-5 lg:px-16 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-ink via-[#120F05] to-ink"></div>
+  <div class="absolute inset-10 lg:inset-16 border border-gold/6 pointer-events-none hidden lg:block"></div>
+
+  <div class="relative z-10 max-w-2xl mx-auto text-center">
+    <p class="sec-label justify-center mb-6">Nächster Schritt</p>
+    <h2 class="font-display leading-none tracking-tight mb-6" style="font-size: clamp(52px, 9vw, 110px);">
+      Lass uns<br><span class="text-gold">reden.</span>
+    </h2>
+    <p class="text-muted text-base leading-relaxed mb-12 max-w-md mx-auto">Duft bestellen, Hautberatung buchen, oder Business-Gespräch starten — schreib einfach. Ich antworte persönlich.</p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="https://wa.me/4915141336341?text=Hey%2C%20ich%20m%C3%B6chte%20bestellen:" class="btn btn-wa text-base px-8 py-5" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        WhatsApp schreiben
+      </a>
+      <a href="https://rodionfragrance.github.io/Duft-Orakel/" class="btn btn-outline text-base px-8 py-5" target="_blank">
+        🔮 Duft-Orakel starten
+      </a>
+    </div>
+
+    <p class="text-muted/40 text-xs mt-8">Antwort meist innerhalb weniger Stunden · 87% unserer Kunden aus Deutschland</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer class="border-t px-5 lg:px-16 py-10" style="border-color: rgba(200,150,62,0.15);">
+  <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+
+    <div>
+      <a href="/" class="font-display text-xl tracking-widest text-off-white">POPOW<span class="text-gold">&</span>KAMNEW</a>
+      <p class="text-muted text-xs mt-2 max-w-xs leading-relaxed">Parfüm ist der Schlüssel zur Freiheit. Echte Düfte direkt vom Hersteller. Werl, Deutschland.</p>
+    </div>
+
+    <div class="flex flex-wrap gap-x-10 gap-y-3">
+      <a href="#produkte" class="text-xs text-muted uppercase tracking-widest hover:text-gold transition-colors">Produkte</a>
+      <a href="#orakel" class="text-xs text-muted uppercase tracking-widest hover:text-gold transition-colors">Duft-Orakel</a>
+      <a href="/business" class="text-xs text-muted uppercase tracking-widest hover:text-gold transition-colors">Business</a>
+      <a href="https://www.instagram.com/rodionpopow/" target="_blank" class="text-xs text-muted uppercase tracking-widest hover:text-gold transition-colors">Instagram</a>
+      <a href="https://www.tiktok.com/@rodionfragrance" target="_blank" class="text-xs text-muted uppercase tracking-widest hover:text-gold transition-colors">TikTok</a>
+      <a href="/impressum" class="text-xs text-muted uppercase tracking-widest hover:text-gold transition-colors">Impressum</a>
+      <a href="/datenschutz" class="text-xs text-muted uppercase tracking-widest hover:text-gold transition-colors">Datenschutz</a>
+    </div>
+
+    <p class="text-muted/40 text-xs">© 2025 Rodion Popow<br>Alle Rechte vorbehalten</p>
+  </div>
+</footer>
+
+
+<script>
+  function toggleMenu() {
+    const m = document.getElementById('mobile-menu');
+    m.classList.toggle('hidden');
+  }
+
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Smooth nav hide/show on scroll
+  let lastScroll = 0;
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    const curr = window.scrollY;
+    if (curr > lastScroll && curr > 100) {
+      nav.style.transform = 'translateY(-100%)';
+    } else {
+      nav.style.transform = 'translateY(0)';
+    }
+    lastScroll = curr;
+  }, { passive: true });
+  nav.style.transition = 'transform .3s ease';
+</script>
+
+</body>
+</html>
