@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Hautberatung · Margarita Kamnew · Chogan  · ET </title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple:#91649e; --pdark:#6b4578; --plight:#b08abb; --pfaint:#f8f4fa; --psubtle:#ede5f0;
+  --gold:#c4a46a; --goldlt:#f0e8d6;
+  --white:#fff; --off:#faf9f8;
+  --g100:#f5f4f3; --g200:#e8e6e3; --g400:#b8b4af; --g600:#7a7672; --g800:#3d3a37; --text:#1e1b18;
+  --r:16px; --rsm:10px;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --ease:all 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--g100);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+ 
+/* APP */
+#app{max-width:700px;margin:0 auto;background:var(--white);min-height:100vh;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.07)}
+ 
+/* PROGRESS */
+#pb{height:3px;background:var(--g200);flex-shrink:0;position:sticky;top:0;z-index:200}
+#pf{height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));width:0%;transition:width .5s ease}
+ 
+/* NAV */
+#nav{display:none;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:1px solid var(--g100);background:rgba(255,255,255,.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);position:sticky;top:3px;z-index:190;flex-shrink:0}
+#nav.on{display:flex}
+#backBtn{background:none;border:none;cursor:pointer;color:var(--g600);font-family:var(--sans);font-size:14px;display:flex;align-items:center;gap:5px;padding:5px 0;transition:var(--ease)}
+#backBtn:hover{color:var(--purple)}
+#nLogo{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:.1em;color:var(--purple);text-transform:uppercase}
+#nStep{font-size:12px;color:var(--g400);letter-spacing:.05em}
+ 
+/* SCREENS — each screen is hidden by default */
+.scr{display:none;flex-direction:column;flex:1;padding-bottom:96px}
+.scr.on{display:flex;animation:fadeUp .32s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+ 
+/* SINGLE SHARED CTA BAR */
+#cta{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;padding:13px 24px;padding-bottom:calc(13px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--g100);z-index:180;display:flex;gap:10px}
+.bprim{flex:1;padding:15px 20px;background:var(--purple);color:#fff;border:none;border-radius:50px;font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:.03em;cursor:pointer;transition:var(--ease);-webkit-appearance:none}
+.bprim:hover{background:var(--pdark)}
+.bprim:active{transform:scale(.97)}
+.bghost{padding:15px 16px;background:var(--g100);color:var(--g800);border:1.5px solid var(--g200);border-radius:50px;font-family:var(--sans);font-size:14px;font-weight:400;cursor:pointer;transition:var(--ease);-webkit-appearance:none;white-space:nowrap}
+.bghost:hover{border-color:var(--purple);color:var(--purple)}
+ 
+/* LAYOUT */
+.pad{padding:28px 28px 0}
+.pt{padding-top:30px}
+hr.d{border:none;border-top:1px solid var(--g100);margin:22px 0}
+ 
+/* TYPE */
+.lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--purple);margin-bottom:16px}
+.ttl{font-family:var(--serif);font-size:clamp(24px,4.5vw,34px);font-weight:400;color:var(--text);line-height:1.2;margin-bottom:8px}
+.sub{font-size:14px;font-weight:300;color:var(--g600);line-height:1.65;margin-bottom:26px}
+.slbl{font-size:12px;font-weight:300;color:var(--g600);margin-bottom:8px}
+ 
+/* FIELDS */
+.f{margin-bottom:14px}
+.f label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--g400);margin-bottom:5px}
+.f input,.f textarea{width:100%;padding:13px 14px;border:1.5px solid var(--g200);border-radius:var(--rsm);font-family:var(--sans);font-size:15px;font-weight:300;color:var(--text);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.f input:focus,.f textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(145,100,158,.1)}
+.f textarea{resize:none;min-height:74px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+ 
+/* CHOICES */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:22px}
+.g1{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+ 
+.ch{position:relative}
+.ch input{position:absolute;opacity:0;width:0;height:0}
+.cl{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:13px 10px;border:1.5px solid var(--g200);border-radius:var(--rsm);cursor:pointer;transition:var(--ease);background:var(--white);text-align:center;min-height:74px;user-select:none;-webkit-user-select:none}
+.cli{flex-direction:row;padding:12px 14px;justify-content:flex-start;min-height:auto;text-align:left;gap:12px}
+.ch input:checked+.cl{border-color:var(--purple);background:var(--pfaint)}
+.cl:active{transform:scale(.96)}
+.cem{font-size:19px;line-height:1}
+.ct{font-size:12px;font-weight:400;color:var(--g800);line-height:1.35}
+.ch input:checked+.cl .ct{color:var(--pdark);font-weight:500}
+.rdot{width:18px;height:18px;border-radius:50%;border:2px solid var(--g400);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--ease)}
+.ch input:checked+.cl .rdot{background:var(--purple);border-color:var(--purple)}
+.ch input:checked+.cl .rdot::after{content:'';width:6px;height:6px;border-radius:50%;background:white;display:block}
+ 
+/* HERO */
+.hero{padding:52px 36px 42px;text-align:center;background:linear-gradient(180deg,var(--pfaint) 0%,var(--white) 100%);flex-shrink:0}
+.hic{width:58px;height:58px;background:var(--psubtle);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:24px}
+.hero h1{font-family:var(--serif);font-size:clamp(28px,6vw,44px);font-weight:400;line-height:1.15;margin-bottom:11px;letter-spacing:-.01em}
+.hero h1 em{font-style:italic;color:var(--purple)}
+.hero p{font-size:15px;font-weight:300;color:var(--g600);line-height:1.7}
+ 
+/* STEPS PREVIEW */
+.sp{display:flex;flex-direction:column;gap:13px;margin-bottom:14px}
+.spr{display:flex;align-items:center;gap:13px}
+.spn{width:32px;height:32px;border-radius:50%;background:var(--psubtle);color:var(--purple);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.spr h4{font-size:14px;font-weight:500;color:var(--text);margin-bottom:1px}
+.spr p{font-size:12px;color:var(--g400);font-weight:300}
+ 
+/* TEST CARDS */
+.tc{background:var(--g100);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.tch{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.tic{width:38px;height:38px;background:var(--purple);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-size:17px}
+.tc h3{font-family:var(--serif);font-size:18px;font-weight:500}
+.tc p{font-size:13px;font-weight:300;color:var(--g600);line-height:1.6;margin-bottom:13px}
+.stps{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.str{display:flex;gap:9px;font-size:13px;color:var(--g800);font-weight:300;line-height:1.5;align-items:flex-start}
+.stn{width:21px;height:21px;border-radius:50%;background:var(--psubtle);color:var(--purple);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.tlbl{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--purple);margin-bottom:7px}
+ 
+/* RESULT OPTIONS */
+.ros{display:flex;flex-direction:column;gap:7px;margin-bottom:0}
+.ro{display:flex;align-items:center;gap:11px;padding:12px 14px;border:1.5px solid var(--g200);border-radius:var(--rsm);cursor:pointer;transition:var(--ease);background:var(--white);font-size:13px;color:var(--g800);font-weight:400;line-height:1.4;user-select:none;-webkit-user-select:none}
+.ro.sel{border-color:var(--purple);background:var(--pfaint);color:var(--pdark);font-weight:500}
+.ro:active{transform:scale(.98)}
+ 
+/* SKIN TYPE */
+.skg{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:22px}
+.skc{padding:17px 13px;border:2px solid var(--g200);border-radius:var(--r);cursor:pointer;transition:var(--ease);text-align:center;background:var(--white);user-select:none;-webkit-user-select:none}
+.skc.sel{border-color:var(--purple);background:var(--pfaint)}
+.skc:active{transform:scale(.96)}
+.ske{font-size:28px;margin-bottom:7px}
+.skn{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:2px}
+.skd{font-size:11px;color:var(--g400);font-weight:300;line-height:1.35}
+.skc.sel .skn{color:var(--pdark)}
+ 
+/* RESULT BANNER */
+.rb{background:linear-gradient(135deg,var(--purple) 0%,var(--pdark) 100%);border-radius:var(--r);padding:26px;color:white;margin-bottom:22px;position:relative;overflow:hidden}
+.rb::before{content:'';position:absolute;top:-35px;right:-35px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07)}
+.rbb{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 13px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px}
+.rb h2{font-family:var(--serif);font-size:28px;font-weight:400;margin-bottom:7px}
+.rb p{font-size:13px;font-weight:300;opacity:.88;line-height:1.6}
+ 
+/* PRODUCT LIST */
+.pl{display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+.ps{display:flex;gap:12px;align-items:flex-start;padding:14px;background:var(--g100);border-radius:var(--rsm);border-left:3px solid var(--purple)}
+.ps.gold{border-left-color:var(--gold)}
+.pn{font-family:var(--serif);font-size:24px;color:var(--plight);font-weight:300;line-height:1;flex-shrink:0;min-width:22px}
+.pn.gold{color:var(--gold)}
+.pi{flex:1}
+.pt2{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:1px}
+.pt2.gold{color:var(--gold)}
+.pnm{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.pds{font-size:12px;font-weight:300;color:var(--g600);line-height:1.45}
+.pcd{font-size:10px;color:var(--g400);margin-top:2px;font-family:monospace}
+.ppr{font-size:14px;font-weight:500;color:var(--gold);flex-shrink:0}
+ 
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.pill{background:var(--psubtle);color:var(--pdark);border-radius:20px;padding:4px 13px;font-size:12px;font-weight:500}
+ 
+/* SEC */
+.sttl{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--text);margin-bottom:2px}
+.ssub{font-size:12px;color:var(--g400);font-weight:300;margin-bottom:12px}
+ 
+/* INFO BOX */
+.ib{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border-radius:var(--rsm);margin-bottom:18px}
+.ib.gold{background:var(--goldlt)}
+.ib.purp{background:var(--pfaint)}
+.ib p{font-size:13px;font-weight:300;color:var(--g800);line-height:1.6}
+ 
+/* SUPPLEMENT CARDS */
+.sc{border:1.5px solid var(--g200);border-radius:var(--r);overflow:hidden;margin-bottom:11px}
+.sch{display:flex;align-items:center;gap:11px;padding:15px;background:var(--g100);cursor:pointer;user-select:none;-webkit-user-select:none}
+.sch:active{opacity:.8}
+.scic{font-size:22px;flex-shrink:0}
+.sci{flex:1}
+.scb{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:1px}
+.scn{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--text)}
+.scs{font-size:11px;color:var(--g400);font-weight:300}
+.sca{font-size:14px;color:var(--purple);transition:transform .25s ease;flex-shrink:0}
+.sca.o{transform:rotate(180deg)}
+.scbody{padding:16px 15px;border-top:1px solid var(--g200);display:none}
+.scdesc{font-size:13px;font-weight:300;color:var(--g800);line-height:1.65;margin-bottom:13px}
+.ing{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:13px}
+.ingx{background:var(--pfaint);border-radius:8px;padding:9px 11px}
+.ingv{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--purple);line-height:1}
+.ingn{font-size:11px;color:var(--g600);font-weight:300;margin-top:2px;line-height:1.3}
+.exs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px}
+.ex{background:var(--goldlt);color:var(--g800);border-radius:20px;padding:4px 10px;font-size:11px}
+.ub{background:var(--g100);border-radius:8px;padding:11px 13px;margin-bottom:9px}
+.utl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:4px}
+.utx{font-size:13px;font-weight:300;color:var(--g800);line-height:1.6}
+.wb{display:flex;gap:7px;align-items:flex-start;background:var(--g100);border:1px solid var(--g200);border-radius:8px;padding:9px 11px;font-size:11px;color:var(--g600);font-weight:300;line-height:1.55;margin-bottom:7px}
+.wb.org{background:#fff3e0;border-color:#e65100;color:#7a3300}
+.crt{font-size:11px;color:var(--g400);text-align:center;padding-top:5px}
+ 
+/* SUMMARY */
+.sumr{display:flex;justify-content:space-between;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--g100);gap:13px}
+.sumk{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--g400);flex-shrink:0;min-width:95px}
+.sumv{font-size:14px;color:var(--text);font-weight:300;text-align:right;line-height:1.5}
+ 
+/* FINAL */
+.fh{background:linear-gradient(135deg,var(--pfaint) 0%,var(--goldlt) 100%);padding:46px 36px 38px;text-align:center}
+.chk{width:62px;height:62px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:26px;color:white}
+.fh h1{font-family:var(--serif);font-size:28px;font-weight:400;margin-bottom:7px}
+.fh p{font-size:14px;font-weight:300;color:var(--g600);line-height:1.65}
+ 
+/* PLANNER */
+.plst{margin-bottom:18px}
+.pllbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:7px}
+.totalr{display:flex;justify-content:space-between;align-items:center;padding:11px 0}
+.totlbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g400)}
+.totval{font-family:var(--serif);font-size:28px;color:var(--purple)}
+ 
+/* CREDIT */
+.credit{text-align:center;padding:22px 0 6px}
+.credit-line{font-size:11px;font-weight:300;color:var(--g400);letter-spacing:.1em;text-transform:uppercase}
+.credit-name{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--purple);margin-top:3px;letter-spacing:.03em}
+ 
+/* WELCOME CREDIT */
+.wcredit{text-align:center;padding:18px 0 2px;font-size:12px;color:var(--g400);letter-spacing:.06em}
+.wcredit strong{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--plight);font-weight:400}
+ 
+/* PRINT */
+@media print{#cta,#pb,#nav{display:none!important}.scr{display:flex!important;padding-bottom:0}body{background:white}#app{box-shadow:none}}
+ 
+/* RESPONSIVE */
+@media(min-width:560px){.hero,.fh{padding-left:48px;padding-right:48px}.pad{padding-left:40px;padding-right:40px}#cta{padding-left:40px;padding-right:40px}}
+@media(max-width:340px){.r2,.g2,.skg,.ing{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="pb"><div id="pf"></div></div>
+  <nav id="nav">
+    <button id="backBtn" onclick="back()">&#8592; Zurück</button>
+    <div id="nLogo">Hautberatung · Margarita Kamnew · ET</div>
+    <div id="nStep">1 / 9</div>
+  </nav>
+ 
+  <!-- S0 WILLKOMMEN -->
+  <div class="scr on" id="s0">
+    <div class="hero">
+      <div class="hic">🌿</div>
+      <h1>Ihre persönliche<br><em>Hautberatung</em></h1>
+      <p>Interaktive Analyse für Ihre optimale Pflegeroutine – individuell abgestimmt auf Ihre Haut.</p>
+    </div>
+    <div class="pad pt">
+      <span class="lbl">Ablauf der Beratung</span>
+      <div class="sp">
+        <div class="spr"><div class="spn">1</div><div><h4>Kundendaten</h4><p>Persönliche Angaben erfassen</p></div></div>
+        <div class="spr"><div class="spn">2</div><div><h4>Hautanalyse</h4><p>Aktuellen Hautzustand bestimmen</p></div></div>
+        <div class="spr"><div class="spn">3</div><div><h4>Aktuelle Pflege</h4><p>Produkte, Marken & Ziele</p></div></div>
+        <div class="spr"><div class="spn">4</div><div><h4>Physische Tests</h4><p>Kneiftest & Empfindlichkeitstest</p></div></div>
+        <div class="spr"><div class="spn">5</div><div><h4>Gesundheit & Lebensstil</h4><p>Allergien, Medikamente & mehr</p></div></div>
+        <div class="spr"><div class="spn">6</div><div><h4>Hauttyp-Bestimmung</h4><p>Analyse gemeinsam auswerten</p></div></div>
+        <div class="spr"><div class="spn">7</div><div><h4>Produktempfehlung</h4><p>Maßgeschneiderte Pflegeroutine</p></div></div>
+        <div class="spr"><div class="spn">8</div><div><h4>Bestellplan & Abschluss</h4><p>Produktplaner & Zusammenfassung</p></div></div>
+      </div>
+      <div class="wcredit">· Created by <strong>Margarita Kamnew</strong></div>
+    </div>
+  </div>
+ 
+  <!-- S1 KUNDENDATEN -->
+  <div class="scr" id="s1">
+    <div class="pad pt">
+      <span class="lbl">Schritt 1 · Kundendaten</span>
+      <div class="ttl">Angaben zur Person</div>
+      <div class="sub">Diese Informationen bleiben vertraulich und dienen ausschließlich Ihrer persönlichen Beratung.</div>
+      <div class="r2">
+        <div class="f"><label>Vorname</label><input type="text" id="f_vn" placeholder="Maria" autocomplete="given-name"></div>
+        <div class="f"><label>Nachname</label><input type="text" id="f_nn" placeholder="Muster" autocomplete="family-name"></div>
+      </div>
+      <div class="f"><label>Adresse</label><input type="text" id="f_adr" placeholder="Musterstraße 1, 12345 Musterstadt" autocomplete="street-address"></div>
+      <div class="r2">
+        <div class="f"><label>Telefon</label><input type="tel" id="f_tel" placeholder="+43 123 456789" autocomplete="tel"></div>
+        <div class="f"><label>Alter</label><input type="number" id="f_alt" placeholder="35" min="16" max="99"></div>
+      </div>
+      <div class="f"><label>E-Mail</label><input type="email" id="f_email" placeholder="mail@beispiel.at" autocomplete="email"></div>
+      <hr class="d">
+      <span class="lbl">Pflege-Erfahrung</span>
+      <div class="slbl">Verwenden Sie bereits Skincare-Produkte?</div>
+      <div class="g2" style="margin-bottom:16px">
+        <div class="ch"><input type="radio" name="sc" id="sc_j" value="ja"><label class="cl" for="sc_j"><span class="cem">✓</span><span class="ct">Ja, bereits</span></label></div>
+        <div class="ch"><input type="radio" name="sc" id="sc_n" value="nein"><label class="cl" for="sc_n"><span class="cem">✗</span><span class="ct">Noch nicht</span></label></div>
+      </div>
+      <div class="slbl">Wie wichtig ist Ihnen Hautpflege?</div>
+      <div class="g2">
+        <div class="ch"><input type="radio" name="wg" id="wg_j" value="wichtig"><label class="cl" for="wg_j"><span class="cem">⭐</span><span class="ct">Wichtig</span></label></div>
+        <div class="ch"><input type="radio" name="wg" id="wg_n" value="nicht"><label class="cl" for="wg_n"><span class="cem">○</span><span class="ct">Nicht wichtig</span></label></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- S2 HAUTZUSTAND -->
+  <div class="scr" id="s2">
+    <div class="pad pt">
+      <span class="lbl">Schritt 2 · Hautanalyse</span>
+      <div class="ttl">Wie ist Ihr Hautzustand?</div>
+      <div class="sub">Mehrfachauswahl möglich – wählen Sie alles Zutreffende.</div>
+      <div class="g2">
+        <div class="ch"><input type="checkbox" id="hz1" name="hz" value="Ölig"><label class="cl" for="hz1"><span class="cem">💧</span><span class="ct">Ölig</span></label></div>
+        <div class="ch"><input type="checkbox" id="hz2" name="hz" value="Trocken"><label class="cl" for="hz2"><span class="cem">🌵</span><span class="ct">Trocken & schuppig</span></label></div>
+        <div class="ch"><input type="checkbox" id="hz3" name="hz" value="Gereizt"><label class="cl" for="hz3"><span class="cem">🔴</span><span class="ct">Gereizt & Rötungen</span></label></div>
+        <div class="ch"><input type="checkbox" id="hz4" name="hz" value="Akne"><label class="cl" for="hz4"><span class="cem">⚠️</span><span class="ct">Akne / Pickel</span></label></div>
+        <div class="ch"><input type="checkbox" id="hz5" name="hz" value="Falten"><label class="cl" for="hz5"><span class="cem">⌛</span><span class="ct">Falten / Anti-Aging</span></label></div>
+        <div class="ch"><input type="checkbox" id="hz6" name="hz" value="Pigmentstörung"><label class="cl" for="hz6"><span class="cem">🎨</span><span class="ct">Pigmentstörung</span></label></div>
+        <div class="ch"><input type="checkbox" id="hz7" name="hz" value="Augenringe"><label class="cl" for="hz7"><span class="cem">👁</span><span class="ct">Augenringe</span></label></div>
+        <div class="ch"><input type="checkbox" id="hz8" name="hz" value="Rau &amp; uneben"><label class="cl" for="hz8"><span class="cem">🪨</span><span class="ct">Rau &amp; uneben</span></label></div>
+      </div>
+      <hr class="d">
+      <div class="slbl">Nach der Reinigung fühlt sich Ihre Haut an...</div>
+      <div class="g2" style="margin-bottom:0">
+        <div class="ch"><input type="radio" name="rein" id="r1" value="Trocken"><label class="cl" for="r1"><span class="cem">😬</span><span class="ct">Trocken & gespannt</span></label></div>
+        <div class="ch"><input type="radio" name="rein" id="r2" value="Frisch"><label class="cl" for="r2"><span class="cem">😊</span><span class="ct">Frisch & sauber</span></label></div>
+        <div class="ch"><input type="radio" name="rein" id="r3" value="Ölig"><label class="cl" for="r3"><span class="cem">😅</span><span class="ct">Ölig & fettig</span></label></div>
+        <div class="ch"><input type="radio" name="rein" id="r4" value="Normal"><label class="cl" for="r4"><span class="cem">😌</span><span class="ct">Angenehm normal</span></label></div>
+      </div>
+      <hr class="d">
+      <div class="slbl">Sonnenreaktion</div>
+      <div class="g1">
+        <div class="ch"><input type="radio" name="son" id="so1" value="Gut verträglich"><label class="cl cli" for="so1"><span class="rdot"></span><span class="ct">Ich bräune leicht und werde selten rot</span></label></div>
+        <div class="ch"><input type="radio" name="son" id="so2" value="Gemischt"><label class="cl cli" for="so2"><span class="rdot"></span><span class="ct">Ich bräune etwas, bekomme aber auch Sonnenbrand</span></label></div>
+        <div class="ch"><input type="radio" name="son" id="so3" value="Empfindlich"><label class="cl cli" for="so3"><span class="rdot"></span><span class="ct">Ich bekomme schnell Sonnenbrand und bräune kaum</span></label></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- S3 AKTUELLE PFLEGE -->
+  <div class="scr" id="s3">
+    <div class="pad pt">
+      <span class="lbl">Schritt 3 · Aktuelle Pflege</span>
+      <div class="ttl">Was verwenden Sie derzeit?</div>
+      <div class="sub">Welche Produkte sind Teil Ihrer täglichen Routine?</div>
+      <div class="g2">
+        <div class="ch"><input type="checkbox" id="p1" name="prd" value="Make-up Entferner"><label class="cl" for="p1"><span class="cem">🧴</span><span class="ct">Make-up Entferner</span></label></div>
+        <div class="ch"><input type="checkbox" id="p2" name="prd" value="Toner"><label class="cl" for="p2"><span class="cem">💦</span><span class="ct">Toner</span></label></div>
+        <div class="ch"><input type="checkbox" id="p3" name="prd" value="Reinigung"><label class="cl" for="p3"><span class="cem">🫧</span><span class="ct">Reinigung</span></label></div>
+        <div class="ch"><input type="checkbox" id="p4" name="prd" value="Serum"><label class="cl" for="p4"><span class="cem">💎</span><span class="ct">Serum</span></label></div>
+        <div class="ch"><input type="checkbox" id="p5" name="prd" value="Anti-Aging Creme"><label class="cl" for="p5"><span class="cem">✨</span><span class="ct">Anti-Aging Creme</span></label></div>
+        <div class="ch"><input type="checkbox" id="p6" name="prd" value="Augencreme"><label class="cl" for="p6"><span class="cem">👁</span><span class="ct">Augencreme</span></label></div>
+        <div class="ch"><input type="checkbox" id="p7" name="prd" value="UV-Schutz"><label class="cl" for="p7"><span class="cem">☀️</span><span class="ct">UV-Schutz</span></label></div>
+        <div class="ch"><input type="checkbox" id="p8" name="prd" value="Öle"><label class="cl" for="p8"><span class="cem">🫒</span><span class="ct">Öle</span></label></div>
+      </div>
+      <div class="f"><label>Aktuelle Marke(n)</label><input type="text" id="f_mrk" placeholder="z. B. Aurodhea, Chogan..."></div>
+      <hr class="d">
+      <div class="slbl">Anwendungshäufigkeit</div>
+      <div class="g2" style="margin-bottom:0">
+        <div class="ch"><input type="radio" name="hf" id="hf1" value="2× täglich"><label class="cl" for="hf1"><span class="cem">🌅🌙</span><span class="ct">Täglich 2×</span></label></div>
+        <div class="ch"><input type="radio" name="hf" id="hf2" value="1× täglich"><label class="cl" for="hf2"><span class="cem">🌅</span><span class="ct">Täglich 1×</span></label></div>
+        <div class="ch"><input type="radio" name="hf" id="hf3" value="Gelegentlich"><label class="cl" for="hf3"><span class="cem">📅</span><span class="ct">Gelegentlich</span></label></div>
+        <div class="ch"><input type="radio" name="hf" id="hf4" value="Keine Produkte"><label class="cl" for="hf4"><span class="cem">❌</span><span class="ct">Noch nichts</span></label></div>
+      </div>
+      <hr class="d">
+      <div class="slbl">Pflegeziele (Mehrfachauswahl)</div>
+      <div class="g2">
+        <div class="ch"><input type="checkbox" id="z1" name="zl" value="Feuchtigkeitsspende"><label class="cl" for="z1"><span class="cem">💧</span><span class="ct">Feuchtig&shy;keitsspende</span></label></div>
+        <div class="ch"><input type="checkbox" id="z2" name="zl" value="Anti-Aging"><label class="cl" for="z2"><span class="cem">⏳</span><span class="ct">Anti-Aging</span></label></div>
+        <div class="ch"><input type="checkbox" id="z3" name="zl" value="Unreinheiten reduzieren"><label class="cl" for="z3"><span class="cem">🧹</span><span class="ct">Unreinheiten reduzieren</span></label></div>
+        <div class="ch"><input type="checkbox" id="z4" name="zl" value="Hautbild verbessern"><label class="cl" for="z4"><span class="cem">✨</span><span class="ct">Hautbild verbessern</span></label></div>
+        <div class="ch"><input type="checkbox" id="z5" name="zl" value="Hautberuhigung"><label class="cl" for="z5"><span class="cem">🕊</span><span class="ct">Haut beruhigen</span></label></div>
+        <div class="ch"><input type="checkbox" id="z6" name="zl" value="Natürliche Inhaltsstoffe"><label class="cl" for="z6"><span class="cem">🌿</span><span class="ct">Natürliche Inhaltsstoffe</span></label></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- S4 TESTS -->
+  <div class="scr" id="s4">
+    <div class="pad pt">
+      <span class="lbl">Schritt 4 · Physische Tests</span>
+      <div class="ttl">Haut-Tests durchführen</div>
+      <div class="sub">Führen Sie gemeinsam mit dem Berater die Tests durch.</div>
+ 
+      <div class="tc">
+        <div class="tch"><div class="tic">👆</div><h3>Kneiftest · Stirn &amp; Augen</h3></div>
+        <div class="stps">
+          <div class="str"><div class="stn">1</div>Kleine Hautfalte an der Stirn (über der Augenbraue) mit Daumen &amp; Zeigefinger greifen</div>
+          <div class="str"><div class="stn">2</div>Falte ca. 10 Sekunden halten, dann loslassen</div>
+          <div class="str"><div class="stn">3</div>Test vorsichtig unter dem Auge wiederholen</div>
+        </div>
+        <div class="tlbl">Ergebnis Stirn</div>
+        <div class="ros" style="margin-bottom:13px">
+          <div class="ro" onclick="selR(this,'kStirn','Feuchtigkeitsmangel')">⚠️ &nbsp;Falte bleibt einige Sek. → Feuchtigkeitsmangel</div>
+          <div class="ro" onclick="selR(this,'kStirn','Ausreichend Feuchtigkeit')">✅ &nbsp;Falte glättet sofort → ausreichend Feuchtigkeit</div>
+        </div>
+        <div class="tlbl">Ergebnis Augen</div>
+        <div class="ros">
+          <div class="ro" onclick="selR(this,'kAuge','Feuchtigkeitsmangel unter den Augen')">⚠️ &nbsp;Falte bleibt einige Sek. → Feuchtigkeitsmangel</div>
+          <div class="ro" onclick="selR(this,'kAuge','Normale Feuchtigkeit')">✅ &nbsp;Keine Veränderung → normale Pflege reicht</div>
+        </div>
+      </div>
+ 
+      <div class="tc">
+        <div class="tch"><div class="tic">👊</div><h3>Kneiftest · Kieferpartie</h3></div>
+        <p>Haut vorsichtig mit zwei Fingern an der Kieferpartie greifen und Spannung beurteilen.</p>
+        <div class="ros">
+          <div class="ro" onclick="selR(this,'kKiefer','Straff &amp; prall')">💪 &nbsp;Fühlt sich straff &amp; prall an</div>
+          <div class="ro" onclick="selR(this,'kKiefer','Weich &amp; schlaff – Straffung empfohlen')">🔽 &nbsp;Fühlt sich weich &amp; schlaff an</div>
+        </div>
+      </div>
+ 
+      <div class="tc">
+        <div class="tch"><div class="tic">✏️</div><h3>Empfindlichkeitstest · Spatel</h3></div>
+        <div class="stps">
+          <div class="str"><div class="stn">1</div>Mit einem Spatel leicht aber mit Druck ein „X" über die Stirn streichen</div>
+          <div class="str"><div class="stn">2</div>Test auf dem Dekolleté wiederholen</div>
+        </div>
+        <div class="tlbl">Ergebnis Stirn</div>
+        <div class="ros" style="margin-bottom:13px">
+          <div class="ro" onclick="selR(this,'eStirn','Empfindlich – Haut wurde rot')">🔴 &nbsp;Empfindlich – Haut wurde schnell rot</div>
+          <div class="ro" onclick="selR(this,'eStirn','Unempfindlich – keine Reaktion')">🟢 &nbsp;Unempfindlich – Haut blieb unverändert</div>
+        </div>
+        <div class="tlbl">Ergebnis Dekolleté</div>
+        <div class="ros">
+          <div class="ro" onclick="selR(this,'eDeko','Empfindlich')">🔴 &nbsp;Empfindlich – Haut wurde schnell rot</div>
+          <div class="ro" onclick="selR(this,'eDeko','Unempfindlich')">🟢 &nbsp;Unempfindlich – Haut blieb unverändert</div>
+        </div>
+      </div>
+ 
+      <div class="tc">
+        <div class="tch"><div class="tic">🔍</div><h3>Poreneinschätzung</h3></div>
+        <div class="ros">
+          <div class="ro" onclick="selR(this,'poren','Feinporig')">🔵 &nbsp;Feinporig – Poren kaum sichtbar</div>
+          <div class="ro" onclick="selR(this,'poren','T-Zone vergrößert')">🟡 &nbsp;T-Zone vergrößert – Stirn, Nase &amp; Kinn</div>
+          <div class="ro" onclick="selR(this,'poren','Großporig')">🟠 &nbsp;Großporig – allgemein vergrößert</div>
+        </div>
+      </div>
+ 
+      <div class="tc">
+        <div class="tch"><div class="tic">📏</div><h3>Hautdicke</h3></div>
+        <div class="ros">
+          <div class="ro" onclick="selR(this,'hdicke','Dünn &amp; sensibel')">🌸 &nbsp;Dünn &amp; sensibel – wenig Unterfettgewebe</div>
+          <div class="ro" onclick="selR(this,'hdicke','Normal')">🌿 &nbsp;Normal – ausgewogene Hautdicke</div>
+          <div class="ro" onclick="selR(this,'hdicke','Robust')">💪 &nbsp;Robust &amp; widerstandsfähig</div>
+        </div>
+      </div>
+ 
+      <div class="f"><label>Jahreszeitliche Veränderungen (optional)</label><textarea id="f_jz" placeholder="z. B. trockener im Winter, öliger im Sommer..."></textarea></div>
+    </div>
+  </div>
+ 
+  <!-- S5 GESUNDHEIT -->
+  <div class="scr" id="s5">
+    <div class="pad pt">
+      <span class="lbl">Schritt 5 · Gesundheit &amp; Lebensstil</span>
+      <div class="ttl">Gesundheitsfragen</div>
+      <div class="sub">Diese Angaben helfen, die richtigen Produkte für Sie zu finden.</div>
+ 
+      <div class="slbl">Hautirritationen oder allergische Reaktionen?</div>
+      <div class="g2" style="margin-bottom:10px">
+        <div class="ch"><input type="radio" name="alg" id="ag_j" value="ja"><label class="cl" for="ag_j"><span class="cem">⚠️</span><span class="ct">Ja</span></label></div>
+        <div class="ch"><input type="radio" name="alg" id="ag_n" value="nein"><label class="cl" for="ag_n"><span class="cem">✓</span><span class="ct">Nein</span></label></div>
+      </div>
+      <div class="f"><label>Wenn ja – Art der Reaktion / ärztliche Diagnose</label><textarea id="f_alg" placeholder="z. B. Kontaktallergie, Neurodermitis..."></textarea></div>
+ 
+      <div class="slbl">Regelmäßige Medikamente?</div>
+      <div class="g2" style="margin-bottom:10px">
+        <div class="ch"><input type="radio" name="med" id="md_j" value="ja"><label class="cl" for="md_j"><span class="cem">💊</span><span class="ct">Ja</span></label></div>
+        <div class="ch"><input type="radio" name="med" id="md_n" value="nein"><label class="cl" for="md_n"><span class="cem">✓</span><span class="ct">Nein</span></label></div>
+      </div>
+      <div class="f"><label>Wenn ja – Welche Medikamente?</label><textarea id="f_med" placeholder="Bitte technische Datenblätter mit dem Arzt abklären..."></textarea></div>
+ 
+      <hr class="d">
+      <div class="slbl">Bekannte Diagnosen / Hautkrankheiten</div>
+      <div class="g2">
+        <div class="ch"><input type="checkbox" id="d1" name="dg" value="Hormonelle Störungen"><label class="cl" for="d1"><span class="cem">⚡</span><span class="ct">Hormonelle Störungen</span></label></div>
+        <div class="ch"><input type="checkbox" id="d2" name="dg" value="Neurodermitis"><label class="cl" for="d2"><span class="cem">🌿</span><span class="ct">Neurodermitis</span></label></div>
+        <div class="ch"><input type="checkbox" id="d3" name="dg" value="Schuppenflechte"><label class="cl" for="d3"><span class="cem">❄️</span><span class="ct">Schuppenflechte</span></label></div>
+        <div class="ch"><input type="checkbox" id="d4" name="dg" value="Diabetes"><label class="cl" for="d4"><span class="cem">🩺</span><span class="ct">Diabetes</span></label></div>
+        <div class="ch"><input type="checkbox" id="d5" name="dg" value="Autoimmunerkrankung"><label class="cl" for="d5"><span class="cem">🔬</span><span class="ct">Autoimmun&shy;erkrankung</span></label></div>
+        <div class="ch"><input type="checkbox" id="d6" name="dg" value="Schilddrüse"><label class="cl" for="d6"><span class="cem">🦋</span><span class="ct">Schilddrüsen&shy;erkrankung</span></label></div>
+      </div>
+ 
+      <hr class="d">
+      <div class="slbl">Rauchen Sie?</div>
+      <div class="g2" style="margin-bottom:0">
+        <div class="ch"><input type="radio" name="rch" id="rc_j" value="ja"><label class="cl" for="rc_j"><span class="cem">🚬</span><span class="ct">Ja</span></label></div>
+        <div class="ch"><input type="radio" name="rch" id="rc_n" value="nein"><label class="cl" for="rc_n"><span class="cem">✓</span><span class="ct">Nein</span></label></div>
+      </div>
+      <hr class="d">
+      <div class="slbl">Tägliche Trinkmenge Wasser</div>
+      <div class="g2" style="margin-bottom:0">
+        <div class="ch"><input type="radio" name="trk" id="t1" value="&lt; 1 Liter"><label class="cl" for="t1"><span class="cem">😬</span><span class="ct">Unter 1 L</span></label></div>
+        <div class="ch"><input type="radio" name="trk" id="t2" value="ca. 1 Liter"><label class="cl" for="t2"><span class="cem">💧</span><span class="ct">ca. 1 Liter</span></label></div>
+        <div class="ch"><input type="radio" name="trk" id="t3" value="ca. 2 Liter"><label class="cl" for="t3"><span class="cem">💧💧</span><span class="ct">ca. 2 Liter</span></label></div>
+        <div class="ch"><input type="radio" name="trk" id="t4" value="2+ Liter"><label class="cl" for="t4"><span class="cem">🏆</span><span class="ct">2+ Liter</span></label></div>
+      </div>
+      <hr class="d">
+      <div class="slbl">Monatliches Budget</div>
+      <div class="g2" style="margin-bottom:0">
+        <div class="ch"><input type="radio" name="bgt" id="b1" value="unter 100€"><label class="cl" for="b1"><span class="cem">💶</span><span class="ct">unter 100 €</span></label></div>
+        <div class="ch"><input type="radio" name="bgt" id="b2" value="100–200€"><label class="cl" for="b2"><span class="cem">💶💶</span><span class="ct">100–200 €</span></label></div>
+        <div class="ch"><input type="radio" name="bgt" id="b3" value="über 200€"><label class="cl" for="b3"><span class="cem">💶💶💶</span><span class="ct">über 200 €</span></label></div>
+      </div>
+      <hr class="d">
+      <div class="f"><label>Nahrungsergänzungsmittel (optional)</label><input type="text" id="f_sup" placeholder="z. B. Vitamin C, Omega 3, Biotin..."></div>
+    </div>
+  </div>
+ 
+  <!-- S6 HAUTTYP -->
+  <div class="scr" id="s6">
+    <div class="pad pt">
+      <span class="lbl">Schritt 6 · Hauttyp-Bestimmung</span>
+      <div class="ttl">Hauttyp bestimmen</div>
+      <div class="sub">Basierend auf Tests und Analyse – wählen Sie den passenden Hauttyp:</div>
+      <div class="ib gold"><span style="font-size:18px;flex-shrink:0">💡</span><p>Diese Auswahl bildet die Grundlage für die Produktempfehlung. Mehrere Eigenschaften können kombiniert werden.</p></div>
+      <div class="skg">
+        <div class="skc" onclick="selSkin(this,'Normal')"><div class="ske">😊</div><div class="skn">Normal</div><div class="skd">Ausgeglichen, feine Poren, rosiger Teint</div></div>
+        <div class="skc" onclick="selSkin(this,'Mischhaut')"><div class="ske">🌗</div><div class="skn">Mischhaut</div><div class="skd">Fettige T-Zone, trockene Wangen</div></div>
+        <div class="skc" onclick="selSkin(this,'Fettig')"><div class="ske">💦</div><div class="skn">Fettig</div><div class="skd">Glänzend, große Poren, Mitesser</div></div>
+        <div class="skc" onclick="selSkin(this,'Trocken')"><div class="ske">🌵</div><div class="skn">Trocken</div><div class="skd">Matt & fahl, schuppig, gespannt</div></div>
+        <div class="skc" onclick="selSkin(this,'Sensibel')"><div class="ske">🌸</div><div class="skn">Sensibel</div><div class="skd">Rötungsneigung, Spannungsgefühl</div></div>
+        <div class="skc" onclick="selSkin(this,'Reif')"><div class="ske">⏳</div><div class="skn">Reif & Anti-Aging</div><div class="skd">Falten, Elastizitätsverlust</div></div>
+      </div>
+      <hr class="d">
+      <div class="slbl">Zusätzliche Anliegen (optional)</div>
+      <div class="g2">
+        <div class="ch"><input type="checkbox" id="e1" name="ex" value="Cellulite"><label class="cl" for="e1"><span class="cem">🫧</span><span class="ct">Cellulite</span></label></div>
+        <div class="ch"><input type="checkbox" id="e2" name="ex" value="Couperose"><label class="cl" for="e2"><span class="cem">🔴</span><span class="ct">Couperose</span></label></div>
+        <div class="ch"><input type="checkbox" id="e3" name="ex" value="Haarausfall"><label class="cl" for="e3"><span class="cem">💆</span><span class="ct">Haarausfall</span></label></div>
+        <div class="ch"><input type="checkbox" id="e4" name="ex" value="Narben"><label class="cl" for="e4"><span class="cem">✴️</span><span class="ct">Narben</span></label></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- S7 PRODUKTEMPFEHLUNG -->
+  <div class="scr" id="s7">
+    <div class="pad" style="padding-top:22px">
+      <div class="rb"><div class="rbb">Ihr Hauttyp</div><h2 id="r_typ">—</h2><p id="r_dsc">—</p></div>
+      <span class="lbl">Ihre Pflegeziele</span>
+      <div class="pills" id="r_pills"></div>
+      <hr class="d">
+      <div class="sttl">Gesichtspflege</div><div class="ssub">Morgen &amp; Abend Routine</div>
+      <div class="pl" id="r_face"></div>
+      <hr class="d">
+      <div class="sttl">Körperpflege</div><div class="ssub">Passende Ergänzungen</div>
+      <div class="pl" id="r_body"></div>
+      <div id="r_hsec" style="display:none">
+        <hr class="d">
+        <div class="sttl">Haarpflege</div><div class="ssub">Bei Haarausfall empfohlen</div>
+        <div class="pl" id="r_haar"></div>
+      </div>
+      <hr class="d">
+      <div class="sttl">Nahrungsergänzung</div><div class="ssub">Pflege von innen – Supplefit by Chogan</div>
+      <div class="pl" id="r_supp"></div>
+ 
+      <div class="sc" id="sc_skinail">
+        <div class="sch" onclick="togSupp('skinail')"><div class="scic">💊</div><div class="sci"><div class="scb">INTB042 · 30 Beutel à 21 g</div><div class="scn">Skinail Collagen</div><div class="scs">Haut · Haare · Nägel</div></div><div class="sca" id="a_skinail">▾</div></div>
+        <div class="scbody" id="b_skinail">
+          <div class="scdesc">Nahrungsergänzungsmittel mit angenehmem <strong>Pfirsich-Geschmack</strong>. Der exklusive Komplex <strong>CBH-TOTAL™</strong> enthält hydrolysiertes Kollagen Typ I &amp; III (2000 Da) für schnelle Aufnahme.</div>
+          <div class="ing">
+            <div class="ingx"><div class="ingv">12,4 g</div><div class="ingn">Hydrolysiertes Kollagen</div></div>
+            <div class="ingx"><div class="ingv">80 mg</div><div class="ingn">Vitamin C (100% VNR)</div></div>
+            <div class="ingx"><div class="ingv">10 mg</div><div class="ingn">Zink (100% VNR)</div></div>
+            <div class="ingx"><div class="ingv">0,05 mg</div><div class="ingn">Biotin / Vit. H (100%)</div></div>
+            <div class="ingx"><div class="ingv">16 mg</div><div class="ingn">Niacin B3 (100%)</div></div>
+            <div class="ingx"><div class="ingv">2,5 µg</div><div class="ingn">Vitamin B12 (100%)</div></div>
+          </div>
+          <div class="exs"><div class="ex">🍇 Weintrauben (Procyanidine)</div><div class="ex">🫐 Heidelbeeren</div><div class="ex">🍒 Kirsche (lokale Kette)</div><div class="ex">🌺 Granatapfel</div><div class="ex">🫐 Acai-Beeren</div></div>
+          <div class="ub"><div class="utl">Anwendung</div><div class="utx">Täglich 1 Beutel in 250 ml zimmerwarmem Wasser auflösen und trinken. Morgens oder abends.</div></div>
+          <div class="wb">⚠️ &nbsp;Nicht als Ersatz für ausgewogene Ernährung. Außerhalb der Reichweite von Kindern unter 3 Jahren. Schwangere &amp; Stillende: Arzt befragen. Kühl &amp; trocken lagern. MHD: 12 Monate. Keine bekannten Allergene (EU-VO 1169/2011).</div>
+          <div class="crt">🇨🇭 Rinderkollagen aus der Schweiz · ISO 9001:2015 · FSSC 22000 · GMP zertifiziert</div>
+        </div>
+      </div>
+ 
+      <div class="sc" id="sc_skinpure" style="display:none">
+        <div class="sch" onclick="togSupp('skinpure')"><div class="scic">🌿</div><div class="sci"><div class="scb">INTB048 · 60 Kapseln à 646 mg</div><div class="scn">Skinpure</div><div class="scs">Hautwohlbefinden · Akne · Entgiftung</div></div><div class="sca" id="a_skinpure">▾</div></div>
+        <div class="scbody" id="b_skinpure">
+          <div class="scdesc">Kapseln zur Förderung des Hautwohlbefindens. Der <strong>NIKSPRO™-Komplex</strong> (Brokkoli &amp; Erdrauch) fördert Entgiftung. Große Klette antimikrobiell &amp; entzündungshemmend. Niacinamid stärkt die Hautbarriere und reguliert die Talgproduktion.</div>
+          <div class="ing">
+            <div class="ingx"><div class="ingv">600 mg</div><div class="ingn">Große Klette (20% Inulin)</div></div>
+            <div class="ingx"><div class="ingv">238 mg</div><div class="ingn">Brokkoli-Extrakt (13% Sulforaphan)</div></div>
+            <div class="ingx"><div class="ingv">200 mg</div><div class="ingn">Erdrauch (≥0,04% Protopin)</div></div>
+            <div class="ingx"><div class="ingv">50 mg</div><div class="ingn">Niacinamid / B3 (312%)</div></div>
+          </div>
+          <div class="ub"><div class="utl">Anwendung</div><div class="utx">2-mal täglich 1 Kapsel vorzugsweise <strong>zwischen den Mahlzeiten</strong> mit 1–2 Glas Wasser.</div></div>
+          <div class="wb org">⛔ &nbsp;<strong>Achtung:</strong> Enthält Brokkoli – bei Schilddrüsenerkrankungen NICHT einnehmen!</div>
+          <div class="wb">⚠️ &nbsp;Nicht als Ersatz für ausgewogene Ernährung. Außerhalb der Reichweite von Kindern unter 3 Jahren. Kühl &amp; trocken. MHD: 36 Monate. Keine bekannten Allergene (EU-VO 1169/2011).</div>
+        </div>
+      </div>
+ 
+      <div class="ib purp" style="margin-top:14px"><span style="font-size:16px;flex-shrink:0">🛡</span><p><strong>Hinweis:</strong> Bei Medikamenteneinnahme oder bekannten Diagnosen bitte technische Datenblätter mit dem Arzt abklären.</p></div>
+    </div>
+  </div>
+ 
+  <!-- S8 BESTELLPLAN -->
+  <div class="scr" id="s8">
+    <div class="pad pt">
+      <span class="lbl">Schritt 8 · Bestellplan</span>
+      <div class="ttl">Produktplaner ausfüllen</div>
+      <div class="sub">Produkte mit Artikelnummer und Preis eintragen.</div>
+      <div id="plannerEl"></div>
+      <hr class="d">
+      <div class="totalr"><div class="totlbl">Gesamtpreis</div><div class="totval" id="totval">— €</div></div>
+      <hr class="d">
+      <div class="slbl">Weiterempfehlung</div>
+      <div class="g2" style="margin-bottom:14px">
+        <div class="ch"><input type="radio" name="wep" id="we_j" value="ja"><label class="cl" for="we_j"><span class="cem">👥</span><span class="ct">Ja, gerne</span></label></div>
+        <div class="ch"><input type="radio" name="wep" id="we_n" value="nein"><label class="cl" for="we_n"><span class="cem">🤫</span><span class="ct">Lieber nicht</span></label></div>
+      </div>
+      <div class="g2">
+        <div class="ch"><input type="checkbox" id="i1" name="int" value="Intensiver mit Hautpflege beschäftigen"><label class="cl" for="i1"><span class="cem">📋</span><span class="ct">Intensiver mit Hautpflege beschäftigen</span></label></div>
+        <div class="ch"><input type="checkbox" id="i2" name="int" value="Als Berater tätig werden"><label class="cl" for="i2"><span class="cem">💼</span><span class="ct">Als Berater tätig werden</span></label></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- S9 ABSCHLUSS -->
+  <div class="scr" id="s9">
+    <div class="fh"><div class="chk">✓</div><h1>Beratung abgeschlossen</h1><p>Vielen Dank für das offene Gespräch. Ihre optimale Pflegeroutine ist jetzt zusammengestellt.</p></div>
+    <div class="pad" style="padding-top:26px">
+      <span class="lbl">Ihre Daten</span>
+      <div id="sum_dat"></div>
+      <hr class="d">
+      <span class="lbl">Hautbefund</span>
+      <div id="sum_haut"></div>
+      <hr class="d">
+      <span class="lbl">Nächste Schritte</span>
+      <div class="stps">
+        <div class="str"><div class="stn">1</div>Produktplaner aushändigen &amp; gemeinsam besprechen</div>
+        <div class="str"><div class="stn">2</div>Bestellung aufgeben &amp; Liefertermin abstimmen</div>
+        <div class="str"><div class="stn">3</div>Follow-up-Gespräch nach 4 Wochen vereinbaren</div>
+        <div class="str"><div class="stn">4</div>Feedback nach 1. Anwendung einholen</div>
+      </div>
+      <hr class="d">
+      <div class="ib purp"><span style="font-size:16px;flex-shrink:0">💜</span><p>Ich stehe jederzeit für Fragen zur Verfügung und freue mich über Feedback nach den ersten Anwendungen!</p></div>
+      <div class="credit"><div class="credit-line">Beratungs-App</div><div class="credit-name">Made by Margarita Kamnew</div></div>
+    </div>
+  </div>
+ 
+  <!-- GLOBAL CTA (single, always at bottom, managed by JS) -->
+  <div id="cta"></div>
+</div>
+ 
+<script>
+// ─── STATE ───
+var ST = { screen:0, skin:'', tests:{}, planItems:[] };
+var TOTAL = 9;
+ 
+// ─── CTA CONFIG ───
+var CTA = [
+  {m:'Beratung starten →'},
+  {m:'Weiter →'},
+  {m:'Weiter →'},
+  {m:'Weiter →'},
+  {m:'Weiter →'},
+  {m:'Weiter →'},
+  {m:'Empfehlung erstellen →'},
+  {m:'Weiter →', g:'Zum Bestellplan'},
+  {m:'Abschluss →'},
+  {m:'Neue Beratung', g:'🖨 Drucken'}
+];
+ 
+function renderCTA() {
+  var cfg = CTA[ST.screen] || CTA[0];
+  var html = '<button class="bprim" onclick="main()">' + cfg.m + '</button>';
+  if (cfg.g) html = '<button class="bghost" onclick="ghost()">' + cfg.g + '</button>' + html;
+  document.getElementById('cta').innerHTML = html;
+}
+ 
+function main() {
+  if (ST.screen === 0) goTo(1);
+  else if (ST.screen === 6) genRec();
+  else if (ST.screen === 9) startNew();
+  else goTo(ST.screen + 1);
+}
+function ghost() {
+  if (ST.screen === 7) goTo(8);
+  else if (ST.screen === 9) window.print();
+}
+ 
+function goTo(n) {
+  if (n < 0 || n > TOTAL) return;
+  if (n === 9) buildSum();
+  var prev = document.getElementById('s' + ST.screen);
+  var next = document.getElementById('s' + n);
+  if (prev) prev.classList.remove('on');
+  if (next) {
+    next.classList.remove('on');
+    // Force reflow
+    void next.offsetWidth;
+    next.classList.add('on');
+  }
+  ST.screen = n;
+  // Nav
+  var nav = document.getElementById('nav');
+  nav.className = n > 0 ? 'on' : '';
+  document.getElementById('nStep').textContent = n + ' / ' + TOTAL;
+  // Progress
+  document.getElementById('pf').style.width = Math.round((n / TOTAL) * 100) + '%';
+  // CTA
+  renderCTA();
+  window.scrollTo(0, 0);
+}
+ 
+function back() { goTo(Math.max(0, ST.screen - 1)); }
+ 
+// ─── RESULT OPTS ───
+function selR(el, key, val) {
+  var sib = el.parentNode.querySelectorAll('.ro');
+  for (var i = 0; i < sib.length; i++) sib[i].classList.remove('sel');
+  el.classList.add('sel');
+  ST.tests[key] = val;
+}
+ 
+// ─── SKIN TYPE ───
+function selSkin(el, type) {
+  var cards = document.querySelectorAll('.skc');
+  for (var i = 0; i < cards.length; i++) cards[i].classList.remove('sel');
+  el.classList.add('sel');
+  ST.skin = type;
+}
+ 
+// ─── PRODUCTS ───
+// REIHENFOLGE laut Margarita: 1. Mizellenwasser → 2. Reinigung/Waschgel → 3. Toner
+var DB = {
+  Normal:{face:[
+    {n:1,t:'Mizellenwasser',nm:'3-in-1 Mizellenwasser',ds:'Make-up entfernen, erste Reinigungsstufe, beruhigend',cd:'CR12',pr:''},
+    {n:2,t:'Reinigung',nm:'Vegan Facial Cleansing Gel',ds:'Sanfte tägliche Reinigung mit Aloe Vera & Kamille',cd:'CR13',pr:''},
+    {n:3,t:'Feuchtigkeitspflege',nm:'Hyaluronsäure Gesichtscreme',ds:'Feuchtigkeitsspendend, polstert auf, für alle Hauttypen',cd:'CR05B',pr:'26,90 €'},
+    {n:4,t:'Augenpflege',nm:'Eye Contour Cream',ds:'Straffend, beruhigend mit Seidenprotein & Argan',cd:'CR22B',pr:'26,90 €'}
+  ],body:[
+    {n:1,t:'Duschgel',nm:'Duschgel mit Hafer',ds:'Sanft reinigend, feuchtigkeitsspendend, rückfettend',cd:'AV01B',pr:'17,90 €'},
+    {n:2,t:'Körperpflege',nm:'Aloe Vera Körpercreme',ds:'Erfrischend, pflegend, für alle Hauttypen',cd:'CR30B',pr:'23,90 €'}
+  ]},
+  Mischhaut:{face:[
+    {n:1,t:'Mizellenwasser',nm:'3-in-1 Mizellenwasser',ds:'Make-up entfernen, erste Reinigungsstufe, regulierend',cd:'CR12',pr:''},
+    {n:2,t:'Reinigung',nm:'Vegan Facial Cleansing Gel',ds:'Ausgleichend, sanft für Mischhaut',cd:'CR13',pr:''},
+    {n:3,t:'Toner',nm:'⚠️ BITTE BESTÄTIGEN – Toner für Mischhaut',ds:'Produktname, Code & Preis bitte von Margarita bestätigen lassen',cd:'??? – bitte eintragen',pr:''},
+    {n:4,t:'Behandlung',nm:'Schneckenschleim Waschgel',ds:'Reguliert Talgproduktion, antibakteriell',cd:'BV12B',pr:'24,90 €'},
+    {n:5,t:'Tagespflege',nm:'Schneckenschleim Anti-Aging Creme',ds:'Hyaluron, Kollagen, Kupferpeptide – für Elastizität',cd:'CR02B',pr:'39,90 €'},
+    {n:6,t:'Augenpflege',nm:'Eye Contour Cream Schneckenschleim',ds:'Falten, Tränensäcke, Straffung',cd:'BV04B',pr:'29,90 €'}
+  ],body:[
+    {n:1,t:'Duschgel',nm:'Duschgel Ice Effect',ds:'Belebend, straffend, bei schweren Beinen',cd:'BS05B',pr:'17,90 €'},
+    {n:2,t:'Körperpflege',nm:'Neem Körpercreme',ds:'Cellulite, fördert Elastizität, strafft',cd:'NM03B',pr:'24,90 €'}
+  ]},
+  Fettig:{face:[
+    {n:1,t:'Mizellenwasser',nm:'3-in-1 Mizellenwasser',ds:'Make-up entfernen, erste Reinigungsstufe',cd:'CR12',pr:''},
+    {n:2,t:'Reinigung',nm:'Klärendes Waschgel Salicylsäure',ds:'Reinigt Poren, reduziert Talgproduktion',cd:'CR11B',pr:'19,90 €'},
+    {n:3,t:'Maske (2×/Woche)',nm:'Neem Gesichtsmaske',ds:'Adstringierend, antibakteriell, talgregulierend',cd:'AS01B',pr:'14,90 €'},
+    {n:4,t:'Tagespflege',nm:'Neem Gesichtscreme',ds:'Mattierend, antibakteriell, Anti-Aging-Effekt',cd:'NM06B',pr:'34,90 €'}
+  ],body:[
+    {n:1,t:'Duschgel',nm:'Neem Duschgel',ds:'Antibakteriell, reinigend, pflegend',cd:'NM02B',pr:'19,90 €'},
+    {n:2,t:'Körperpflege',nm:'Neem Körpercreme',ds:'Gegen Orangenhaut-Effekt & Cellulite',cd:'NM03B',pr:'24,90 €'}
+  ]},
+  Trocken:{face:[
+    {n:1,t:'Mizellenwasser',nm:'3-in-1 Mizellenwasser',ds:'Make-up entfernen, erste sanfte Reinigungsstufe',cd:'CR12',pr:''},
+    {n:2,t:'Reinigung',nm:'Reinigungsmilch',ds:'Sanfte, feuchtigkeitserhaltende Reinigung',cd:'CR13',pr:''},
+    {n:3,t:'Toner / Spray',nm:'Aloe Vera Erste-Hilfe-Spray',ds:'Sofortige Feuchtigkeit, beruhigend',cd:'CR23B',pr:'16,90 €'},
+    {n:4,t:'Serum',nm:'Hyaluronsäure Gel-Serum',ds:'Strafft, polstert auf, intensive Feuchtigkeitszufuhr',cd:'CR08B',pr:'39,90 €'},
+    {n:5,t:'Tagespflege',nm:'Eselsmilch Tagescreme',ds:'Intensive Pflege, hypoallergen, beruhigend',cd:'LA04B',pr:'49,90 €'},
+    {n:6,t:'Nachtpflege',nm:'Eselsmilch Nachtcreme',ds:'Regenerierend, antioxidativ, für reife & trockene Haut',cd:'LA05B',pr:'59,90 €'},
+    {n:7,t:'Augenpflege',nm:'Aloe Vera Augencreme',ds:'Feuchtigkeitsspendend, strafft, antioxidativ',cd:'CR22B',pr:'26,90 €'}
+  ],body:[
+    {n:1,t:'Duschgel',nm:'Eselsmilch Duschgel',ds:'Sanft, nährend, für empfindliche Haut',cd:'BV01B',pr:'19,90 €'},
+    {n:2,t:'Körperpflege',nm:'Eselsmilch Körpermilch',ds:'Regenerierend, rückfettend, gegen Juckreiz & Rötungen',cd:'LA02B',pr:'49,90 €'}
+  ]},
+  Sensibel:{face:[
+    {n:1,t:'Mizellenwasser',nm:'3-in-1 Mizellenwasser',ds:'Make-up entfernen, erste sanfte Reinigungsstufe',cd:'CR12',pr:''},
+    {n:2,t:'Reinigung',nm:'Aloe Vera Peel-Off Maske',ds:'Sanft reinigend, beruhigend, entzündungshemmend',cd:'AL11B',pr:'18,90 €'},
+    {n:3,t:'Toner / Spray',nm:'Aloe Vera Erste-Hilfe-Spray',ds:'Sofortige Linderung bei Reizungen & Rötungen',cd:'CR23B',pr:'16,90 €'},
+    {n:4,t:'Feuchtigkeitspflege',nm:'Hyaluronsäure Gesichtscreme',ds:'Feuchtigkeitsspendend, für empfindliche Haut',cd:'CR05B',pr:'26,90 €'},
+    {n:5,t:'Augenpflege',nm:'Aloe Vera Augencreme',ds:'Sanft, beruhigend, entzündungshemmend',cd:'CR22B',pr:'26,90 €'}
+  ],body:[
+    {n:1,t:'Duschgel',nm:'Duschgel mit Hafer',ds:'Besonders sanft für empfindliche Haut',cd:'AV01B',pr:'17,90 €'},
+    {n:2,t:'Körperpflege',nm:'Argan Körpercreme',ds:'Für sehr empfindliche Haut, hilft bei Rötungen',cd:'AR01B',pr:'19,90 €'}
+  ]},
+  Reif:{face:[
+    {n:1,t:'Mizellenwasser',nm:'3-in-1 Mizellenwasser',ds:'Make-up entfernen, erste Reinigungsstufe',cd:'CR12',pr:''},
+    {n:2,t:'Reinigung',nm:'Vegan Facial Cleansing Gel',ds:'Sanfte Reinigung ohne Feuchtigkeitsverlust',cd:'CR13',pr:''},
+    {n:3,t:'Serum',nm:'PEPTILUX Hyaluron Gel-Serum',ds:'Strafft, polstert Falten auf, patentierter Peptid-Komplex LIPHASYN™',cd:'CR08B',pr:'39,90 €'},
+    {n:4,t:'Tagespflege',nm:'Argan Gesichtscreme Anti-Age',ds:'Kollagen & Elastin-Stimulation, mildert Falten sichtbar',cd:'AR10B',pr:'39,90 €'},
+    {n:5,t:'Nachtpflege',nm:'Eselsmilch Nachtcreme',ds:'Intensive Regeneration über Nacht',cd:'LA05B',pr:'59,90 €'},
+    {n:6,t:'Augenpflege',nm:'PEPTILUX Eye Contour Cream',ds:'Tränensäcke, Augenringe, Fältchen – Sofortwirkung',cd:'CR22B',pr:'26,90 €'},
+    {n:7,t:'Maske (1-2×/Woche)',nm:'Argan Anti-Age Gesichtsmaske',ds:'Intensiver Pflegeboost, regeneriert & strafft',cd:'AR07B',pr:'19,90 €'}
+  ],body:[
+    {n:1,t:'Duschgel',nm:'Argan Duschgel',ds:'Nährend, feuchtigkeitsspendend, elastizitätsfördernd',cd:'BS07B',pr:'12,90 €'},
+    {n:2,t:'Körperpflege',nm:'Argan Körpercreme',ds:'Anti-Cellulite, stellt Hydrolipidmantel wieder her',cd:'AR01B',pr:'19,90 €'}
+  ]}
+};
+ 
+var DESCS = {
+  Normal:'Ihre Haut ist ausgeglichen mit gutem Feuchtigkeitsgehalt, feinen Poren und einem rosigen, gleichmäßigen Teint. Eine ausgewogene Basispflege erhält diesen Zustand optimal.',
+  Mischhaut:'Ihre Haut hat eine fettige T-Zone (Stirn, Nase, Kinn) und trockene Wangen. Empfohlen wird eine ausgleichende Pflege, die reguliert ohne auszutrocknen.',
+  Fettig:'Ihre Haut produziert überschüssigen Talg, was zu vergrößerten Poren und Unreinheiten führt. Regulierende, antibakterielle Pflege bringt das Gleichgewicht zurück.',
+  Trocken:'Ihre Haut hat wenig Eigenfeuchtigkeit und benötigt intensive Pflege. Hyaluron, Eselsmilch und Argan sind ideal für dauerhafte Feuchtigkeitsversorgung.',
+  Sensibel:'Ihre Haut reagiert empfindlich auf äußere Einflüsse. Beruhigende, entzündungshemmende Inhaltsstoffe wie Aloe Vera schützen und stärken Ihre Hautbarriere.',
+  Reif:'Ihre Haut zeigt Zeichen der Hautalterung. Hochwertige Peptide, Kollagen und Hyaluronsäure unterstützen die natürliche Regeneration und mildern Falten sichtbar.'
+};
+ 
+var HAAR = [
+  {n:1,t:'Shampoo',nm:'Anti-Haarverlust Shampoo',ds:'Koffein, Ginkgo Biloba, Sägepalme – fördert Mikrozirkulation der Haarwurzeln',cd:'CAP12B',pr:''},
+  {n:2,t:'Intensivkur (3×/Woche)',nm:'Intensive Anti-Haarverlust Kur',ds:'8 Pflanzenextrakte + Sphingony-Wirkstoff – reguliert Haarzyklus über 16 Wochen',cd:'FA01B',pr:''},
+  {n:3,t:'Lotion (täglich)',nm:'Anti-Haarverlust Lotion Wakame',ds:'Ginseng, Arnika, Wakame – täglich 1 Pipette auf Kopfhaut',cd:'FA02B',pr:''}
+];
+ 
+function buildList(items, gold) {
+  return items.map(function(p) {
+    return '<div class="ps' + (gold ? ' gold' : '') + '">' +
+      '<div class="pn' + (gold ? ' gold' : '') + '">' + String(p.n).padStart(2,'0') + '</div>' +
+      '<div class="pi">' +
+      '<div class="pt2' + (gold ? ' gold' : '') + '">' + p.t + '</div>' +
+      '<div class="pnm">' + p.nm + '</div>' +
+      '<div class="pds">' + p.ds + '</div>' +
+      '<div class="pcd">' + p.cd + '</div>' +
+      '</div>' +
+      (p.pr ? '<div class="ppr">' + p.pr + '</div>' : '') +
+      '</div>';
+  }).join('');
+}
+ 
+function genRec() {
+  if (!ST.skin) { alert('Bitte wählen Sie zuerst einen Hauttyp aus.'); return; }
+  var data = DB[ST.skin];
+ 
+  document.getElementById('r_typ').textContent = ST.skin === 'Reif' ? 'Reife Haut · Anti-Aging' : ST.skin;
+  document.getElementById('r_dsc').textContent = DESCS[ST.skin] || '';
+ 
+  var ziele = [].slice.call(document.querySelectorAll('input[name="zl"]:checked')).map(function(i){return i.value;});
+  document.getElementById('r_pills').innerHTML = ziele.length
+    ? ziele.map(function(g){return '<span class="pill">'+g+'</span>';}).join('')
+    : '<span class="pill">Allgemeine Pflege</span>';
+ 
+  document.getElementById('r_face').innerHTML = buildList(data.face, false);
+  document.getElementById('r_body').innerHTML = buildList(data.body, false);
+ 
+  var hasHaar = document.getElementById('e3').checked || document.getElementById('d1').checked;
+  document.getElementById('r_hsec').style.display = hasHaar ? 'block' : 'none';
+  if (hasHaar) document.getElementById('r_haar').innerHTML = buildList(HAAR, false);
+ 
+  var isAkne = ST.skin === 'Fettig' || document.getElementById('hz4').checked;
+  var hasSchi = document.getElementById('d6').checked;
+  var suppHtml = '<div class="ps"><div class="pn">S1</div><div class="pi"><div class="pt2">Supplement · Täglich (Beutel in Wasser)</div><div class="pnm">Skinail Collagen</div><div class="pds">Kollagen, Biotin, Zink, Vitamin-Komplex – Haut, Haare & Nägel</div><div class="pcd">INTB042 · 30 Beutel à 21 g</div></div></div>';
+  if (isAkne && !hasSchi) {
+    suppHtml += '<div class="ps gold"><div class="pn gold">S2</div><div class="pi"><div class="pt2 gold">Supplement · 2× täglich (Kapseln)</div><div class="pnm">Skinpure</div><div class="pds">Brokkoli, Erdrauch, Niacinamid – reguliert Talgproduktion, bei Akne & unreiner Haut</div><div class="pcd">INTB048 · 60 Kapseln à 646 mg</div></div></div>';
+    document.getElementById('sc_skinpure').style.display = 'block';
+  } else {
+    document.getElementById('sc_skinpure').style.display = 'none';
+    if (hasSchi) suppHtml += '<div class="wb org" style="margin-top:8px">⛔ Skinpure enthält Brokkoli und ist bei Schilddrüsenerkrankungen <strong>nicht geeignet</strong>.</div>';
+  }
+  document.getElementById('r_supp').innerHTML = suppHtml;
+ 
+  buildPlanner(data.face, data.body);
+  goTo(7);
+}
+ 
+function buildPlanner(face, body) {
+  var all = face.concat(body).slice(0, 8);
+  ST.planItems = all;
+  var html = all.map(function(p, i) {
+    var prVal = p.pr ? p.pr.replace(' €','').replace(',','.') : '';
+    return '<div class="plst">' +
+      '<div class="pllbl">Schritt ' + (i+1) + ' · ' + p.t + '</div>' +
+      '<div class="r2">' +
+      '<div class="f"><label>Produkt</label><input type="text" id="pp_' + i + '" value="' + p.nm.replace(/"/g,'&quot;') + '"></div>' +
+      '<div class="f"><label>Art.-Nr.</label><input type="text" id="pc_' + i + '" value="' + p.cd + '"></div>' +
+      '</div><div class="r2">' +
+      '<div class="f"><label>Anzahl</label><input type="number" id="pq_' + i + '" value="1" min="1" max="10" oninput="calcT()"></div>' +
+      '<div class="f"><label>Preis (€)</label><input type="number" id="ppr_' + i + '" placeholder="0.00" step="0.01" value="' + prVal + '" oninput="calcT()"></div>' +
+      '</div><div class="f"><label>Anwendungshinweis</label><input type="text" id="pu_' + i + '" placeholder="z. B. Morgens & abends, erbsengroße Menge..."></div>' +
+      (i < all.length-1 ? '<hr class="d" style="margin:12px 0">' : '') +
+      '</div>';
+  }).join('');
+  var el = document.getElementById('plannerEl');
+  if (el) { el.innerHTML = html; calcT(); }
+}
+ 
+function calcT() {
+  var total = 0;
+  for (var i = 0; i < ST.planItems.length; i++) {
+    var pr = parseFloat(document.getElementById('ppr_'+i)&&document.getElementById('ppr_'+i).value) || 0;
+    var qty = parseInt(document.getElementById('pq_'+i)&&document.getElementById('pq_'+i).value) || 1;
+    total += pr * qty;
+  }
+  var el = document.getElementById('totval');
+  if (el) el.textContent = total > 0 ? total.toFixed(2).replace('.',',') + ' €' : '— €';
+}
+ 
+function togSupp(id) {
+  var body = document.getElementById('b_' + id);
+  var arr = document.getElementById('a_' + id);
+  if (!body) return;
+  var open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  if (arr) { if (open) arr.classList.remove('o'); else arr.classList.add('o'); }
+}
+ 
+function g(id) { var el = document.getElementById(id); return el ? (el.value || '—') : '—'; }
+function getChecked(name) { return [].slice.call(document.querySelectorAll('input[name="'+name+'"]:checked')).map(function(i){return i.value;}); }
+ 
+function buildSum() {
+  var age = g('f_alt');
+  document.getElementById('sum_dat').innerHTML =
+    '<div class="sumr"><div class="sumk">Name</div><div class="sumv">' + g('f_vn') + ' ' + g('f_nn') + (age!=='—'?', '+age+' J.':'') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Telefon</div><div class="sumv">' + g('f_tel') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">E-Mail</div><div class="sumv">' + g('f_email') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Adresse</div><div class="sumv">' + g('f_adr') + '</div></div>';
+ 
+  var hz = getChecked('hz');
+  var zl = getChecked('zl');
+  var dg = getChecked('dg');
+  document.getElementById('sum_haut').innerHTML =
+    '<div class="sumr"><div class="sumk">Hauttyp</div><div class="sumv" style="color:var(--purple);font-weight:500">' + (ST.skin||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Hautzustand</div><div class="sumv">' + (hz.join(', ')||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Ziele</div><div class="sumv">' + (zl.join(', ')||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Kneiftest</div><div class="sumv">' + (ST.tests.kStirn||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Empfindlichkeit</div><div class="sumv">' + (ST.tests.eStirn||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Poren</div><div class="sumv">' + (ST.tests.poren||'—') + '</div></div>' +
+    (dg.length ? '<div class="sumr"><div class="sumk">Diagnosen</div><div class="sumv">' + dg.join(', ') + '</div></div>' : '');
+}
+ 
+function startNew() { if (confirm('Neue Beratung starten? Alle Eingaben werden gelöscht.')) location.reload(); }
+ 
+// ─── INIT ───
+renderCTA();
+</script>
+</body>
+</html>
+ 
