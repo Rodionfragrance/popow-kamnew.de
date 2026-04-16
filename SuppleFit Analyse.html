@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SuppleFit Analyse · Popow & Kamnew</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0A0A0A; --black2: #111111; --black3: #181818;
+  --gold: #C8963E; --gold2: #E8B84B;
+  --off-white: #F5F0E8; --muted: #888880;
+  --border: rgba(200,150,62,0.18);
+  --sans: 'DM Sans', sans-serif; --display: 'Bebas Neue', sans-serif;
+  --ease: all 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: var(--sans); background: var(--black); color: var(--off-white); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity: 0.3;
+}
+#app { max-width: 700px; margin: 0 auto; background: var(--black2); min-height: 100vh; display: flex; flex-direction: column; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+#pb { height: 3px; background: var(--black3); position: sticky; top: 0; z-index: 200; }
+#pf { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2)); width: 0%; transition: width .4s ease; }
+nav { display: none; align-items: center; justify-content: space-between; padding: 15px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 3px; background: rgba(17,17,17,0.95); backdrop-filter: blur(8px); z-index: 100; }
+nav.on { display: flex; }
+#backBtn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--ease); }
+#backBtn:hover { color: var(--gold); }
+.nav-title { font-family: var(--display); font-size: 20px; letter-spacing: 2px; }
+.nav-title span { color: var(--gold); }
+.scr { display: none; flex-direction: column; flex: 1; padding: 30px 24px 100px; }
+.scr.on { display: flex; animation: fadeUp .3s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+.hero { text-align: center; padding: 50px 20px 40px; background: radial-gradient(ellipse at top, rgba(200,150,62,0.1) 0%, transparent 70%); }
+.hero-icon { font-size: 40px; margin-bottom: 15px; }
+.hero h1 { font-family: var(--display); font-size: clamp(36px, 8vw, 56px); line-height: 1; letter-spacing: 1px; margin-bottom: 10px; }
+.hero h1 span { color: var(--gold); }
+.lbl { display: block; font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+.ttl { font-family: var(--display); font-size: 32px; letter-spacing: 1px; margin-bottom: 8px; }
+.sub { font-size: 14px; font-weight: 300; color: var(--muted); margin-bottom: 30px; line-height: 1.6; }
+.fact-box { background: var(--black3); border: 1px solid var(--border); padding: 20px; margin: 20px 0; font-size: 13px; border-left: 3px solid var(--gold); }
+.fact-box h4 { color: var(--gold); margin-bottom: 8px; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+.f-group { margin-bottom: 20px; }
+.f-group label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; color: var(--muted); }
+input, select { width: 100%; padding: 14px; background: var(--black); border: 1px solid var(--border); border-radius: 0; font-family: var(--sans); font-size: 15px; color: var(--off-white); outline: none; transition: var(--ease); appearance: none; }
+input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.select-wrap { position: relative; }
+.select-wrap::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--gold); pointer-events: none; font-size: 14px; }
+/* ─── Slider ─── */
+.range-wrap { margin: 25px 0; background: var(--black3); padding: 20px; border: 1px solid var(--border); }
+.range-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.range-val-badge { font-family: var(--display); font-size: 28px; color: var(--gold); line-height: 1; background: rgba(200,150,62,0.08); border: 1px solid var(--border); padding: 2px 12px; letter-spacing: 1px; transition: color .2s, background .2s; }
+.range-val-badge.low { color: #e05c5c; border-color: rgba(224,92,92,0.3); background: rgba(224,92,92,0.08); }
+.range-val-badge.mid { color: var(--gold2); }
+.range-val-badge.high { color: #5ce07a; border-color: rgba(92,224,122,0.3); background: rgba(92,224,122,0.08); }
+.range-desc { font-size: 11px; color: var(--muted); margin-bottom: 15px; }
+.range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 12px; text-transform: uppercase; font-weight: 700; }
+input[type=range] { -webkit-appearance: none; width: 100%; background: var(--black); height: 6px; border-radius: 5px; outline: none; border: 1px solid var(--border); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid var(--black); transition: transform .15s; }
+input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+.auto-trigger-hint { display: none; font-size: 11px; color: #e05c5c; margin-top: 10px; padding: 8px 12px; background: rgba(224,92,92,0.08); border-left: 2px solid #e05c5c; }
+/* ─── Cards ─── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.card-choice { position: relative; background: var(--black); border: 1px solid var(--border); padding: 20px 15px; text-align: center; cursor: pointer; transition: var(--ease); }
+.card-choice input { position: absolute; opacity: 0; }
+.card-choice.sel { border-color: var(--gold); background: rgba(200,150,62,0.05); }
+.card-choice .icon { font-size: 28px; display: block; margin-bottom: 8px; }
+.card-choice .ct { font-size: 13px; font-weight: 500; color: var(--muted); transition: var(--ease); }
+.card-choice.sel .ct { color: var(--gold); }
+.card-choice:active { transform: scale(0.97); }
+/* ─── Result Header ─── */
+.res-header { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; }
+.res-header h2 { font-family: var(--display); font-size: 32px; letter-spacing: 1px; color: var(--gold); margin-bottom: 5px; }
+.metrics-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+.metric-item { background: var(--black3); border: 1px solid var(--border); padding: 15px; text-align: center; }
+.metric-val { font-family: var(--display); font-size: 28px; color: var(--off-white); line-height: 1; margin-bottom: 4px; }
+.metric-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.metric-sub { font-size: 11px; color: var(--gold); margin-top: 4px; }
+.lifestyle-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+.lm-item { background: var(--black3); border: 1px solid var(--border); padding: 12px 15px; display: flex; align-items: center; gap: 12px; }
+.lm-bar-wrap { flex: 1; }
+.lm-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; }
+.lm-bar-bg { background: var(--black); height: 6px; width: 100%; }
+.lm-bar-fill { height: 6px; transition: width .6s ease .2s; }
+.lm-val { font-family: var(--display); font-size: 22px; line-height: 1; }
+
+/* ─── CATEGORY SECTION (FIX: Rationale klar zu Produkten zugeordnet) ─── */
+.cat-section { margin-bottom: 32px; }
+.cat-section-header {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(200,150,62,0.06); border: 1px solid var(--gold);
+  border-bottom: none; padding: 14px 18px;
+}
+.cat-section-icon { font-size: 22px; }
+.cat-section-title { font-family: var(--display); font-size: 22px; letter-spacing: 1.5px; color: var(--gold); }
+.cat-section-subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.cat-rationale {
+  background: rgba(200,150,62,0.03); border: 1px solid var(--gold);
+  border-top: 1px dashed rgba(200,150,62,0.3); border-bottom: none;
+  padding: 16px 18px; font-size: 13px; font-weight: 300; color: var(--off-white); line-height: 1.7;
+}
+.cat-rationale strong { color: var(--gold); font-weight: 600; }
+
+/* ─── Science Badge ─── */
+.science-strip {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 12px 18px; background: rgba(200,150,62,0.03);
+  border: 1px solid var(--gold); border-top: none; border-bottom: none;
+}
+.sci-badge {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 4px 10px; background: rgba(200,150,62,0.1); border: 1px solid rgba(200,150,62,0.3);
+  color: var(--gold2); white-space: nowrap;
+}
+.sci-badge.highlight { background: rgba(92,224,122,0.1); border-color: rgba(92,224,122,0.3); color: #5ce07a; }
+
+/* ─── Product Card ─── */
+.prod-card {
+  background: var(--black); border: 1px solid var(--gold);
+  border-top: none; padding: 20px; margin-bottom: 0;
+  position: relative; transition: var(--ease);
+}
+.prod-card:last-child { margin-bottom: 0; }
+.prod-card + .prod-card { border-top: 1px solid rgba(200,150,62,0.18); }
+.prod-card:hover { background: rgba(200,150,62,0.03); }
+.prod-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.prod-name { font-family: var(--display); font-size: 24px; letter-spacing: 1px; color: var(--off-white); line-height: 1; }
+.prod-code { font-size: 10px; font-family: monospace; color: var(--muted); letter-spacing: 1px; background: var(--black3); padding: 4px 8px; }
+.prod-info { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+.prod-info strong { color: var(--off-white); font-weight: 500; }
+.prod-dose-box { background: var(--black3); border: 1px dashed rgba(200,150,62,0.25); padding: 12px; margin-bottom: 14px; }
+.prod-dose-lbl { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 4px; display: block; }
+.prod-dose-txt { font-size: 13px; color: var(--off-white); font-weight: 500; }
+/* Nutrient mini-table */
+.prod-nutrients { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.nut-chip { font-size: 10px; font-weight: 700; padding: 4px 8px; background: var(--black3); border: 1px solid var(--border); color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.nut-chip span { color: var(--gold2); }
+.prod-bot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 14px; }
+.prod-price { font-size: 18px; font-weight: 600; color: var(--gold); }
+.btn-wa-small { background: #25D366; color: #000; padding: 10px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: var(--ease); }
+.btn-wa-small:hover { background: #1ebe5d; }
+/* Close section border */
+.cat-section-end { border-bottom: 1px solid var(--gold); margin-bottom: 0; }
+
+/* ─── Basis-Empfehlung Banner ─── */
+.basis-banner {
+  background: rgba(92,224,122,0.04); border: 1px solid rgba(92,224,122,0.25);
+  padding: 14px 18px; margin-bottom: 20px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.basis-banner-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.basis-banner-text { font-size: 12px; color: var(--off-white); line-height: 1.6; }
+.basis-banner-text strong { color: #5ce07a; display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+
+/* ─── Tagesplan ─── */
+.tagesplan { background: var(--black3); border: 1px solid var(--border); margin: 24px 0 0; }
+.tagesplan-title { padding: 14px 18px; border-bottom: 1px solid var(--border); font-family: var(--display); font-size: 20px; letter-spacing: 1px; color: var(--gold); }
+.tp-row { display: flex; gap: 14px; padding: 12px 18px; border-bottom: 1px solid rgba(200,150,62,0.08); align-items: flex-start; }
+.tp-row:last-child { border-bottom: none; }
+.tp-time { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; min-width: 90px; padding-top: 2px; }
+.tp-items { font-size: 13px; color: var(--off-white); line-height: 1.6; }
+/* ─── Preis ─── */
+.price-summary { background: rgba(200,150,62,0.06); border: 1px solid var(--gold); padding: 20px; margin: 16px 0 0; display: flex; justify-content: space-between; align-items: center; }
+.price-total-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+.price-total-val { font-family: var(--display); font-size: 36px; color: var(--gold); letter-spacing: 1px; }
+.btn-wa-full { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25D366; color: #000; padding: 16px 24px; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-decoration: none; transition: var(--ease); margin-top: 10px; }
+.btn-wa-full:hover { background: #1ebe5d; }
+/* ─── Buttons ─── */
+#cta { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 700px; padding: 15px 24px; background: rgba(17,17,17,0.95); backdrop-filter: blur(12px); border-top: 1px solid var(--border); display: flex; gap: 10px; z-index: 150; }
+.btn-main { flex: 1; background: var(--gold); color: var(--black); border: none; padding: 16px; font-family: var(--sans); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--ease); }
+.btn-main:hover { background: var(--gold2); }
+.btn-ghost { flex: 0 0 auto; background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 16px 20px; font-family: var(--sans); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--ease); white-space: nowrap; }
+.btn-ghost:hover { color: var(--off-white); border-color: var(--off-white); }
+.legal-box { margin-top: 24px; padding: 15px; background: var(--black3); border: 1px solid var(--border); font-size: 11px; color: var(--muted); line-height: 1.6; text-align: center; }
+@media (max-width: 400px) { .grid-2 { grid-template-columns: 1fr; } .metrics-box { grid-template-columns: 1fr; } .lifestyle-metrics { grid-template-columns: 1fr; } }
+@media print {
+  #cta, #pb, nav, .hero, .btn-wa-full, .btn-wa-small { display: none !important; }
+  .scr { display: block !important; padding: 0; }
+  body { background: white; color: black; }
+  #app { border: none; background: white; }
+  .prod-card, .cat-section-header, .cat-rationale, .science-strip { background: #f9f9f9 !important; color: black !important; border-color: #ddd !important; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="pb"><div id="pf"></div></div>
+  <nav id="nav">
+    <button id="backBtn" onclick="back()">← Zurück</button>
+    <div class="nav-title">POPOW<span>&</span>KAMNEW</div>
+    <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px" id="nStep">1/5</div>
+  </nav>
+
+  <!-- S0: Intro -->
+  <div class="scr on" id="s0">
+    <div class="hero">
+      <div class="hero-icon">🔬</div>
+      <h1>SuppleFit <span>Analyse</span></h1>
+      <p class="sub" style="max-width:400px;margin:0 auto;">Wissenschaftlich fundierte Supplement-Strategie auf Basis deiner Körperdaten und Lebensstil-Metriken.</p>
+    </div>
+    <div class="fact-box">
+      <h4>Die Lifestyle-Lücke — Warum gute Ernährung heute nicht mehr reicht</h4>
+      <p style="margin-bottom:10px;color:var(--muted);">Drei Faktoren, die systematisch Nährstoffe rauben:</p>
+      <ul style="padding-left:20px;color:var(--off-white);font-weight:300;">
+        <li style="margin-bottom:8px"><strong>Bodenverarmung:</strong> Industrielle Landwirtschaft hat den Mikronährstoffgehalt in Obst & Gemüse in 50 Jahren nachweislich um bis zu 40% reduziert (Journal of HortScience, 2004).</li>
+        <li style="margin-bottom:8px"><strong>Kortisol-Falle:</strong> Chronischer Stress verbraucht B-Vitamine und Magnesium 3–5× schneller als im Ruhezustand.</li>
+        <li><strong>Vitamin-D-Epidemie:</strong> Über 60% der deutschen Bevölkerung sind laut RKI suboptimal mit Vitamin D versorgt — unabhängig von Ernährung oder Aktivität.</li>
+      </ul>
+    </div>
+    <div class="legal-box" style="margin-top:0;border:none;background:transparent;">
+      Nahrungsergänzungsmittel ersetzen keine ausgewogene Ernährung. Keine medizinische Diagnose.<br>
+      <strong>Made by Rodion Popow</strong>
+    </div>
+  </div>
+
+  <!-- S1: Körperdaten -->
+  <div class="scr" id="s1">
+    <span class="lbl">Schritt 1</span>
+    <div class="ttl">Körperdaten</div>
+    <div class="sub">Für die exakte Berechnung deines BMI und Grundumsatzes (Mifflin-St. Jeor Formel).</div>
+    <div class="f-group"><label>Vorname</label><input type="text" id="f_name" placeholder="z.B. Alex"></div>
+    <div class="grid-2">
+      <div class="f-group"><label>Alter</label><input type="number" id="f_age" placeholder="35" min="16" max="99"></div>
+      <div class="f-group">
+        <label>Geschlecht</label>
+        <div class="select-wrap">
+          <select id="f_gender"><option value="m">Mann</option><option value="w">Frau</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="f-group"><label>Größe (cm)</label><input type="number" id="f_height" placeholder="180" min="140" max="220"></div>
+      <div class="f-group"><label>Gewicht (kg)</label><input type="number" id="f_weight" placeholder="80" min="40" max="250"></div>
+    </div>
+    <div class="f-group">
+      <label>Beruf &amp; Aktivitätslevel im Alltag</label>
+      <div class="select-wrap">
+        <select id="f_activity">
+          <option value="1.2">🖥️ Sitzend – Büro, Homeoffice, Fahrer</option>
+          <option value="1.375">🚶 Leicht aktiv – 1–3× Sport/Woche, viel Sitzen</option>
+          <option value="1.55">🏃 Moderat aktiv – 3–5× Sport, viel Stehen/Gehen (z.B. Lehrer, Verkäufer)</option>
+          <option value="1.65">🩺 Körperlich aktiv – Pflegekräfte, Erzieher, Service-Berufe</option>
+          <option value="1.725">🔨 Schwere körperliche Arbeit – Handwerker, Lagerarbeiter, Landwirtschaft</option>
+          <option value="1.9">⚡ Sehr schwere Arbeit / Leistungssport – Bauarbeiter, tägliches intensives Training</option>
+        </select>
+      </div>
+    </div>
+    <div class="fact-box" style="margin-top:0;">
+      <h4>Warum das Aktivitätslevel entscheidend ist</h4>
+      <p style="color:var(--muted);font-size:13px">Ein Handwerker verbrennt täglich 600–900 kcal mehr als ein Büroangestellter. Sein Bedarf an Magnesium (Muskelarbeit), B-Vitaminen (Energiestoffwechsel) und Gelenk-Support ist entsprechend höher.</p>
+    </div>
+  </div>
+
+  <!-- S2: Lifestyle -->
+  <div class="scr" id="s2">
+    <span class="lbl">Schritt 2</span>
+    <div class="ttl">Lifestyle Metriken</div>
+    <div class="sub">Diese Werte fließen direkt in dein Protokoll. Sei absolut ehrlich.</div>
+    <div class="range-wrap">
+      <div class="range-header">
+        <div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">Aktuelles Energielevel</label>
+          <p class="range-desc">Wie viel Antrieb hast du über den Tag verteilt? Berücksichtige Nachmittagstief, Koffeinbedarf.</p>
+        </div>
+        <span class="range-val-badge" id="energyBadge">5</span>
+      </div>
+      <input type="range" id="f_energy_val" min="1" max="10" value="5" oninput="updateBadge('energyBadge',this.value);checkAutoTriggers()">
+      <div class="range-labels"><span>1 – Erschöpft</span><span>10 – High Energy</span></div>
+      <div class="auto-trigger-hint" id="energyHint">⚠️ Wert unter 6 — Energie & Fokus Produkte werden automatisch hinzugefügt.</div>
+    </div>
+    <div class="range-wrap">
+      <div class="range-header">
+        <div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">Schlafqualität &amp; Erholung</label>
+          <p class="range-desc">Wachst du erholt auf? Berücksichtige Einschlafdauer und Durchschlafen.</p>
+        </div>
+        <span class="range-val-badge" id="sleepBadge">5</span>
+      </div>
+      <input type="range" id="f_sleep_val" min="1" max="10" value="5" oninput="updateBadge('sleepBadge',this.value);checkAutoTriggers()">
+      <div class="range-labels"><span>1 – Gerädert</span><span>10 – Perfekt erholt</span></div>
+      <div class="auto-trigger-hint" id="sleepHint">⚠️ Wert unter 5 — Schlafprodukte werden automatisch hinzugefügt.</div>
+    </div>
+  </div>
+
+  <!-- S3: Fokus -->
+  <div class="scr" id="s3">
+    <span class="lbl">Schritt 3</span>
+    <div class="ttl">Dein Fokus</div>
+    <div class="sub">Wo willst du die größten Ergebnisse? (Mehrfachwahl)</div>
+    <div class="grid-2">
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="weight"><span class="icon">⚖️</span><span class="ct">Gewichtsmanagement</span></label>
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="beauty"><span class="icon">✨</span><span class="ct">Beauty (Haut/Haare)</span></label>
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="energy"><span class="icon">⚡</span><span class="ct">Energie &amp; Fokus</span></label>
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="detox"><span class="icon">🌿</span><span class="ct">Detox &amp; Balance</span></label>
+    </div>
+  </div>
+
+  <!-- S4: Indikatoren -->
+  <div class="scr" id="s4">
+    <span class="lbl">Schritt 4</span>
+    <div class="ttl">Physische Indikatoren</div>
+    <div class="sub">Wo sendet dein Körper aktuell Signale?</div>
+    <div class="grid-2">
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="sleep"><span class="icon">🌙</span><span class="ct">Schlafprobleme</span></label>
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="joints"><span class="icon">🦴</span><span class="ct">Gelenke &amp; Knochen</span></label>
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="gut"><span class="icon">🌪️</span><span class="ct">Darm &amp; Verdauung</span></label>
+      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="heart"><span class="icon">❤️</span><span class="ct">Herz &amp; Vitalität</span></label>
+    </div>
+  </div>
+
+  <!-- S5: Ergebnis -->
+  <div class="scr" id="s5">
+    <div class="res-header">
+      <h2 id="resName">DEIN PROTOKOLL</h2>
+      <p id="resDate" style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px"></p>
+    </div>
+    <div class="lbl">Metabolisches Profil</div>
+    <div class="metrics-box">
+      <div class="metric-item">
+        <div class="metric-val" id="resBMI">--</div>
+        <div class="metric-lbl">BMI (Body Mass Index)</div>
+        <div class="metric-sub" id="resBMIStatus">--</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-val" id="resBMR">--</div>
+        <div class="metric-lbl">Grundumsatz (Ruhe)</div>
+        <div class="metric-sub" id="resTDEE">Tagesbedarf: -- kcal</div>
+      </div>
+    </div>
+    <div class="lbl">Lifestyle-Metriken</div>
+    <div class="lifestyle-metrics">
+      <div class="lm-item">
+        <div style="font-size:22px">⚡</div>
+        <div class="lm-bar-wrap">
+          <div class="lm-label">Energielevel</div>
+          <div class="lm-bar-bg"><div class="lm-bar-fill" id="energyBar" style="width:50%;background:var(--gold)"></div></div>
+        </div>
+        <div class="lm-val" id="resEnergy" style="color:var(--gold)">5/10</div>
+      </div>
+      <div class="lm-item">
+        <div style="font-size:22px">🌙</div>
+        <div class="lm-bar-wrap">
+          <div class="lm-label">Schlafqualität</div>
+          <div class="lm-bar-bg"><div class="lm-bar-fill" id="sleepBar" style="width:50%;background:var(--gold)"></div></div>
+        </div>
+        <div class="lm-val" id="resSleep" style="color:var(--gold)">5/10</div>
+      </div>
+    </div>
+    <div id="basisBanner"></div>
+    <div class="lbl" style="margin-top:8px">Strategie &amp; Einnahmeplan</div>
+    <div id="recContainer"></div>
+    <div id="tagesplanContainer"></div>
+    <div id="priceSummaryContainer"></div>
+    <div class="legal-box">
+      <strong>Rechtlicher Hinweis:</strong> Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene Ernährung. Empfohlene Tagesdosen nicht überschreiten. Bei Medikamenteneinnahme Arzt konsultieren. Alle Angaben zu % VNR (Nährstoffbezugswert) gemäß EU-VO 1169/2011.
+    </div>
+  </div>
+
+  <div id="cta"><button class="btn-main" onclick="next()">Analyse starten →</button></div>
+</div>
+
+<script>
+let cur = 0; const total = 5;
+
+function updateBadge(id, val) {
+  const el = document.getElementById(id); el.textContent = val;
+  el.className = 'range-val-badge';
+  if (val <= 3) el.classList.add('low');
+  else if (val <= 6) el.classList.add('mid');
+  else el.classList.add('high');
+}
+function checkAutoTriggers() {
+  const e = +document.getElementById('f_energy_val').value;
+  const s = +document.getElementById('f_sleep_val').value;
+  document.getElementById('energyHint').style.display = e < 6 ? 'block' : 'none';
+  document.getElementById('sleepHint').style.display  = s < 5 ? 'block' : 'none';
+}
+function toggleSel(el) { el.classList.toggle('sel'); }
+
+// ─── WA SVG ──────────────────────────────────────────────────
+const WA_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="#000" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>`;
+
+// ─── PRODUCT DATABASE ─────────────────────────────────────────
+// Alle Daten aus offiziellen Chogan-Datenblättern (XML-Import)
+const DB = {
+  weight: {
+    icon: '⚖️', title: 'Gewichtsmanagement',
+    subtitle: 'Blutzucker · Sättigung · Wasserhaushalt',
+    rationale: (d) => `<strong>Dein Ausgangspunkt:</strong> BMI ${d.bmi} (${d.bmiStatus}), Tagesbedarf ${d.tdee} kcal. Gewichtsmanagement ist kein reines Kalorienproblem — es ist ein <strong>Signal- und Hormonproblem</strong>. Glucomannan (zugelassen nach EU Health Claims Regulation) ist der einzige pflanzliche Wirkstoff mit wissenschaftlich belegtem Einfluss auf das Körpergewicht im Rahmen einer kalorienreduzierten Diät.`,
+    science: ['✅ EU Health Claim: Glucomannan trägt zur Gewichtsabnahme bei', '📊 Studien: Sättigungseffekt nach 15–30 Min durch Quellung im Magen'],
+    items: [
+      { name: "Meal Shake", code: "SU0004", dose: "31g Pulver + 250ml Milch 1,5% Fett (SuppleFit-Shaker). 1–2 Mahlzeiten/Tag ersetzen.", info: "<strong>25 Vitamine & Mineralien</strong> in einer Portion. Kein Mangel trotz Kaloriendefizit. Liefert 21g Eiweiß, 12g Ballaststoffe und nur 236 kcal/Portion — ideal für ein kontrolliertes Defizit ohne Heißhunger.", nutrients: [['Eiweiß','21g'],['Ballaststoffe','12g'],['Kcal','236'],['Vit C','101% VNR'],['Magnesium','30% VNR'],['Eisen','38% VNR']], price: 65.00, timing: 'abends' },
+      { name: "Garci Max +", code: "INTB044", dose: "3× täglich 2 Kapseln VOR den Hauptmahlzeiten mit 1–2 Gläsern Wasser.", info: "<strong>GSG-COMPLEX™:</strong> Glucomannan quillt im Magen auf und aktiviert das Sättigungshormon CCK, bevor zu viel gegessen wird. Spirulina liefert pflanzliches Eiweiß und Chlorophyll zur Entgiftung. Garcinia Cambogia hemmt das Enzym Citratlyase (Fettbildung).", nutrients: [['Glucomannan','aktiv'],['Spirulina','100% bio'],['Garcinia','enthalten']], price: 19.00, timing: 'vor-mahlzeiten' },
+      { name: "Dren Fast Entwässerung", code: "INTB007", dose: "1 Stick morgens in 1L Wasser auflösen, über Vormittag trinken.", info: "<strong>EQUITULLAS™-Komplex:</strong> Ananas-Bromelain fördert Mikrozirkulation und lindert Schwere-Beine-Gefühl. Birke & Ackerschachtelhalm sind EU-anerkannte Entwässerungspflanzen. Enthält Folsäure (100% VNR). Oft ist scheinbares 'Übergewicht' zu 30–40% eingelagertes Gewebewasser.", nutrients: [['Ananas-Bromelain','aktiv'],['Birkenextrakt','enthalten'],['Folsäure','100% VNR']], price: 39.00, timing: 'morgens' }
+    ]
+  },
+  beauty: {
+    icon: '✨', title: 'Beauty – Haut, Haare, Nägel',
+    subtitle: 'Kollagen Typ I+III · Zellverjüngung · Hautbarriere',
+    rationale: (d) => `<strong>Wissenschaftlicher Fakt:</strong> Der körpereigene Kollagenabbau beginnt mit ~25 Jahren und beschleunigt sich nach 30 mit ca. 1–2% pro Jahr (Varani et al., J. Invest. Dermatol. 2006). Ab ${d.age >= 25 ? d.age : '25'} Jahren ist externe Kollagenzufuhr klinisch relevant. Cremes penetrieren nur die Epidermis — <strong>Kollagen muss oral zugeführt werden</strong> um die Dermis (Matrix) zu erreichen.`,
+    science: ['📊 Klinisch: Hydrolysiertes Kollagen Typ I+III zeigt nachweisliche Hautverbesserung nach 4–8 Wochen', '✅ 12,4g Kollagen pro Portion (Skinail) — Marktspitze'],
+    items: [
+      { name: "Skinail Collagen", code: "INTB042", dose: "1 Beutel in 250ml zimmerwarmem Wasser morgens auf nüchternen Magen.", info: "<strong>CBH-TOTAL™-Komplex mit 12,4g hydrolysiertem Kollagen Typ I & III</strong> pro Portion — optimale Bioverfügbarkeit durch Hydrolyse-Vorspaltung. Angereichert mit Heidelbeere, Granatapfel, Weinbeere, Acai (Antioxidantien gegen oxidativen Stress) + Biotin (400% VNR), Zink (100% VNR) und alle B-Vitamine (100% VNR).", nutrients: [['Kollagen Typ I+III','12,4g'],['Biotin','400% VNR'],['Zink','100% VNR'],['Vit C','100% VNR'],['Vit B6','100% VNR']], price: 139.00, timing: 'morgens-nüchtern' },
+      { name: "Skinpure", code: "INTB048", dose: "2× täglich 1 Kapsel zwischen den Mahlzeiten.", info: "<strong>NIKSPRO™:</strong> Brokkoli-Extrakt + Erdrauch fördern hepatische Entgiftung (Phase-II-Enzyme). Große Klette wirkt antimikrobiell und entzündungshemmend bei Akne. Niacinamid reguliert Talgproduktion und stärkt die Hautbarriere (klinisch belegt). Wirkt als 'innerer Filter' vor äußerer Hautpflege.", nutrients: [['Brokkoliextrakt','NIKSPRO™'],['Niacinamid','talgregulierend'],['Klette','antimikrobiell']], price: 24.90, timing: 'zwischen-mahlzeiten' }
+    ]
+  },
+  energy: {
+    icon: '⚡', title: 'Energie & Fokus',
+    subtitle: 'B-Vitamine · L-Carnitin · Kognition',
+    rationale: (d) => `<strong>Dein Energielevel: ${d.energy}/10.</strong> ${d.energy <= 4 ? 'Ein Wert unter 5 deutet klinisch auf ein B-Vitamin-Defizit hin — Stress und körperliche Arbeit verbrauchen B1, B6 und B12 dramatisch schneller.' : 'Selbst bei moderatem Wert gilt:'} Der häufigste Fehler: Koffein oben drauf zu kippen, ohne den zellulären Akku aufzuladen. B-Vitamine sind <strong>essenziell für die mitochondriale ATP-Produktion</strong> — ohne sie läuft kein Energiestoffwechsel.`,
+    science: ['📊 B1 (Multigelvit): 12,5mg = 1136% VNR — High-Dose Therapeutik', '✅ L-Carnitin: Transportiert langkettige Fettsäuren in die Mitochondrien'],
+    items: [
+      { name: "Multigelvit", code: "INTB026", dose: "1 Stick morgens direkt in den Mund (kein Wasser nötig). Mandarinen-Gel.", info: "<strong>IPERVITAMY™-Komplex:</strong> Vitamin C 320mg (400% VNR), B1 12,5mg (1136% VNR), B6 5mg (357% VNR), B12 0,01mg (400% VNR), Biotin (400% VNR) + L-Carnitin 150mg. Gel-Formulierung → direkte Resorption über Mundschleimhaut, kein Magenpassage-Verlust. Vegan & glutenfrei.", nutrients: [['Vit C','400% VNR'],['Vit B1','1136% VNR'],['Vit B6','357% VNR'],['Vit B12','400% VNR'],['L-Carnitin','150mg']], price: 24.90, timing: 'morgens' },
+      { name: "MyBrain", code: "INTB040", dose: "1 Stick täglich, idealerweise vor Phasen hoher Konzentration.", info: "<strong>DL-Phosphoserin</strong> ist der einzige Nährstoff, für den die FDA eine qualifizierte Health Claim für kognitive Funktion zugelassen hat. Kombiniert mit <strong>Ginkgo biloba</strong> (Durchblutungsförderung Gehirn), <strong>Bacopa monnieri</strong> (Gedächtnisleistung, klinisch studiert), Griffonia-5-HTP (mentales Wohlbefinden) und Taigawurzel (Adaptogen).", nutrients: [['Phosphoserin','aktiv'],['Ginkgo biloba','enthalten'],['Bacopa','enthalten'],['5-HTP','aus Griffonia'],['B5','100% VNR']], price: 57.90, timing: 'nach-bedarf' }
+    ]
+  },
+  detox: {
+    icon: '🌿', title: 'Detox & Balance',
+    subtitle: 'Darmberuhigung · Entschlackung · Basische Balance',
+    rationale: () => `<strong>Das Fundament aller Körperfunktionen:</strong> Ein überlastetes Verdauungssystem mindert die Nährstoffaufnahme aller anderen Supplemente um bis zu 50%. Bio-Aloe Vera (ohne Antrachinone) ist der einzige Pflanzenwirkstoff, der gleichzeitig entschlackt, die Darmschleimhaut beruhigt und die natürliche Basizität unterstützt — ohne Laxativ-Effekt.`,
+    science: ['✅ 100% Bio-Aloe Vera – ohne Zucker, Süßungsmittel & Konservierungsstoffe', '📊 Rückfettend, beruhigend, entschlackend (Herstellerdeklaration)'],
+    items: [
+      { name: "Bio Aloe Vera Saft", code: "OINT01", dose: "2–3× täglich 30ml, 30 Min VOR den Mahlzeiten (pur oder verdünnt).", info: "<strong>100% Bio, ungefiltert:</strong> Gepresst aus dem Blattmark sorgfältig ausgewählter Aloe-Vera-Pflanzen aus vollständig biologischer Versorgungskette. Frei von Zucker, Süßungsmitteln und Konservierungsstoffen — ein seltenes Qualitätsmerkmal. Wirkt rückfettend auf Schleimhäute, basierend und entschlackend.", nutrients: [['Bio-zertifiziert','100%'],['Konservierungsfrei','✓'],['Zuckerfrei','✓']], price: 24.90, timing: 'vor-mahlzeiten' }
+    ]
+  },
+  sleep: {
+    icon: '🌙', title: 'Schlaf & Regeneration',
+    subtitle: 'Melatonin · 5-HTP · Entspannung',
+    rationale: (d) => `<strong>Schlafwert: ${d.sleep}/10.</strong> ${d.sleep <= 3 ? '⚠️ Kritischer Bereich: Ein Wert unter 4 bedeutet Schlafentzug — das supprimiert Testosteron, erhöht Cortisol und blockiert Regeneration vollständig.' : 'Schlechter Schlaf ist kein Lifestyle-Problem, sondern ein Neurochemie-Problem.'} Melatonin ist der einzige Stoff mit EU Health Claim zur Verkürzung der Einschlafzeit. Die Kombination mit <strong>5-HTP (Serotonin-Vorstufe)</strong> aus Griffonia und Passionsblume adressiert sowohl Einschlafen als auch Tiefschlafqualität.`,
+    science: ['✅ EU Health Claim: Melatonin 1mg verkürzt nachweislich die Einschlafzeit', '📊 5-HTP: Griffonia-Extrakt, 20mg — Serotonin-Vorstufe für Tiefschlafförderung'],
+    items: [
+      { name: "Speedsleep", code: "INTB028", dose: "1 Stick 30 Min vor dem Schlafengehen direkt einnehmen.", info: "<strong>SOMNIWELL™-Komplex:</strong> Melatonin 1mg (EU-zugelassen), Griffonia-5-HTP 20mg, Klatschmohn 100mg (lindert Verspannungen), Passionsblume (beruhigt Nervensystem), Sommerlinde-Flavonoide 5mg, Kalifornischer Mohn (Entspannung bei Stress). Gel-Format → schnelle Wirkung ohne Schlucken.", nutrients: [['Melatonin','1mg – EU Health Claim'],['5-HTP','20mg aus Griffonia'],['Klatschmohn','100mg'],['Passionsblume','enthalten']], price: 27.90, timing: 'abends-schlaf' }
+    ]
+  },
+  joints: {
+    icon: '🦴', title: 'Gelenke & Knochen',
+    subtitle: 'Vitamin D3 2000 IU · K2 · Calcium · PEA-Komplex',
+    rationale: () => `<strong>Kritische Studienlage für Deutschland:</strong> Das RKI empfiehlt 800 IU Vitamin D3/Tag — die Realität zeigt, dass über 60% der Deutschen diesen Wert nicht erreichen. Vitamin D ist kein "Sonnen-Vitamin", sondern ein <strong>Steroidhormon</strong>, das Calciumaufnahme, Immunsystem und Muskelkraft steuert. <strong>Ohne K2 landet Calcium im Blut statt im Knochen</strong> (Verkalkungsrisiko!). Das DALKO™-Trio (D3+K2+Calcium) aus Lithothamnium ist der klinisch korrekte Ansatz.`,
+    science: ['✅ Vitamin D3: 2000 IU = 1000% VNR — therapeutisch relevant für Mangelausgleich', '📊 K2: 67% VNR — dirigiert Calcium in Knochen, verhindert Gefäßverkalkung', '⚠️ >60% der Deutschen: Vitamin D suboptimal (RKI 2023)'],
+    items: [
+      { name: "Sore Stop +", code: "INTB043", dose: "3× täglich 2 Kapseln (morgens, mittags, abends) mit reichlich Wasser.", info: "<strong>PEA-ARTICOL™-Komplex:</strong> Palmitoylethanolamid (PEA) ist ein körpereigenes Signalmolekül zur Regulierung lokaler Entzündungsreaktionen. In Kombination mit Vitamin D und B-Vitaminen unterstützt es Energiestoffwechsel und Stressresistenz. Fördert Gelenkfunktionalität bei körperlicher Belastung.", nutrients: [['PEA-ARTICOL™','patentiert'],['Vitamin D','enthalten'],['B-Vitamine','enthalten']], price: 39.00, timing: 'morgens' },
+      { name: "Skelboost", code: "INTB047", dose: "1 Kapsel täglich ZU einer Mahlzeit (fettlöslich — wichtig!).", info: "<strong>DALKO™-Komplex aus Lithothamnium Calcareum:</strong> Vitamin D3 <strong>2000 IU (1000% VNR)</strong> — weit über RKI-Empfehlung für therapeutischen Ausgleich. K2 0,05mg (67% VNR) dirigiert Calcium präzise in die Knochenmatrix. Calcium 120mg aus Meeresalgen (Lithothamnium) — natürliche Matrix mit besserer Bioverfügbarkeit als synthetisches CaCO3.", nutrients: [['Vit D3','2000 IU = 1000% VNR'],['Vit K2','67% VNR'],['Calcium','120mg Lithothamnium']], price: 24.90, timing: 'mittags' }
+    ]
+  },
+  gut: {
+    icon: '🌪️', title: 'Darm & Verdauung',
+    subtitle: '25 Mrd. KBE · 3 Probiotikstämme · Mikrobiom',
+    rationale: () => `<strong>Das Mikrobiom ist der Schlüssel zur Gesamtgesundheit:</strong> 70–80% des Immunsystems sitzen im Darm. Gestörte Darmflora (Dysbiose) durch Stress, Antibiotika oder Ernährung führt zu schlechter Nährstoffaufnahme aller anderen Supplemente. <strong>25 Milliarden lebende Kulturen</strong> aus 3 selektierten Stämmen (Lactobacillus acidophilus, L. plantarum, L. rhamnosus) sind die klinisch relevante Dosierung für Wiederaufbau nach Dysbiose.`,
+    science: ['📊 25 Milliarden KBE pro Kapsel – klinisch effektive Dosierung', '✅ 3 Stämme: L. acidophilus + L. plantarum + L. rhamnosus = breites Spektrum'],
+    items: [
+      { name: "Vitalflora", code: "INTB049", dose: "1 Kapsel täglich zu einer Hauptmahlzeit mit Wasser.", info: "<strong>MICROCORE™-Komplex:</strong> Lactobacillus acidophilus (5 Mrd.) + Lactiplantibacillus plantarum (10 Mrd.) + Lacticaseibacillus rhamnosus (10 Mrd.) = 25 Milliarden lebende Kulturen. Magenresistente Kapsel sichert Überlebensfähigkeit bis zum Darm. Besiedelt die Darmflora nach Stress, schlechter Ernährung oder Antibiotika neu.", nutrients: [['L. acidophilus','5 Mrd. KBE'],['L. plantarum','10 Mrd. KBE'],['L. rhamnosus','10 Mrd. KBE'],['Gesamt','25 Mrd. KBE']], price: 29.90, timing: 'mittags' }
+    ]
+  },
+  heart: {
+    icon: '❤️', title: 'Herz & Vitalität',
+    subtitle: 'Omega-3 1500mg · EPA 570mg · DHA 375mg · CoQ10',
+    rationale: () => `<strong>Omega-3: Das Supplement mit der stärksten Datenlage weltweit.</strong> Die Deutsche Gesellschaft für Ernährung (DGE) empfiehlt 250mg EPA+DHA/Tag — die durchschnittliche deutsche Versorgung liegt bei 50–70mg. OMEGAPOWER liefert pro Tagesdosis <strong>1500mg Omega-3</strong> (570mg EPA + 375mg DHA) = das 6-fache der DGE-Empfehlung. EPA & DHA tragen zur normalen Herzfunktion bei (EU Health Claim). DHA erhält normale Gehirnfunktion und Sehkraft (EU Health Claim).`,
+    science: ['✅ EU Health Claim: EPA+DHA tragen zur normalen Herzfunktion bei', '✅ EU Health Claim: DHA erhält normale Gehirnfunktion & Sehkraft', '📊 1500mg Omega-3 = 6× DGE-Tagesempfehlung', '🧬 CoQ10 30mg – mitochondriales Antioxidans (Herzmuskel)'],
+    items: [
+      { name: "Omegapower", code: "INTB050", dose: "3 Weichkapseln täglich NACH einer Mahlzeit unzerkaut schlucken (mit Mahlzeit erhöht Resorption um 50%).", info: "<strong>VIVACORE™:</strong> Hochreines Fischöl 2400mg, davon Omega-3 <strong>1500mg</strong> (EPA 570mg + DHA 375mg). Coenzym Q10 30mg als mitochondriales Antioxidans. Vitamin E 24mg (200% VNR) als natürlicher Oxidationsschutz. Senkt stille Entzündungen (CRP-Wert), schützt Gefäßendothel und unterstützt die Gehirnfunktion.", nutrients: [['Fischöl','2400mg'],['Omega-3','1500mg total'],['EPA','570mg (38%)'],['DHA','375mg (25%)'],['CoQ10','30mg'],['Vit E','200% VNR']], price: 32.90, timing: 'nach-mahlzeit' }
+    ]
+  }
+};
+
+// ─── Basis-Empfehlungen (wissenschaftlich universell) ─────────
+// Vitamin D + Omega-3 = für alle in Deutschland relevant
+// Kollagen = ab 25 Jahren
+const BASIS_PRODUCTS = {
+  vitD: { code: 'INTB047', name: 'Skelboost', reason: 'Vitamin D3 2000 IU – über 60% der Deutschen mangelhaft versorgt (RKI)' },
+  omega: { code: 'INTB050', name: 'Omegapower', reason: 'Omega-3 – Ø Deutsche: 50–70mg/Tag (DGE-Ziel: 250mg)' },
+  collagen: { code: 'INTB042', name: 'Skinail Collagen', reason: 'Ab 25: Körper baut Kollagen mit ~1–2%/Jahr ab (Varani et al.)' }
+};
+
+// ─── Navigation ───────────────────────────────────────────────
+function next() {
+  if (cur === 1) {
+    if (!document.getElementById('f_height').value || !document.getElementById('f_weight').value) {
+      alert("Bitte Größe und Gewicht eintragen."); return;
+    }
+  }
+  if (cur < total) { cur++; update(); }
+}
+function back() { if (cur > 0) { cur--; update(); } }
+
+function update() {
+  document.querySelectorAll('.scr').forEach((s,i) => s.classList.toggle('on', i === cur));
+  document.getElementById('nav').classList.toggle('on', cur > 0);
+  document.getElementById('nStep').textContent = cur + "/" + total;
+  document.getElementById('pf').style.width = (cur / total * 100) + "%";
+  const cta = document.getElementById('cta');
+  if (cur === total) {
+    genResults();
+    cta.innerHTML = '<button class="btn-ghost" onclick="location.reload()">↺ Neu starten</button><button class="btn-main" onclick="window.print()">Protokoll drucken / PDF</button>';
+  } else {
+    cta.innerHTML = '<button class="btn-main" onclick="next()">Weiter →</button>';
+  }
+  window.scrollTo(0,0);
+}
+
+// ─── Metriken ─────────────────────────────────────────────────
+function calculateMetrics() {
+  const height = parseFloat(document.getElementById('f_height').value);
+  const weight = parseFloat(document.getElementById('f_weight').value);
+  const age    = parseFloat(document.getElementById('f_age').value) || 30;
+  const gender = document.getElementById('f_gender').value;
+  const activity = parseFloat(document.getElementById('f_activity').value);
+  const bmi = (weight / Math.pow(height/100, 2)).toFixed(1);
+  let bmiStatus = bmi < 18.5 ? 'Untergewicht – Aufbau empfohlen' : bmi < 25 ? 'Normalgewicht – Optimal' : bmi < 30 ? 'Präadipositas – Kontrolle empfohlen' : 'Adipositas – Handlungsbedarf';
+  let bmr = gender === 'm' ? 10*weight + 6.25*height - 5*age + 5 : 10*weight + 6.25*height - 5*age - 161;
+  return { bmi, bmiStatus, bmr: Math.round(bmr), tdee: Math.round(bmr*activity),
+           energy: +document.getElementById('f_energy_val').value,
+           sleep: +document.getElementById('f_sleep_val').value, age };
+}
+
+// ─── HTML Builder ─────────────────────────────────────────────
+function buildProductCard(p, name, metrics) {
+  const waMsg = encodeURIComponent(
+    `Hey Rodion! 👋 SuppleFit Analyse – Protokoll für ${name}\n\n` +
+    `📊 BMI: ${metrics.bmi} | Grundumsatz: ${metrics.bmr} kcal | Tagesbedarf: ${metrics.tdee} kcal\n` +
+    `⚡ Energie: ${metrics.energy}/10 | 🌙 Schlaf: ${metrics.sleep}/10\n\n` +
+    `Ich möchte bestellen:\n➡️ ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
+  );
+  const chips = (p.nutrients||[]).map(n => `<div class="nut-chip">${n[0]} <span>${n[1]}</span></div>`).join('');
+  return `<div class="prod-card">
+    <div class="prod-header">
+      <span class="prod-name">${p.name}</span>
+      <span class="prod-code">${p.code}</span>
+    </div>
+    ${chips ? `<div class="prod-nutrients">${chips}</div>` : ''}
+    <div class="prod-dose-box">
+      <span class="prod-dose-lbl">Einnahme-Anleitung:</span>
+      <span class="prod-dose-txt">${p.dose}</span>
+    </div>
+    <div class="prod-info">${p.info}</div>
+    <div class="prod-bot">
+      <span class="prod-price">${p.price.toFixed(2).replace('.',',')} €</span>
+      <a href="https://wa.me/4915141336341?text=${waMsg}" class="btn-wa-small" target="_blank">${WA_SVG} Bestellen</a>
+    </div>
+  </div>`;
+}
+
+function buildCategorySection(key, metrics, name, seenProducts, allProducts) {
+  const cat = DB[key];
+  if (!cat) return '';
+  const scienceBadges = cat.science.map(s => `<div class="sci-badge">${s}</div>`).join('');
+  let cardsHtml = '';
+  cat.items.forEach(p => {
+    if (seenProducts.has(p.code)) return;
+    seenProducts.add(p.code);
+    allProducts.push(p);
+    cardsHtml += buildProductCard(p, name, metrics);
+  });
+  if (!cardsHtml) return '';
+  return `<div class="cat-section">
+    <div class="cat-section-header">
+      <span class="cat-section-icon">${cat.icon}</span>
+      <div>
+        <div class="cat-section-title">${cat.title}</div>
+        <div class="cat-section-subtitle">${cat.subtitle}</div>
+      </div>
+    </div>
+    <div class="cat-rationale">📋 <em>${cat.rationale(metrics)}</em></div>
+    <div class="science-strip">${scienceBadges}</div>
+    ${cardsHtml}
+    <div class="cat-section-end"></div>
+  </div>`;
+}
+
+// ─── Ergebnisse ───────────────────────────────────────────────
+function genResults() {
+  const name = document.getElementById('f_name').value || "Kunde";
+  const m = calculateMetrics();
+
+  document.getElementById('resName').textContent = "Protokoll: " + name;
+  document.getElementById('resDate').textContent = "Erstellt am " + new Date().toLocaleDateString('de-DE', {day:'2-digit',month:'2-digit',year:'numeric'});
+  document.getElementById('resBMI').textContent = m.bmi;
+  document.getElementById('resBMIStatus').textContent = m.bmiStatus;
+  document.getElementById('resBMR').innerHTML = m.bmr + ' <span style="font-size:14px">kcal</span>';
+  document.getElementById('resTDEE').textContent = "Tagesbedarf: ca. " + m.tdee + " kcal";
+  const eColor = m.energy <= 3 ? '#e05c5c' : m.energy <= 6 ? 'var(--gold2)' : '#5ce07a';
+  const sColor = m.sleep  <= 3 ? '#e05c5c' : m.sleep  <= 6 ? 'var(--gold2)' : '#5ce07a';
+  document.getElementById('resEnergy').textContent = m.energy + "/10";
+  document.getElementById('resSleep').textContent  = m.sleep  + "/10";
+  document.getElementById('resEnergy').style.color = eColor;
+  document.getElementById('resSleep').style.color  = sColor;
+  document.getElementById('energyBar').style.width = (m.energy*10) + "%";
+  document.getElementById('energyBar').style.background = eColor;
+  document.getElementById('sleepBar').style.width  = (m.sleep*10) + "%";
+  document.getElementById('sleepBar').style.background  = sColor;
+
+  // Keys: user-selected + auto-triggers
+  const selectedGoals  = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(i=>i.value);
+  const selectedIssues = Array.from(document.querySelectorAll('input[name="issue"]:checked')).map(i=>i.value);
+  let allKeys = [...new Set([...selectedGoals, ...selectedIssues])];
+  if (m.energy < 6 && !allKeys.includes('energy')) allKeys.push('energy');
+  if (m.sleep  < 5 && !allKeys.includes('sleep'))  allKeys.push('sleep');
+
+  const seenProducts = new Set();
+  const allProducts  = [];
+  let html = '';
+
+  allKeys.forEach(key => {
+    html += buildCategorySection(key, m, name, seenProducts, allProducts);
+  });
+
+  document.getElementById('recContainer').innerHTML = html || "<p style='color:var(--muted);text-align:center;padding:20px 0'>Bitte wähle Ziele oder Indikatoren aus.</p>";
+
+  // ─── Basis-Empfehlung Banner ──────────────────────────────
+  const basisItems = [];
+  if (!seenProducts.has('INTB047')) basisItems.push(BASIS_PRODUCTS.vitD);
+  if (!seenProducts.has('INTB050')) basisItems.push(BASIS_PRODUCTS.omega);
+  if (m.age >= 25 && !seenProducts.has('INTB042')) basisItems.push(BASIS_PRODUCTS.collagen);
+
+  if (basisItems.length > 0) {
+    const bannerHtml = basisItems.map(b =>
+      `<div class="basis-banner">
+        <span class="basis-banner-icon">🔬</span>
+        <div class="basis-banner-text">
+          <strong>Wissenschaftliche Basis-Empfehlung</strong>
+          <strong>${b.name} (${b.code})</strong>
+          ${b.reason} — nicht in deinem aktuellen Protokoll enthalten. Sprich Rodion darauf an.
+        </div>
+      </div>`
+    ).join('');
+    document.getElementById('basisBanner').innerHTML = `<div class="lbl" style="margin-top:20px">Basis-Empfehlung Wissenschaft</div>${bannerHtml}`;
+  }
+
+  // ─── Tagesplan ────────────────────────────────────────────
+  if (allProducts.length > 0) {
+    const plan = {'morgens-nüchtern':[],'morgens':[],'vor-mahlzeiten':[],'mittags':[],'zwischen-mahlzeiten':[],'nach-mahlzeit':[],'nach-bedarf':[],'abends':[],'abends-schlaf':[]};
+    const tLabel = {'morgens-nüchtern':'🌅 Morgens nüchtern','morgens':'🌤️ Morgens','vor-mahlzeiten':'🍽️ Vor Mahlzeiten','mittags':'☀️ Mittags','zwischen-mahlzeiten':'⏱️ Zwischen Mahlzeiten','nach-mahlzeit':'✅ Nach Mahlzeit','nach-bedarf':'💡 Nach Bedarf','abends':'🌆 Abends','abends-schlaf':'🌙 Vor dem Schlafen'};
+    allProducts.forEach(p => { if (plan[p.timing]!==undefined) plan[p.timing].push(p.name); });
+    let tp = '<div class="tagesplan"><div class="tagesplan-title">📅 Dein Tagesplan</div>';
+    Object.entries(plan).forEach(([k,items]) => {
+      if (!items.length) return;
+      tp += `<div class="tp-row"><div class="tp-time">${tLabel[k]}</div><div class="tp-items">${items.join('<br>')}</div></div>`;
+    });
+    tp += '</div>';
+    document.getElementById('tagesplanContainer').innerHTML = tp;
+  }
+
+  // ─── Gesamtpreis ──────────────────────────────────────────
+  if (allProducts.length > 0) {
+    const total = allProducts.reduce((s,p) => s+p.price, 0);
+    const list  = allProducts.map(p => `• ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €`).join('\n');
+    const waFull = encodeURIComponent(
+      `Hey Rodion! 👋 Komplettes SuppleFit Protokoll\n\n` +
+      `📋 Für: ${name}\n📅 ${new Date().toLocaleDateString('de-DE')}\n` +
+      `📊 BMI: ${m.bmi} | GU: ${m.bmr} kcal | Tagesbedarf: ${m.tdee} kcal\n` +
+      `⚡ Energie: ${m.energy}/10 | 🌙 Schlaf: ${m.sleep}/10\n\n` +
+      `🛒 Produkte:\n${list}\n\n💰 Gesamt: ${total.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
+    );
+    document.getElementById('priceSummaryContainer').innerHTML =
+      `<div class="price-summary">
+        <div>
+          <div class="price-total-lbl">Protokoll Gesamtwert</div>
+          <div class="price-total-val">${total.toFixed(2).replace('.',',')} €</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);text-align:right;max-width:140px;line-height:1.5">${allProducts.length} Produkt${allProducts.length>1?'e':''} im Plan</div>
+      </div>
+      <a href="https://wa.me/4915141336341?text=${waFull}" class="btn-wa-full" target="_blank">
+        ${WA_SVG.replace('14','18').replace('14','18')} Komplettes Protokoll bestellen
+      </a>`;
+  }
+}
+
+updateBadge('energyBadge', 5);
+updateBadge('sleepBadge', 5);
+</script>
+</body>
+</html>
