@@ -61,6 +61,13 @@ input[type=range] { -webkit-appearance: none; width: 100%; background: var(--bla
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid var(--black); transition: transform .15s; }
 input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
 .auto-trigger-hint { display: none; font-size: 11px; color: #e05c5c; margin-top: 10px; padding: 8px 12px; background: rgba(224,92,92,0.08); border-left: 2px solid #e05c5c; }
+.slider-scale { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.scale-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; background: var(--black); border: 1px solid rgba(200,150,62,0.08); }
+.scale-num { font-family: var(--display); font-size: 16px; letter-spacing: 1px; min-width: 36px; flex-shrink: 0; line-height: 1.2; padding-top: 1px; }
+.scale-txt { font-size: 12px; color: var(--muted); line-height: 1.5; font-weight: 300; }
+.scale-low .scale-num { color: #e05c5c; }
+.scale-mid .scale-num { color: var(--gold2); }
+.scale-high .scale-num { color: #5ce07a; }
 /* ─── Cards ─── */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
 .card-choice { position: relative; background: var(--black); border: 1px solid var(--border); padding: 20px 15px; text-align: center; cursor: pointer; transition: var(--ease); }
@@ -257,30 +264,82 @@ input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
   <div class="scr" id="s2">
     <span class="lbl">Schritt 2</span>
     <div class="ttl">Lifestyle Metriken</div>
-    <div class="sub">Diese Werte fließen direkt in dein Protokoll. Sei absolut ehrlich.</div>
+    <div class="sub">Diese Werte fließen direkt in dein Protokoll. Sei absolut ehrlich — nicht wie du sein willst, sondern wie du wirklich bist.</div>
+
+    <!-- ENERGIE -->
     <div class="range-wrap">
       <div class="range-header">
         <div>
-          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">Aktuelles Energielevel</label>
-          <p class="range-desc">Wie viel Antrieb hast du über den Tag verteilt? Berücksichtige Nachmittagstief, Koffeinbedarf.</p>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">⚡ Energielevel im Alltag</label>
         </div>
         <span class="range-val-badge" id="energyBadge">5</span>
       </div>
       <input type="range" id="f_energy_val" min="1" max="10" value="5" oninput="updateBadge('energyBadge',this.value);checkAutoTriggers()">
-      <div class="range-labels"><span>1 – Erschöpft</span><span>10 – High Energy</span></div>
-      <div class="auto-trigger-hint" id="energyHint">⚠️ Wert unter 6 — Energie & Fokus Produkte werden automatisch hinzugefügt.</div>
+      <div class="range-labels"><span>1 – Erschöpft</span><span>10 – Volle Power</span></div>
+      <div class="slider-scale">
+        <div class="scale-item scale-low"><span class="scale-num">1–2</span><span class="scale-txt">Aufstehen fühlt sich wie eine Strafe an. Du läufst auf Reserve, brauchst Koffein um zu funktionieren.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">3–5</span><span class="scale-txt">Nachmittagstief zwischen 14–16 Uhr. Du schaffst den Tag, aber ohne echten Antrieb. Koffein hilft kurzfristig.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">6–7</span><span class="scale-txt">Solide Energie, gelegentliche Tiefs. Du könntest mehr aus dir herausholen.</span></div>
+        <div class="scale-item scale-high"><span class="scale-num">8–10</span><span class="scale-txt">Konstante Energie über den Tag. Kein Koffein nötig. Du fühlst dich wach und fokussiert.</span></div>
+      </div>
+      <div class="auto-trigger-hint" id="energyHint">⚠️ Wert unter 6 — Energie & Fokus Protokoll wird automatisch hinzugefügt.</div>
     </div>
+
+    <!-- SCHLAF -->
     <div class="range-wrap">
       <div class="range-header">
         <div>
-          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">Schlafqualität &amp; Erholung</label>
-          <p class="range-desc">Wachst du erholt auf? Berücksichtige Einschlafdauer und Durchschlafen.</p>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">🌙 Schlafqualität &amp; Erholung</label>
         </div>
         <span class="range-val-badge" id="sleepBadge">5</span>
       </div>
       <input type="range" id="f_sleep_val" min="1" max="10" value="5" oninput="updateBadge('sleepBadge',this.value);checkAutoTriggers()">
       <div class="range-labels"><span>1 – Gerädert</span><span>10 – Perfekt erholt</span></div>
-      <div class="auto-trigger-hint" id="sleepHint">⚠️ Wert unter 5 — Schlafprodukte werden automatisch hinzugefügt.</div>
+      <div class="slider-scale">
+        <div class="scale-item scale-low"><span class="scale-num">1–2</span><span class="scale-txt">Du schläfst kaum oder sehr unruhig. Einschlafen dauert ewig. Du wachst nachts auf und grübelst.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">3–5</span><span class="scale-txt">Du schläfst irgendwie durch, aber wachst morgens nicht wirklich erholt auf. Träge in den ersten Stunden.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">6–7</span><span class="scale-txt">Meistens ok. Gelegentlich schlechte Nächte oder zu kurz geschlafen.</span></div>
+        <div class="scale-item scale-high"><span class="scale-num">8–10</span><span class="scale-txt">Du schläfst schnell ein, durch und wachst erholt auf. Kein Wecker nötig am Wochenende.</span></div>
+      </div>
+      <div class="auto-trigger-hint" id="sleepHint">⚠️ Wert unter 5 — Schlaf & Regeneration Protokoll wird automatisch hinzugefügt.</div>
+    </div>
+
+    <!-- STRESS -->
+    <div class="range-wrap">
+      <div class="range-header">
+        <div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">🧠 Stresslevel (mental &amp; emotional)</label>
+        </div>
+        <span class="range-val-badge" id="stressBadge">5</span>
+      </div>
+      <input type="range" id="f_stress_val" min="1" max="10" value="5" oninput="updateBadge('stressBadge',this.value);checkAutoTriggers()">
+      <div class="range-labels"><span>1 – Entspannt</span><span>10 – Dauerstress</span></div>
+      <div class="slider-scale">
+        <div class="scale-item scale-high"><span class="scale-num">1–2</span><span class="scale-txt">Du bist ausgeglichen. Deadlines und Druck stecken dich kaum. Du erholst dich schnell.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">3–5</span><span class="scale-txt">Normaler Alltags-Stress. Gelegentlich überwältigt, aber du findest dein Gleichgewicht wieder.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">6–7</span><span class="scale-txt">Du stehst dauerhaft unter Druck. Gedanken kreisen auch in der Freizeit. Entspannen fällt schwer.</span></div>
+        <div class="scale-item scale-low"><span class="scale-num">8–10</span><span class="scale-txt">Chronischer Stress. Du schläfst schlecht, bist gereizt, kannst kaum abschalten. Körper läuft im Alarmzustand.</span></div>
+      </div>
+      <div class="auto-trigger-hint" id="stressHint">⚠️ Hoher Stress — B-Vitamine & Fokus-Support wird automatisch hinzugefügt. Chronischer Stress verbraucht Magnesium &amp; B-Vitamine 3–5× schneller.</div>
+    </div>
+
+    <!-- SONNE -->
+    <div class="range-wrap">
+      <div class="range-header">
+        <div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px">☀️ Sonneneinstrahlung &amp; Zeit im Freien</label>
+        </div>
+        <span class="range-val-badge" id="sunBadge">5</span>
+      </div>
+      <input type="range" id="f_sun_val" min="1" max="10" value="5" oninput="updateBadge('sunBadge',this.value);checkAutoTriggers()">
+      <div class="range-labels"><span>1 – Kaum draußen</span><span>10 – Täglich Sonne</span></div>
+      <div class="slider-scale">
+        <div class="scale-item scale-low"><span class="scale-num">1–3</span><span class="scale-txt">Büro, Homeoffice, Schichtarbeit. Du kommst kaum ans Tageslicht — vor der Arbeit dunkel, nach der Arbeit dunkel.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">4–6</span><span class="scale-txt">Mittagspause draußen, Wochenende im Freien. Aber Oktober–März kaum Sonne auf der Haut.</span></div>
+        <div class="scale-item scale-mid"><span class="scale-num">7–8</span><span class="scale-txt">Outdoor-Beruf oder regelmäßiger Sport im Freien. Dennoch: Herbst/Winter in Deutschland reicht nie.</span></div>
+        <div class="scale-item scale-high"><span class="scale-num">9–10</span><span class="scale-txt">Täglich mehrere Stunden Sonne auf Armen und Gesicht, ganzjährig in südlichen Breiten.</span></div>
+      </div>
+      <div class="auto-trigger-hint" id="sunHint">⚠️ Wenig Sonne — Vitamin D3 Protokoll (Skelboost) wird automatisch hinzugefügt. In Deutschland reicht Sonnenlicht von Oktober–April generell nicht zur Vitamin-D-Synthese.</div>
     </div>
   </div>
 
@@ -347,6 +406,22 @@ input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
         </div>
         <div class="lm-val" id="resSleep" style="color:var(--gold)">5/10</div>
       </div>
+      <div class="lm-item">
+        <div style="font-size:22px">🧠</div>
+        <div class="lm-bar-wrap">
+          <div class="lm-label">Stresslevel</div>
+          <div class="lm-bar-bg"><div class="lm-bar-fill" id="stressBar" style="width:50%;background:var(--gold)"></div></div>
+        </div>
+        <div class="lm-val" id="resStress" style="color:var(--gold)">5/10</div>
+      </div>
+      <div class="lm-item">
+        <div style="font-size:22px">☀️</div>
+        <div class="lm-bar-wrap">
+          <div class="lm-label">Sonneneinstrahlung</div>
+          <div class="lm-bar-bg"><div class="lm-bar-fill" id="sunBar" style="width:50%;background:var(--gold)"></div></div>
+        </div>
+        <div class="lm-val" id="resSun" style="color:var(--gold)">5/10</div>
+      </div>
     </div>
     <div id="basisBanner"></div>
     <div class="lbl" style="margin-top:8px">Strategie &amp; Einnahmeplan</div>
@@ -372,10 +447,14 @@ function updateBadge(id, val) {
   else el.classList.add('high');
 }
 function checkAutoTriggers() {
-  const e = +document.getElementById('f_energy_val').value;
-  const s = +document.getElementById('f_sleep_val').value;
-  document.getElementById('energyHint').style.display = e < 6 ? 'block' : 'none';
-  document.getElementById('sleepHint').style.display  = s < 5 ? 'block' : 'none';
+  const e  = +document.getElementById('f_energy_val').value;
+  const s  = +document.getElementById('f_sleep_val').value;
+  const st = +document.getElementById('f_stress_val').value;
+  const su = +document.getElementById('f_sun_val').value;
+  document.getElementById('energyHint').style.display = e  < 6 ? 'block' : 'none';
+  document.getElementById('sleepHint').style.display  = s  < 5 ? 'block' : 'none';
+  document.getElementById('stressHint').style.display = st > 6 ? 'block' : 'none';
+  document.getElementById('sunHint').style.display    = su < 7 ? 'block' : 'none';
 }
 function toggleSel(el) { el.classList.toggle('sel'); }
 
@@ -409,7 +488,7 @@ const DB = {
   energy: {
     icon: '⚡', title: 'Energie & Fokus',
     subtitle: 'B-Vitamine · L-Carnitin · Kognition',
-    rationale: (d) => `<strong>Dein Energielevel: ${d.energy}/10.</strong> ${d.energy <= 4 ? 'Ein Wert unter 5 deutet klinisch auf ein B-Vitamin-Defizit hin — Stress und körperliche Arbeit verbrauchen B1, B6 und B12 dramatisch schneller.' : 'Selbst bei moderatem Wert gilt:'} Der häufigste Fehler: Koffein oben drauf zu kippen, ohne den zellulären Akku aufzuladen. B-Vitamine sind <strong>essenziell für die mitochondriale ATP-Produktion</strong> — ohne sie läuft kein Energiestoffwechsel.`,
+    rationale: (d) => `<strong>Dein Energielevel: ${d.energy}/10 · Stresslevel: ${d.stress}/10.</strong> ${d.stress > 6 ? `Bei einem Stresslevel von ${d.stress}/10 verbraucht dein Körper B-Vitamine und Magnesium <strong>3–5× schneller</strong> als im Normalzustand — das erklärt direkt dein Energiedefizit.` : d.energy <= 4 ? 'Ein Wert unter 5 deutet auf ein B-Vitamin-Defizit hin.' : 'Selbst moderate Tiefs signalisieren zelluläre Nährstoffknappheit.'} Der häufigste Fehler: Koffein oben drauf ohne den Akku aufzuladen. <strong>B-Vitamine sind Pflicht für die mitochondriale ATP-Produktion</strong> — ohne sie läuft kein Energiestoffwechsel.`,
     science: ['📊 B1 (Multigelvit): 12,5mg = 1136% VNR — High-Dose Therapeutik', '✅ L-Carnitin: Transportiert langkettige Fettsäuren in die Mitochondrien'],
     items: [
       { name: "Multigelvit", code: "INTB026", dose: "1 Stick morgens direkt in den Mund (kein Wasser nötig). Mandarinen-Gel.", info: "<strong>IPERVITAMY™-Komplex:</strong> Vitamin C 320mg (400% VNR), B1 12,5mg (1136% VNR), B6 5mg (357% VNR), B12 0,01mg (400% VNR), Biotin (400% VNR) + L-Carnitin 150mg. Gel-Formulierung → direkte Resorption über Mundschleimhaut, kein Magenpassage-Verlust. Vegan & glutenfrei.", nutrients: [['Vit C','400% VNR'],['Vit B1','1136% VNR'],['Vit B6','357% VNR'],['Vit B12','400% VNR'],['L-Carnitin','150mg']], price: 24.90, timing: 'morgens' },
@@ -437,7 +516,7 @@ const DB = {
   joints: {
     icon: '🦴', title: 'Gelenke & Knochen',
     subtitle: 'Vitamin D3 2000 IU · K2 · Calcium · PEA-Komplex',
-    rationale: () => `<strong>Kritische Studienlage für Deutschland:</strong> Das RKI empfiehlt 800 IU Vitamin D3/Tag — die Realität zeigt, dass über 60% der Deutschen diesen Wert nicht erreichen. Vitamin D ist kein "Sonnen-Vitamin", sondern ein <strong>Steroidhormon</strong>, das Calciumaufnahme, Immunsystem und Muskelkraft steuert. <strong>Ohne K2 landet Calcium im Blut statt im Knochen</strong> (Verkalkungsrisiko!). Das DALKO™-Trio (D3+K2+Calcium) aus Lithothamnium ist der klinisch korrekte Ansatz.`,
+    rationale: (d) => `<strong>Kritische Studienlage für Deutschland${d.sun < 7 ? ` · Deine Sonneneinstrahlung: ${d.sun}/10` : ''}:</strong> ${d.sun < 4 ? `Bei einem Sonnenwert von ${d.sun}/10 produziert dein Körper nahezu kein Vitamin D — Büroalltag, Schichtarbeit oder unsere Breitengrade Oktober–April reichen nicht.` : 'Auch wer regelmäßig draußen ist:'} Das RKI empfiehlt 800 IU Vitamin D3/Tag — die Realität zeigt, dass über 60% der Deutschen diesen Wert nicht erreichen. Vitamin D ist kein "Sonnen-Vitamin", sondern ein <strong>Steroidhormon</strong>, das Calciumaufnahme, Immunsystem und Muskelkraft steuert. <strong>Ohne K2 landet Calcium im Blut statt im Knochen</strong> (Verkalkungsrisiko!).`,
     science: ['✅ Vitamin D3: 2000 IU = 1000% VNR — therapeutisch relevant für Mangelausgleich', '📊 K2: 67% VNR — dirigiert Calcium in Knochen, verhindert Gefäßverkalkung', '⚠️ >60% der Deutschen: Vitamin D suboptimal (RKI 2023)'],
     items: [
       { name: "Sore Stop +", code: "INTB043", dose: "3× täglich 2 Kapseln (morgens, mittags, abends) mit reichlich Wasser.", info: "<strong>PEA-ARTICOL™-Komplex:</strong> Palmitoylethanolamid (PEA) ist ein körpereigenes Signalmolekül zur Regulierung lokaler Entzündungsreaktionen. In Kombination mit Vitamin D und B-Vitaminen unterstützt es Energiestoffwechsel und Stressresistenz. Fördert Gelenkfunktionalität bei körperlicher Belastung.", nutrients: [['PEA-ARTICOL™','patentiert'],['Vitamin D','enthalten'],['B-Vitamine','enthalten']], price: 39.00, timing: 'morgens' },
@@ -511,7 +590,10 @@ function calculateMetrics() {
   let bmr = gender === 'm' ? 10*weight + 6.25*height - 5*age + 5 : 10*weight + 6.25*height - 5*age - 161;
   return { bmi, bmiStatus, bmr: Math.round(bmr), tdee: Math.round(bmr*activity),
            energy: +document.getElementById('f_energy_val').value,
-           sleep: +document.getElementById('f_sleep_val').value, age };
+           sleep:  +document.getElementById('f_sleep_val').value,
+           stress: +document.getElementById('f_stress_val').value,
+           sun:    +document.getElementById('f_sun_val').value,
+           age };
 }
 
 // ─── HTML Builder ─────────────────────────────────────────────
@@ -581,14 +663,24 @@ function genResults() {
   document.getElementById('resTDEE').textContent = "Tagesbedarf: ca. " + m.tdee + " kcal";
   const eColor = m.energy <= 3 ? '#e05c5c' : m.energy <= 6 ? 'var(--gold2)' : '#5ce07a';
   const sColor = m.sleep  <= 3 ? '#e05c5c' : m.sleep  <= 6 ? 'var(--gold2)' : '#5ce07a';
+  const stColor= m.stress >= 8 ? '#e05c5c' : m.stress >= 6 ? 'var(--gold2)' : '#5ce07a';
+  const suColor= m.sun    <= 3 ? '#e05c5c' : m.sun    <= 6 ? 'var(--gold2)' : '#5ce07a';
   document.getElementById('resEnergy').textContent = m.energy + "/10";
   document.getElementById('resSleep').textContent  = m.sleep  + "/10";
+  document.getElementById('resStress').textContent = m.stress + "/10";
+  document.getElementById('resSun').textContent    = m.sun    + "/10";
   document.getElementById('resEnergy').style.color = eColor;
   document.getElementById('resSleep').style.color  = sColor;
+  document.getElementById('resStress').style.color = stColor;
+  document.getElementById('resSun').style.color    = suColor;
   document.getElementById('energyBar').style.width = (m.energy*10) + "%";
   document.getElementById('energyBar').style.background = eColor;
   document.getElementById('sleepBar').style.width  = (m.sleep*10) + "%";
   document.getElementById('sleepBar').style.background  = sColor;
+  document.getElementById('stressBar').style.width = (m.stress*10) + "%";
+  document.getElementById('stressBar').style.background = stColor;
+  document.getElementById('sunBar').style.width    = (m.sun*10) + "%";
+  document.getElementById('sunBar').style.background    = suColor;
 
   // Keys: user-selected + auto-triggers
   const selectedGoals  = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(i=>i.value);
@@ -596,6 +688,8 @@ function genResults() {
   let allKeys = [...new Set([...selectedGoals, ...selectedIssues])];
   if (m.energy < 6 && !allKeys.includes('energy')) allKeys.push('energy');
   if (m.sleep  < 5 && !allKeys.includes('sleep'))  allKeys.push('sleep');
+  if (m.stress > 6 && !allKeys.includes('energy')) allKeys.push('energy');
+  if (m.sun    < 7 && !allKeys.includes('joints')) allKeys.push('joints');
 
   const seenProducts = new Set();
   const allProducts  = [];
@@ -649,7 +743,7 @@ function genResults() {
       `Hey Rodion! 👋 Komplettes SuppleFit Protokoll\n\n` +
       `📋 Für: ${name}\n📅 ${new Date().toLocaleDateString('de-DE')}\n` +
       `📊 BMI: ${m.bmi} | GU: ${m.bmr} kcal | Tagesbedarf: ${m.tdee} kcal\n` +
-      `⚡ Energie: ${m.energy}/10 | 🌙 Schlaf: ${m.sleep}/10\n\n` +
+      `⚡ Energie: ${m.energy}/10 | 🌙 Schlaf: ${m.sleep}/10 | 🧠 Stress: ${m.stress}/10 | ☀️ Sonne: ${m.sun}/10\n\n` +
       `🛒 Produkte:\n${list}\n\n💰 Gesamt: ${total.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
     );
     document.getElementById('priceSummaryContainer').innerHTML =
@@ -668,6 +762,8 @@ function genResults() {
 
 updateBadge('energyBadge', 5);
 updateBadge('sleepBadge', 5);
+updateBadge('stressBadge', 5);
+updateBadge('sunBadge', 5);
 </script>
 </body>
 </html>
