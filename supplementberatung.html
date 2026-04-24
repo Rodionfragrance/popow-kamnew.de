@@ -398,10 +398,10 @@ input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
     <div class="ttl">Dein Fokus</div>
     <div class="sub">Wo willst du die größten Ergebnisse? (Mehrfachwahl)</div>
     <div class="grid-2">
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="weight"><span class="icon">⚖️</span><span class="ct">Gewichtsmanagement</span></label>
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="beauty"><span class="icon">✨</span><span class="ct">Beauty (Haut/Haare)</span></label>
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="energy"><span class="icon">⚡</span><span class="ct">Energie &amp; Fokus</span></label>
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="goal" value="detox"><span class="icon">🌿</span><span class="ct">Detox &amp; Balance</span></label>
+      <label class="card-choice"><input type="checkbox" name="goal" value="weight" onchange="toggleSel(this.parentElement)"><span class="icon">⚖️</span><span class="ct">Gewichtsmanagement</span></label>
+      <label class="card-choice"><input type="checkbox" name="goal" value="beauty" onchange="toggleSel(this.parentElement)"><span class="icon">✨</span><span class="ct">Beauty (Haut/Haare)</span></label>
+      <label class="card-choice"><input type="checkbox" name="goal" value="energy" onchange="toggleSel(this.parentElement)"><span class="icon">⚡</span><span class="ct">Energie &amp; Fokus</span></label>
+      <label class="card-choice"><input type="checkbox" name="goal" value="detox" onchange="toggleSel(this.parentElement)"><span class="icon">🌿</span><span class="ct">Detox &amp; Balance</span></label>
     </div>
   </div>
 
@@ -411,10 +411,10 @@ input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
     <div class="ttl">Physische Indikatoren</div>
     <div class="sub">Wo sendet dein Körper aktuell Signale?</div>
     <div class="grid-2">
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="sleep"><span class="icon">🌙</span><span class="ct">Schlafprobleme</span></label>
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="joints"><span class="icon">🦴</span><span class="ct">Gelenke &amp; Knochen</span></label>
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="gut"><span class="icon">🌪️</span><span class="ct">Darm &amp; Verdauung</span></label>
-      <label class="card-choice" onclick="toggleSel(this)"><input type="checkbox" name="issue" value="heart"><span class="icon">❤️</span><span class="ct">Herz &amp; Vitalität</span></label>
+      <label class="card-choice"><input type="checkbox" name="issue" value="sleep" onchange="toggleSel(this.parentElement)"><span class="icon">🌙</span><span class="ct">Schlafprobleme</span></label>
+      <label class="card-choice"><input type="checkbox" name="issue" value="joints" onchange="toggleSel(this.parentElement)"><span class="icon">🦴</span><span class="ct">Gelenke &amp; Knochen</span></label>
+      <label class="card-choice"><input type="checkbox" name="issue" value="gut" onchange="toggleSel(this.parentElement)"><span class="icon">🌪️</span><span class="ct">Darm &amp; Verdauung</span></label>
+      <label class="card-choice"><input type="checkbox" name="issue" value="heart" onchange="toggleSel(this.parentElement)"><span class="icon">❤️</span><span class="ct">Herz &amp; Vitalität</span></label>
     </div>
   </div>
 
