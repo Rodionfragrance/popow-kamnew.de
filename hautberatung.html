@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Hautberatung · Margarita Kamnew · Chogan  · ET </title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --purple:#91649e; --pdark:#6b4578; --plight:#b08abb; --pfaint:#f8f4fa; --psubtle:#ede5f0;
@@ -220,6 +220,44 @@ hr.d{border:none;border-top:1px solid var(--g100);margin:22px 0}
 /* RESPONSIVE */
 @media(min-width:560px){.hero,.fh{padding-left:48px;padding-right:48px}.pad{padding-left:40px;padding-right:40px}#cta{padding-left:40px;padding-right:40px}}
 @media(max-width:340px){.r2,.g2,.skg,.ing{grid-template-columns:1fr}}
+
+/* ===== Helles Redesign — Popow & Kamnew ===== */
+body::before { display: none !important; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  letter-spacing: -0.005em;
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+}
+h1, h2, h3, h4,
+.nav-logo, .footer-logo, .brand, .header-title {
+  font-family: 'Bodoni Moda', Georgia, serif !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.08 !important;
+  color: #1A1A1A !important;
+}
+/* Getrackte Versal-Labels neutralisieren */
+[class*="eyebrow"], [class*="-label"], .page-label, .block-label,
+.nav-back, .footer-links a, .toc p {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+[class*="eyebrow"]::before, .page-label::before, .block-label::before { display: none !important; }
+/* Weiche Kanten statt scharfer Rahmen */
+button, .btn, [class*="btn-"], [class*="button"] { border-radius: 999px !important; }
+[class*="card"], [class*="option"], [class*="tile"], [class*="box"],
+.toc, .result, [class*="panel"] { border-radius: 18px !important; }
+/* Haarlinien */
+[style*="border"], hr { border-color: #E4E2DE !important; }
+/* Fokus sichtbar halten */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #1A1A1A !important; outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
 </style>
 </head>
 <body>
@@ -909,4 +947,3 @@ renderCTA();
 </script>
 </body>
 </html>
- 
