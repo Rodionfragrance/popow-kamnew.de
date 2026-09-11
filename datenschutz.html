@@ -6,26 +6,26 @@
 <title>Datenschutzerklärung | Popow & Kamnew</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --black: #0A0A0A; --black2: #111111; --black3: #1A1A1A;
-  --gold: #C8963E; --white: #F5F0E8; --gray: #888880; --border: rgba(200,150,62,0.2);
+  --black: #FFFFFF; --black2: #F6F5F3; --black3: #EFEEEB;
+  --gold: #1A1A1A; --white: #1A1A1A; --gray: #6E6E73; --border: rgba(0,0,0,0.10);
 }
-body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; }
+body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; }
 nav {
   display: flex; align-items: center; justify-content: space-between;
   padding: 20px 40px; border-bottom: 1px solid var(--border);
 }
-.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--white); text-decoration: none; }
+.nav-logo { font-family: 'Bodoni Moda', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--white); text-decoration: none; }
 .nav-logo span { color: var(--gold); }
 .nav-back { font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); text-decoration: none; transition: color 0.2s; display: flex; align-items: center; gap: 8px; }
 .nav-back:hover { color: var(--gold); }
 .container { max-width: 760px; margin: 0 auto; padding: 80px 40px; }
 .page-label { font-size: 10px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
 .page-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
-h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 7vw, 72px); line-height: 0.95; letter-spacing: -0.5px; color: var(--white); margin-bottom: 60px; }
+h1 { font-family: 'Bodoni Moda', sans-serif; font-size: clamp(40px, 7vw, 72px); line-height: 0.95; letter-spacing: -0.5px; color: var(--white); margin-bottom: 60px; }
 h1 span { color: var(--gold); }
 .toc { background: var(--black2); border: 1px solid var(--border); padding: 28px 32px; margin-bottom: 60px; }
 .toc p { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
@@ -33,9 +33,9 @@ h1 span { color: var(--gold); }
 .toc li { font-size: 13px; color: var(--gray); line-height: 2; }
 .toc a { color: var(--gray); text-decoration: none; transition: color 0.2s; }
 .toc a:hover { color: var(--gold); }
-.section { padding: 48px 0; border-bottom: 1px solid rgba(200,150,62,0.08); }
+.section { padding: 48px 0; border-bottom: 1px solid rgba(0,0,0,0.10); }
 .section:last-child { border-bottom: none; }
-.section h2 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--white); margin-bottom: 24px; }
+.section h2 { font-family: 'Bodoni Moda', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--white); margin-bottom: 24px; }
 .section h3 { font-size: 14px; font-weight: 600; color: var(--white); margin: 24px 0 10px; letter-spacing: 0.3px; }
 .section p { font-size: 14px; color: var(--gray); line-height: 1.9; margin-bottom: 12px; }
 .section p:last-child { margin-bottom: 0; }
@@ -45,12 +45,50 @@ h1 span { color: var(--gold); }
 .section ul li { font-size: 14px; color: var(--gray); line-height: 1.9; }
 .caps { font-size: 13px; line-height: 1.8; color: var(--gray); }
 footer { padding: 32px 40px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 40px; }
-.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--white); text-decoration: none; }
+.footer-logo { font-family: 'Bodoni Moda', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--white); text-decoration: none; }
 .footer-logo span { color: var(--gold); }
 .footer-links { display: flex; gap: 24px; list-style: none; }
 .footer-links a { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); text-decoration: none; transition: color 0.2s; }
 .footer-links a:hover { color: var(--gold); }
 @media (max-width: 600px) { nav, .container, footer { padding-left: 20px; padding-right: 20px; } }
+
+/* ===== Helles Redesign — Popow & Kamnew ===== */
+body::before { display: none !important; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  letter-spacing: -0.005em;
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+}
+h1, h2, h3, h4,
+.nav-logo, .footer-logo, .brand, .header-title {
+  font-family: 'Bodoni Moda', Georgia, serif !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.08 !important;
+  color: #1A1A1A !important;
+}
+/* Getrackte Versal-Labels neutralisieren */
+[class*="eyebrow"], [class*="-label"], .page-label, .block-label,
+.nav-back, .footer-links a, .toc p {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+[class*="eyebrow"]::before, .page-label::before, .block-label::before { display: none !important; }
+/* Weiche Kanten statt scharfer Rahmen */
+button, .btn, [class*="btn-"], [class*="button"] { border-radius: 999px !important; }
+[class*="card"], [class*="option"], [class*="tile"], [class*="box"],
+.toc, .result, [class*="panel"] { border-radius: 18px !important; }
+/* Haarlinien */
+[style*="border"], hr { border-color: #E4E2DE !important; }
+/* Fokus sichtbar halten */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #1A1A1A !important; outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
 </style>
 </head>
 <body>
@@ -150,7 +188,7 @@ footer { padding: 32px 40px; border-top: 1px solid var(--border); display: flex;
     <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Weitere Informationen: <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
     <h3>WhatsApp</h3>
     <p>Diese Website enthält Links zum WhatsApp-Dienst (Meta Platforms Ireland Limited). Wenn Sie auf einen WhatsApp-Link klicken, werden Sie zu WhatsApp weitergeleitet. Die Datenverarbeitung durch WhatsApp erfolgt nach deren eigenen Datenschutzbedingungen.</p>
-    <p style="margin-top:40px;font-size:12px;color:rgba(136,136,128,0.5);">Quelle: <a href="https://www.e-recht24.de" target="_blank" rel="noopener" style="color:rgba(136,136,128,0.5);">e-recht24.de</a> · Angepasst für Popow & Kamnew</p>
+    <p style="margin-top:40px;font-size:12px;color:rgba(110,110,115,0.5);">Quelle: <a href="https://www.e-recht24.de" target="_blank" rel="noopener" style="color:rgba(110,110,115,0.5);">e-recht24.de</a> · Angepasst für Popow & Kamnew</p>
   </div>
 </div>
 
