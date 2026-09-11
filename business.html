@@ -2,774 +2,259 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dein eigenes Business – Parfüm als Schlüssel zur Freiheit | Rodion Popow</title>
-<meta name="description" content="Kein Büro. Kein Chef. Kein fixer Stundenplan. Ich zeige dir wie du mit einem Produkt das jeder kennt dein eigenes Business aufbaust – nebenberuflich oder hauptberuflich.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Düfte selbst verkaufen — Popow &amp; Kamnew</title>
+<meta name="description" content="Wie es aussieht, italienische Düfte selbstständig zu verkaufen. Ehrlich erklärt, ohne Zahlenversprechen — von Rodion und Margarita aus Werl.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --black:   #0A0A0A;
-  --black2:  #111111;
-  --black3:  #181818;
-  --gold:    #C8963E;
-  --gold2:   #E8B84B;
-  --white:   #F5F0E8;
-  --gray:    #888880;
-  --border:  rgba(200,150,62,0.18);
-  --green:   #25D366;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--black);
-  color: var(--white);
-  overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 999; opacity: 0.35;
-}
-
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 40px;
-  background: linear-gradient(to bottom, rgba(10,10,10,0.98), transparent);
-}
-.nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px; letter-spacing: 3px;
-  color: var(--white); text-decoration: none;
-}
-.nav-logo span { color: var(--gold); }
-.nav-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 22px; background: var(--gold);
-  color: var(--black); font-size: 12px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  text-decoration: none; transition: all 0.2s;
-}
-.nav-cta:hover { background: var(--gold2); }
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  justify-content: center;
-  padding: 120px 40px 80px;
-  position: relative; overflow: hidden;
-}
-
-.hero-bg {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 50% 70% at 80% 30%, rgba(200,150,62,0.07) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 40% at 10% 90%, rgba(200,150,62,0.04) 0%, transparent 60%),
-    var(--black);
-}
-
-.hero-ghost {
-  position: absolute; bottom: -20px; right: -20px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(100px, 18vw, 260px);
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(200,150,62,0.07);
-  line-height: 1; pointer-events: none; user-select: none;
-  letter-spacing: -5px;
-}
-
-.hero-inner { position: relative; z-index: 2; max-width: 820px; }
-
-.hero-tag {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 7px 16px; border: 1px solid var(--border);
-  background: rgba(200,150,62,0.06);
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 3px; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 32px;
-}
-
-.hero-tag::before {
-  content: ''; width: 6px; height: 6px;
-  background: var(--gold); border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.8); }
-}
-
-.hero h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(52px, 9vw, 120px);
-  line-height: 0.92; letter-spacing: -1px;
-  color: var(--white); margin-bottom: 32px;
-}
-.hero h1 .g { color: var(--gold); }
-.hero h1 .o {
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(245,240,232,0.6);
-}
-
-.hero-sub {
-  font-size: 17px; font-weight: 300;
-  color: var(--gray); line-height: 1.75;
-  max-width: 520px; margin-bottom: 48px;
-}
-
-.hero-sub strong { color: var(--white); font-weight: 600; }
-
-.cta-group { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-
-.btn-wa {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 18px 36px; background: var(--green);
-  color: #000; font-size: 14px; font-weight: 700;
-  letter-spacing: 0.5px; text-decoration: none;
-  transition: all 0.25s;
-}
-.btn-wa:hover {
-  background: #1ebe5d;
-  box-shadow: 0 8px 32px rgba(37,211,102,0.3);
-  transform: translateY(-2px);
-}
-.btn-wa svg { width: 18px; height: 18px; fill: #000; flex-shrink: 0; }
-
-.btn-down {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 17px 28px; border: 1px solid rgba(245,240,232,0.15);
-  color: var(--gray); font-size: 13px; font-weight: 500;
-  letter-spacing: 1px; text-transform: uppercase;
-  text-decoration: none; transition: all 0.25s;
-}
-.btn-down:hover { border-color: var(--gold); color: var(--gold); }
-
-.hero-proof {
-  display: flex; gap: 40px; margin-top: 56px;
-  padding-top: 40px; border-top: 1px solid rgba(200,150,62,0.1);
-  flex-wrap: wrap;
-}
-.proof-item {}
-.proof-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 40px; color: var(--gold); line-height: 1; display: block;
-}
-.proof-lbl {
-  font-size: 11px; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--gray);
-  display: block; margin-top: 4px;
-}
-
-/* ── PROBLEM SECTION ── */
-.problem {
-  padding: 100px 40px;
-  background: var(--black2);
-  position: relative; overflow: hidden;
-}
-.problem-inner { max-width: 900px; margin: 0 auto; }
-
-.sec-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 4px;
-  text-transform: uppercase; color: var(--gold);
-  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-}
-.sec-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
-
-.sec-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(38px, 5.5vw, 72px);
-  line-height: 0.95; letter-spacing: -0.5px;
-  margin-bottom: 32px;
-}
-
-.pain-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 2px; margin-top: 48px;
-}
-.pain-card {
-  background: var(--black3);
-  border: 1px solid rgba(255,255,255,0.04);
-  padding: 36px 28px;
-  position: relative;
-}
-.pain-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(200,150,62,0.3), transparent);
-}
-.pain-emoji { font-size: 28px; display: block; margin-bottom: 16px; }
-.pain-title {
-  font-size: 15px; font-weight: 700;
-  color: var(--white); margin-bottom: 8px;
-}
-.pain-text { font-size: 13px; color: var(--gray); line-height: 1.7; }
-
-/* ── STORY SECTION ── */
-.story {
-  padding: 100px 40px;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 80px; align-items: center;
-  max-width: 1100px; margin: 0 auto;
-}
-
-.story-quote {
-  font-family: 'DM Sans', sans-serif;
-  font-size: clamp(20px, 2.5vw, 28px);
-  font-weight: 300; font-style: italic;
-  color: var(--white); line-height: 1.5;
-  padding-left: 28px;
-  border-left: 3px solid var(--gold);
-  margin-bottom: 32px;
-}
-
-.story-text {
-  font-size: 15px; color: var(--gray);
-  line-height: 1.85; margin-bottom: 14px;
-}
-
-.story-signature {
-  display: flex; align-items: center; gap: 16px; margin-top: 32px;
-}
-.story-avatar {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold), var(--black3));
-  border: 2px solid var(--gold);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px; color: var(--black); letter-spacing: 1px;
-  flex-shrink: 0;
-}
-.story-name { font-size: 14px; font-weight: 600; color: var(--white); }
-.story-role { font-size: 12px; color: var(--gray); }
-
-.story-right { }
-.insight-list { list-style: none; }
-.insight-item {
-  display: flex; gap: 16px; align-items: flex-start;
-  padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.insight-item:last-child { border-bottom: none; }
-.insight-icon {
-  width: 36px; height: 36px; flex-shrink: 0;
-  background: rgba(200,150,62,0.1);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
-.insight-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
-.insight-text { font-size: 13px; color: var(--gray); line-height: 1.6; }
-
-/* ── HOW IT WORKS ── */
-.how {
-  padding: 100px 40px;
-  background: var(--black2);
-}
-.how-inner { max-width: 900px; margin: 0 auto; }
-
-.steps-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 2px; margin-top: 60px;
-  position: relative;
-}
-
-.steps-grid::before {
-  content: '';
-  position: absolute; top: 36px; left: 10%; right: 10%; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-dim, #8A6428), transparent);
-  opacity: 0.3; z-index: 0;
-}
-
-.step-card {
-  background: var(--black3);
-  border: 1px solid var(--border);
-  padding: 36px 24px; text-align: center;
-  position: relative; z-index: 1;
-  transition: border-color 0.3s;
-}
-.step-card:hover { border-color: var(--gold); }
-
-.step-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 48px; color: var(--gold);
-  line-height: 1; margin-bottom: 16px;
-  display: block;
-}
-.step-title {
-  font-size: 14px; font-weight: 700;
-  color: var(--white); margin-bottom: 8px;
-}
-.step-text { font-size: 12px; color: var(--gray); line-height: 1.6; }
-
-/* ── EARNINGS ── */
-.earnings {
-  padding: 100px 40px;
-  text-align: center; position: relative; overflow: hidden;
-}
-.earnings-bg {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(200,150,62,0.06) 0%, transparent 70%);
-}
-.earnings-ghost {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(80px, 14vw, 200px);
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(200,150,62,0.05);
-  letter-spacing: -5px; pointer-events: none;
-  user-select: none; white-space: nowrap;
-}
-
-.earnings-inner { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
-.earnings-table {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 2px; margin: 56px 0;
-}
-.earn-card {
-  background: var(--black3);
-  border: 1px solid var(--border);
-  padding: 32px 20px; text-align: center;
-  transition: all 0.3s;
-}
-.earn-card:hover { border-color: var(--gold); transform: translateY(-4px); }
-.earn-card.featured {
-  background: linear-gradient(135deg, rgba(200,150,62,0.15), rgba(200,150,62,0.05));
-  border-color: var(--gold);
-}
-.earn-level {
-  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--gray); margin-bottom: 12px; display: block;
-}
-.earn-amount {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 36px; color: var(--gold); line-height: 1;
-  display: block; margin-bottom: 8px;
-}
-.earn-card.featured .earn-amount { font-size: 44px; color: var(--gold2); }
-.earn-note { font-size: 11px; color: var(--gray); }
-
-.disclaimer {
-  font-size: 11px; color: rgba(136,136,128,0.5);
-  line-height: 1.6; max-width: 560px; margin: 0 auto 48px;
-}
-
-/* ── FAQ ── */
-.faq { padding: 80px 40px; background: var(--black2); }
-.faq-inner { max-width: 720px; margin: 0 auto; }
-
-.faq-item {
-  border-bottom: 1px solid rgba(200,150,62,0.1);
-  padding: 0;
-  overflow: hidden;
-}
-.faq-q {
-  width: 100%; background: none; border: none;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 24px 0; cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px; font-weight: 600;
-  color: var(--white); text-align: left; gap: 16px;
-}
-.faq-q:hover { color: var(--gold); }
-.faq-icon {
-  width: 24px; height: 24px; flex-shrink: 0;
-  border: 1px solid var(--border); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: var(--gold);
-  transition: transform 0.3s;
-}
-.faq-item.open .faq-icon { transform: rotate(45deg); }
-.faq-a {
-  font-size: 14px; color: var(--gray); line-height: 1.8;
-  padding: 0 0 24px; display: none;
-}
-.faq-item.open .faq-a { display: block; }
-
-/* ── FINAL CTA ── */
-.final-cta {
-  padding: 120px 40px;
-  text-align: center; position: relative; overflow: hidden;
-}
-.final-cta-bg {
-  position: absolute; inset: 0;
-  background: linear-gradient(160deg, #0A0A0A 0%, #120F05 50%, #0A0A0A 100%);
-}
-.final-cta-border {
-  position: absolute; inset: 40px;
-  border: 1px solid rgba(200,150,62,0.08);
-  pointer-events: none;
-}
-.final-cta-inner { position: relative; z-index: 2; max-width: 640px; margin: 0 auto; }
-.final-cta h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(48px, 7vw, 90px);
-  line-height: 0.93; letter-spacing: -1px;
-  margin-bottom: 24px;
-}
-.final-cta h2 span { color: var(--gold); }
-.final-cta p {
-  font-size: 16px; color: var(--gray);
-  line-height: 1.75; margin-bottom: 48px;
-}
-.final-cta p strong { color: var(--white); }
-.wa-big {
-  display: inline-flex; align-items: center; gap: 14px;
-  padding: 22px 48px; background: var(--green);
-  color: #000; font-size: 15px; font-weight: 700;
-  text-decoration: none; transition: all 0.25s;
-  letter-spacing: 0.3px;
-}
-.wa-big:hover {
-  background: #1ebe5d;
-  transform: translateY(-3px);
-  box-shadow: 0 16px 48px rgba(37,211,102,0.25);
-}
-.wa-big svg { width: 22px; height: 22px; fill: #000; }
-.cta-note { margin-top: 16px; font-size: 12px; color: var(--gray); }
-
-/* ── FOOTER ── */
-footer {
-  padding: 32px 40px; border-top: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 16px;
-}
-.footer-logo {
-  font-family: 'Bebas Neue', sans-serif; font-size: 18px;
-  letter-spacing: 3px; color: var(--white); text-decoration: none;
-}
-.footer-logo span { color: var(--gold); }
-.footer-links { display: flex; gap: 24px; list-style: none; }
-.footer-links a {
-  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--gray); text-decoration: none; transition: color 0.2s;
-}
-.footer-links a:hover { color: var(--gold); }
-
-/* ── MOBILE ── */
-@media (max-width: 768px) {
-  nav { padding: 16px 20px; }
-  .hero, .problem, .earnings, .final-cta, .faq { padding-left: 20px; padding-right: 20px; }
-  .story { grid-template-columns: 1fr; gap: 48px; padding: 72px 20px; }
-  .how { padding: 72px 20px; }
-  .pain-grid, .steps-grid, .earnings-table { grid-template-columns: 1fr; }
-  .hero-proof { gap: 24px; }
-  footer { padding: 24px 20px; }
-  .final-cta-border { display: none; }
-}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.hero-tag  { animation: fadeUp 0.7s 0.1s both; }
-.hero h1   { animation: fadeUp 0.7s 0.25s both; }
-.hero-sub  { animation: fadeUp 0.7s 0.4s both; }
-.cta-group { animation: fadeUp 0.7s 0.55s both; }
-.hero-proof{ animation: fadeUp 0.7s 0.7s both; }
+:root{--paper:#FFFFFF;--surface:#F6F5F3;--ink:#1A1A1A;--ink-soft:#6E6E73;--hairline:#E4E2DE;--wa:#25D366;--wrap:1120px;--gap:clamp(84px,10vw,164px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.6;letter-spacing:-.005em;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block;height:auto}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+.narrow{max-width:680px;margin:0 auto}
+.center{text-align:center}
+section{padding-block:var(--gap)}
+h1,h2,h3{font-family:'Bodoni Moda',Georgia,serif;font-weight:400;letter-spacing:-.01em;line-height:1.07}
+h1{font-size:clamp(42px,6.8vw,76px)}
+h2{font-size:clamp(32px,4.6vw,54px)}
+h3{font-size:clamp(20px,2.2vw,25px);line-height:1.22}
+.lead{font-size:clamp(17px,1.6vw,20px);color:var(--ink-soft);line-height:1.65;max-width:54ch}
+.lead.center{margin-inline:auto}
+p+p{margin-top:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-size:16px;font-weight:500;line-height:1;padding:15px 28px;border-radius:999px;border:1px solid transparent;text-decoration:none;cursor:pointer;transition:background .18s,border-color .18s}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover{background:#3a3a3c}
+.btn-quiet{border-color:var(--hairline)}
+.btn-quiet:hover{border-color:var(--ink)}
+.btn-wa{background:var(--wa);color:#0b2e17;font-weight:600}
+.btn-wa:hover{background:#1fbe5a}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px}
+.btn-row.center{justify-content:center}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+.nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);border-bottom:1px solid var(--hairline)}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:'Bodoni Moda',serif;font-size:20px;text-decoration:none}
+.nav .btn{padding:9px 18px;font-size:14px}
+.band{background:var(--surface)}
+.hero{padding-top:clamp(52px,7vw,92px)}
+.hero h1{max-width:15ch;margin:0 auto}
+.hero .lead{margin:24px auto 32px}
+.day{max-width:620px;margin:48px auto 0;border-top:1px solid var(--hairline)}
+.day div{padding:22px 0;border-bottom:1px solid var(--hairline)}
+.day h3{font-size:20px;margin-bottom:6px}
+.day p{font-size:16px;color:var(--ink-soft);max-width:58ch}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
+.col{background:var(--paper);border:1px solid var(--hairline);border-radius:20px;padding:32px 28px}
+.col h3{margin-bottom:10px}
+.col p{font-size:15px;color:var(--ink-soft);line-height:1.55}
+@media(max-width:880px){.cols{grid-template-columns:1fr}}
+.check{list-style:none;max-width:620px;margin:40px auto 0}
+.check li{padding:16px 0 16px 30px;border-bottom:1px solid var(--hairline);position:relative;font-size:16px}
+.check li::before{content:"";position:absolute;left:2px;top:24px;width:11px;height:6px;border-left:1.6px solid var(--ink);border-bottom:1.6px solid var(--ink);transform:rotate(-45deg)}
+.check span{display:block;color:var(--ink-soft);font-size:15px;margin-top:3px}
+.no{list-style:none;max-width:620px;margin:36px auto 0}
+.no li{padding:14px 0 14px 30px;border-bottom:1px solid var(--hairline);position:relative;font-size:16px;color:var(--ink-soft)}
+.no li::before{content:"—";position:absolute;left:2px;color:var(--ink-soft)}
+.quote{max-width:640px;margin:0 auto;font-family:'Bodoni Moda',serif;font-size:clamp(24px,3.2vw,34px);line-height:1.3;text-align:center}
+.faq{max-width:720px;margin:44px auto 0;border-top:1px solid var(--hairline)}
+.faq details{border-bottom:1px solid var(--hairline)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 34px 22px 0;position:relative;font-size:17px;font-weight:500}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:6px;top:50%;width:9px;height:9px;border-right:1.5px solid var(--ink-soft);border-bottom:1.5px solid var(--ink-soft);transform:translateY(-70%) rotate(45deg);transition:transform .22s}
+.faq details[open] summary::after{transform:translateY(-25%) rotate(-135deg)}
+.faq p{padding:0 0 24px;color:var(--ink-soft);font-size:16px;max-width:62ch}
+footer{border-top:1px solid var(--hairline);padding:52px 0 44px;font-size:14px;color:var(--ink-soft)}
+.foot-grid{display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between}
+.foot-links{display:flex;flex-wrap:wrap;gap:10px 24px;list-style:none}
+.foot-links a{text-decoration:none}
+.legal{margin-top:34px;font-size:13px;line-height:1.6;max-width:74ch;color:#8A8A8F}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="/" class="nav-logo">POPOW<span>&</span>KAMNEW</a>
-  <a href="https://wa.me/4915141336341?text=Hey%20Rodion%2C%20ich%20interessiere%20mich%20f%C3%BCr%20das%20Business." class="nav-cta" target="_blank">
-    Gespräch starten
-  </a>
-</nav>
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="index.html">Popow &amp; Kamnew</a>
+    <a class="btn btn-primary" href="https://tally.so/r/QK5R08">Fragebogen ausfüllen</a>
+  </div>
+</header>
 
-<!-- HERO -->
+<main>
+
 <section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-ghost">FREI</div>
-
-  <div class="hero-inner">
-    <div class="hero-tag">Business-Opportunity</div>
-
-    <h1>
-      Kein Chef.<br>
-      Kein Büro.<br>
-      <span class="g">Nur</span> ein<br>
-      <span class="o">Produkt.</span>
-    </h1>
-
-    <p class="hero-sub">
-      Ich bin IT-ler, Familienvater – und ich habe erkannt dass <strong>Parfüm das unterschätzteste Produkt der Welt</strong> ist. Jeder nutzt es. Jeder entscheidet in Sekunden ob er es will. Genau das macht es zum perfekten Einstieg in ein eigenes Business.
-    </p>
-
-    <div class="cta-group">
-      <a href="https://wa.me/4915141336341?text=Hey%20Rodion%2C%20ich%20m%C3%B6chte%20mehr%20%C3%BCber%20das%20Business%20erfahren." class="btn-wa" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        Kostenloses Gespräch – WhatsApp
-      </a>
-      <a href="#wie" class="btn-down">Mehr erfahren ↓</a>
+  <div class="wrap center">
+    <h1>Düfte verkaufen. Selbstständig.</h1>
+    <p class="lead center">Wir erklären dir hier, wie das bei uns aussieht — ohne Zahlen, die dich beeindrucken sollen, und ohne so zu tun, als wäre es einfach.</p>
+    <div class="btn-row center">
+      <a class="btn btn-primary" href="https://tally.so/r/QK5R08">Fragebogen ausfüllen</a>
+      <a class="btn btn-quiet" href="#realistisch">Erst weiterlesen</a>
     </div>
+  </div>
+</section>
 
-    <div class="hero-proof">
-      <div class="proof-item">
-        <span class="proof-num">200+</span>
-        <span class="proof-lbl">Düfte im Sortiment</span>
+<section class="band" id="realistisch">
+  <div class="wrap">
+    <div class="narrow center">
+      <h2>Wie das wirklich anfängt.</h2>
+      <p class="lead center" style="margin-top:18px">Nicht mit einem Team. Mit einem Flakon, den jemand gut findet.</p>
+    </div>
+    <div class="day">
+      <div>
+        <h3>Du riechst selbst</h3>
+        <p>Du bestellst ein Probenset und trägst die Düfte. Ohne das geht nichts — du kannst nichts empfehlen, was du nicht kennst.</p>
       </div>
-      <div class="proof-item">
-        <span class="proof-num">50%</span>
-        <span class="proof-lbl">Marge beim Direktverkauf</span>
+      <div>
+        <h3>Jemand fragt nach</h3>
+        <p>Das passiert von allein. Kollegin im Büro, Schwägerin beim Geburtstag. „Was hast du an?" ist die häufigste Frage im Direktvertrieb.</p>
       </div>
-      <div class="proof-item">
-        <span class="proof-num">0€</span>
-        <span class="proof-lbl">Startkosten fürs Gespräch</span>
+      <div>
+        <h3>Du gibst eine Probe mit</h3>
+        <p>Kein Pitch, kein Katalog. Ein Taschenzerstäuber, zwei Tage tragen, dann melden sie sich.</p>
       </div>
-      <div class="proof-item">
-        <span class="proof-num">🇮🇹</span>
-        <span class="proof-lbl">Made in Italy</span>
+      <div>
+        <h3>Du bestellst für sie</h3>
+        <p>Die erste Bestellung sind meist ein oder zwei Flakons. Ein überschaubarer Betrag — und genau das ist der Punkt. Es fängt klein an.</p>
+      </div>
+      <div>
+        <h3>Und dann nochmal</h3>
+        <p>Parfüm ist verbrauchbar. Wer seinen Duft gefunden hat, kommt in ein paar Monaten wieder. Aus einer Kundin werden über ein Jahr mehrere Bestellungen.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROBLEM -->
-<section class="problem">
-  <div class="problem-inner">
-    <p class="sec-label">Die Realität</p>
-    <h2 class="sec-title">Kennst du <span style="color:var(--gold)">das?</span></h2>
+<section>
+  <div class="wrap">
+    <div class="narrow center">
+      <h2>Was du dafür brauchst.</h2>
+    </div>
+    <ul class="check">
+      <li>Ein Probenset
+        <span>Der Kauf ist Voraussetzung für den Start. Es ist deine Arbeitsgrundlage, kein Beitrag.</span>
+      </li>
+      <li>Eine Gewerbeanmeldung und eine Steuernummer
+        <span>Du wirst selbstständig. Das ist kein Anstellungsverhältnis, es gibt kein Gehalt und keinen bezahlten Urlaub. Um Anmeldung und Steuer kümmerst du dich selbst — wir sagen dir, was wann ansteht.</span>
+      </li>
+      <li>Menschen, mit denen du ohnehin sprichst
+        <span>Kollegen, Nachbarschaft, Verein, Friseurin. Du brauchst keine Reichweite, du brauchst Alltag.</span>
+      </li>
+      <li>Regelmäßigkeit
+        <span>Es funktioniert nicht nebenbei ohne Aufwand. Wer nichts investiert, verkauft nichts — das gilt hier wie überall.</span>
+      </li>
+    </ul>
+  </div>
+</section>
 
-    <div class="pain-grid">
-      <div class="pain-card">
-        <span class="pain-emoji">⏰</span>
-        <div class="pain-title">Zeit gegen Geld tauschen</div>
-        <p class="pain-text">Du arbeitest 40 Stunden – bekommst ein fixes Gehalt. Mehr Zeit bedeutet nicht automatisch mehr Geld.</p>
+<section class="band">
+  <div class="wrap">
+    <div class="narrow center">
+      <h2>Für wen das nichts ist.</h2>
+      <p class="lead center" style="margin-top:18px">Wir schreiben das hin, weil es uns beiden Zeit spart.</p>
+    </div>
+    <ul class="no">
+      <li>Wenn du schnelles Geld suchst. Die ersten Monate sind Lernzeit.</li>
+      <li>Wenn du niemandem etwas verkaufen willst. Das hier ist Verkauf, nicht Content.</li>
+      <li>Wenn du dich vor Absagen fürchtest. Die meisten sagen nein, und das ist normal.</li>
+      <li>Wenn du hoffst, dass ein Team dich trägt. Verkauft wird von dir.</li>
+      <li>Wenn du Selbstständigkeit eigentlich nicht willst. Buchhaltung und Steuer gehören dazu.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="narrow center">
+      <h2>Was ihr von uns bekommt.</h2>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <h3>Einarbeitung</h3>
+        <p>Wir gehen mit dir das Sortiment durch, zeigen dir die Duftfamilien und wie du jemanden beim Finden begleitest.</p>
       </div>
-      <div class="pain-card">
-        <span class="pain-emoji">📉</span>
-        <div class="pain-title">Kein passives Einkommen</div>
-        <p class="pain-text">Wenn du nicht arbeitest, kommt nichts. Urlaub, Krankheit, Pause – alles kostet dich direkt Geld.</p>
+      <div class="col">
+        <h3>Material</h3>
+        <p>Unsere Finder-Tools, Vorlagen für Nachrichten und Bildmaterial. Du musst nicht bei null anfangen.</p>
       </div>
-      <div class="pain-card">
-        <span class="pain-emoji">🔒</span>
-        <div class="pain-title">Abhängigkeit</div>
-        <p class="pain-text">Ein Chef, ein Vertrag, eine Einkommensquelle. Genug davon – aber der Ausstieg ist ungewiss.</p>
+      <div class="col">
+        <h3>Erreichbarkeit</h3>
+        <p>Margarita und ich antworten. Keine Gruppe mit 400 Leuten, in der deine Frage untergeht.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STORY -->
-<section style="padding: 100px 40px; max-width: 1100px; margin: 0 auto;">
-  <div class="story" style="padding: 0; max-width: 100%;">
-    <div>
-      <p class="sec-label">Meine Geschichte</p>
-      <h2 class="sec-title">Vom <span style="color:var(--gold)">IT-ler</span><br>zum<br>Unternehmer.</h2>
-      <blockquote class="story-quote">„Parfüm kostet fast nichts in der Herstellung. Und trotzdem liebt es jeder Mensch. Das ist kein Zufall – das ist ein Geschäftsmodell."</blockquote>
-      <p class="story-text">Ich bin Rodion. IT-ler aus Werl. Familienvater. Ich dachte lange, ein eigenes Business ist kompliziert, teuer und riskant. Bis ich Chogan entdeckt habe.</p>
-      <p class="story-text">30% Duftöl. Direkt vom Hersteller. Kein Zwischenhändler. Ein Produkt das sich selbst erklärt – weil jeder in Sekunden entscheidet ob er einen Duft mag. Zusammen mit meiner Frau Margarita haben wir daraus ein echtes Business gebaut.</p>
-      <div class="story-signature">
-        <div class="story-avatar">RP</div>
-        <div>
-          <div class="story-name">Rodion Popow</div>
-          <div class="story-role">IT-ler · Familienvater · Chogan Berater</div>
-        </div>
-      </div>
+<section class="band">
+  <div class="wrap">
+    <p class="quote">„Wir suchen niemanden, der uns glaubt. Wir suchen jemanden, der es ausprobiert und dann selbst entscheidet."</p>
+    <p class="center" style="margin-top:22px;color:var(--ink-soft);font-size:15px">Rodion &amp; Margarita, Werl</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="narrow center"><h2>Häufige Fragen</h2></div>
+    <div class="faq">
+      <details>
+        <summary>Was verdiene ich damit?</summary>
+        <p>Das dürfen wir öffentlich nicht beziffern, und wir würden es auch nicht wollen — es hängt vollständig davon ab, wie viel du verkaufst. Im persönlichen Gespräch rechnen wir es dir konkret vor, mit echten Zahlen und ohne Schönfärberei.</p>
+      </details>
+      <details>
+        <summary>Ist das ein Nebenjob?</summary>
+        <p>Nein. Es ist eine selbstständige Tätigkeit. Kein Arbeitsvertrag, kein Gehalt, keine Urlaubstage — du entscheidest über Zeit, Umfang und Methode selbst und trägst das Risiko auch selbst.</p>
+      </details>
+      <details>
+        <summary>Muss ich ein Team aufbauen?</summary>
+        <p>Nein. Verkaufen kannst du allein, so lange du willst. Wenn du später jemanden mitnehmen möchtest, erklären wir dir, wie das geht — aber niemand muss das.</p>
+      </details>
+      <details>
+        <summary>Wie viel Zeit sollte ich einplanen?</summary>
+        <p>Realistisch ein paar Stunden pro Woche, verteilt. Nachrichten beantworten, Proben weitergeben, Bestellungen durchgeben. Mehr Zeit heißt mehr Ergebnis, weniger Zeit heißt weniger.</p>
+      </details>
+      <details>
+        <summary>Was passiert nach dem Fragebogen?</summary>
+        <p>Wir lesen ihn und melden uns. Dann telefonieren wir 20 Minuten — du fragst, wir antworten. Danach entscheidest du, nicht wir. Wenn es nicht passt, sagen wir das auch.</p>
+      </details>
     </div>
-    <div>
-      <ul class="insight-list">
-        <li class="insight-item">
-          <div class="insight-icon">🗝️</div>
-          <div>
-            <div class="insight-title">Produkt das jeder kennt</div>
-            <div class="insight-text">Parfüm muss nicht erklärt werden. Du zeigst es – der Kunde entscheidet sofort.</div>
-          </div>
-        </li>
-        <li class="insight-item">
-          <div class="insight-icon">📱</div>
-          <div>
-            <div class="insight-title">Alles läuft über dein Smartphone</div>
-            <div class="insight-text">Kein Lager. Kein Büro. Kein Mindestbestellwert. Du bestellst für Kunden – Chogan liefert.</div>
-          </div>
-        </li>
-        <li class="insight-item">
-          <div class="insight-icon">👥</div>
-          <div>
-            <div class="insight-title">Team aufbauen = Freiheit aufbauen</div>
-            <div class="insight-text">Wer ein eigenes Team entwickelt, verdient auch wenn er schläft. Das ist der Unterschied zwischen Job und Business.</div>
-          </div>
-        </li>
-        <li class="insight-item">
-          <div class="insight-icon">⚡</div>
-          <div>
-            <div class="insight-title">Nebenberuflich starten</div>
-            <div class="insight-text">Kein Risiko, kein Druck. Ich habe parallel zum IT-Job angefangen. Du kannst das auch.</div>
-          </div>
-        </li>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap narrow center">
+    <h2>Zwanzig Minuten, dann weißt du es.</h2>
+    <p class="lead center" style="margin-top:18px">Fünf Fragen im Fragebogen, damit wir wissen, mit wem wir sprechen. Danach melden wir uns.</p>
+    <div class="btn-row center" style="margin-top:30px">
+      <a class="btn btn-primary" href="https://tally.so/r/QK5R08">Fragebogen ausfüllen</a>
+      <a class="btn btn-wa" href="https://wa.me/4915141336341?text=Hallo%2C%20ich%20habe%20eine%20Frage%20zur%20selbstst%C3%A4ndigen%20T%C3%A4tigkeit.">Erst eine Frage stellen</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html">Popow &amp; Kamnew</a>
+        <p style="margin-top:8px;max-width:30ch">Italienische Düfte, Pflege und Vitalität. Aus Werl.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href="index.html">Startseite</a></li>
+        <li><a href="duft-orakel.html">Duft finden</a></li>
+        <li><a href="/impressum">Impressum</a></li>
+        <li><a href="/datenschutz">Datenschutz</a></li>
       </ul>
     </div>
+    <p class="legal">
+      Rodion Popow und Margarita Kamnew sind unabhängige Chogan-Verkaufsberater. Michaelstraße 20, 59457 Werl · 015141336341 · rodion.chogan@proton.me<br><br>
+      Verkaufsberater sind selbstständig tätig. Es besteht kein Arbeitsverhältnis. Erfahrungen einzelner Personen beziehen sich auf die vertretenen Personen und stellen weder eine Garantie für Ihr tatsächliches Einkommen dar noch entsprechen sie der Norm. Ein geschäftlicher Erfolg hängt vom persönlichen Einsatz ab und ist nicht zugesichert.<br><br>© 2026 Rodion Popow &amp; Margarita Kamnew
+    </p>
   </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how" id="wie">
-  <div class="how-inner">
-    <p class="sec-label">Der Weg</p>
-    <h2 class="sec-title">So funktioniert<br><span style="color:var(--gold)">es.</span></h2>
-
-    <div class="steps-grid">
-      <div class="step-card">
-        <span class="step-num">01</span>
-        <div class="step-title">Gespräch mit mir</div>
-        <p class="step-text">Wir reden 20 Minuten. Ich erkläre dir ehrlich was Chogan ist, was es nicht ist, und ob es zu dir passt.</p>
-      </div>
-      <div class="step-card">
-        <span class="step-num">02</span>
-        <div class="step-title">Einstieg & Probenset</div>
-        <p class="step-text">Du startest mit einem Probenset. Damit machst du deine ersten Verkäufe – echte Produkte, echte Erfahrung.</p>
-      </div>
-      <div class="step-card">
-        <span class="step-num">03</span>
-        <div class="step-title">Erste Verkäufe & Struktur</div>
-        <p class="step-text">Ich zeige dir wie das Duft-Orakel deine Kunden findet. Kein Klinkenputzen, kein Pitchen – das Tool arbeitet für dich.</p>
-      </div>
-      <div class="step-card">
-        <span class="step-num">04</span>
-        <div class="step-title">Team & Provision</div>
-        <p class="step-text">Ab dem zweiten Berater in deinem Team aktivierst du die Differenzprovision. So entsteht passives Einkommen.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EARNINGS -->
-<section class="earnings">
-  <div class="earnings-bg"></div>
-  <div class="earnings-ghost">€€€</div>
-  <div class="earnings-inner">
-    <p class="sec-label" style="justify-content:center;">Verdienstmöglichkeiten</p>
-    <h2 class="sec-title">Was ist<br><span style="color:var(--gold)">möglich?</span></h2>
-    <p style="font-size:15px;color:var(--gray);margin-bottom:0;max-width:520px;margin:0 auto 8px;">Dein Verdienst hängt von deiner Aktivität ab. Hier sind die Richtwerte je Karrierestufe.</p>
-
-    <div class="earnings-table">
-      <div class="earn-card">
-        <span class="earn-level">Amethyst</span>
-        <span class="earn-amount">2.500€</span>
-        <span class="earn-note">pro Monat</span>
-      </div>
-      <div class="earn-card">
-        <span class="earn-level">Onyx</span>
-        <span class="earn-amount">4.000€</span>
-        <span class="earn-note">pro Monat</span>
-      </div>
-      <div class="earn-card featured">
-        <span class="earn-level">Sapphire</span>
-        <span class="earn-amount">7.000€</span>
-        <span class="earn-note">pro Monat</span>
-      </div>
-      <div class="earn-card">
-        <span class="earn-level">Emerald</span>
-        <span class="earn-amount">13.000€</span>
-        <span class="earn-note">pro Monat</span>
-      </div>
-    </div>
-
-    <p class="disclaimer">* Basierend auf dem offiziellen Chogan Karriereplan. Angaben sind Richtwerte und hängen von individueller Aktivität, Teamstruktur und monatlichen Punkten ab. Kein Einkommenversprechen.</p>
-
-    <a href="https://wa.me/4915141336341?text=Hey%20Rodion%2C%20ich%20m%C3%B6chte%20mehr%20%C3%BCber%20die%20Verdienstm%C3%B6glichkeiten%20erfahren." class="btn-wa" target="_blank" style="margin:0 auto;">
-      <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#000;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-      Jetzt Gespräch anfragen
-    </a>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq">
-  <div class="faq-inner">
-    <p class="sec-label">Häufige Fragen</p>
-    <h2 class="sec-title" style="margin-bottom:48px;">FAQ.</h2>
-
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        Muss ich sofort Vollzeit einsteigen?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Nein. Ich selbst habe parallel zu meinem IT-Job angefangen. Die meisten starten nebenberuflich mit wenigen Stunden pro Woche. Kein Druck, kein Risiko.</div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        Was kostet der Einstieg?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Als Berater benötigst du ein Probenset um starten zu können. Das ist deine einzige Anfangsinvestition. Keine Monatsgebühren, kein Pflichtlager, kein Mindestbestellwert.</div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        Muss ich gut im Verkaufen sein?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Nein. Das Duft-Orakel auf unserer Website übernimmt die Vorauswahl. Kunden finden ihren Duft selbst – du bist nur der Kontaktpunkt für die Bestellung. Kein Pitchen, kein Überreden.</div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        Wie läuft die Zusammenarbeit mit dir ab?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Du bekommst von mir ein konkretes Onboarding: Woche 1–3 mit klaren Aufgaben, das Duft-Orakel als dein erstes Werkzeug, und persönliche Unterstützung per WhatsApp. Keine Gruppe, kein Massenmailing.</div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        Ist das MLM / Network Marketing?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Ja, Chogan ist ein Network-Marketing-Unternehmen. Ich verstecke das nicht. Der Unterschied: Du verdienst zuerst durch echten Produktverkauf – nicht durch das Anwerben von Leuten. Das Produkt muss sich selbst tragen. Bei Chogan tut es das.</div>
-    </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
-<section class="final-cta">
-  <div class="final-cta-bg"></div>
-  <div class="final-cta-border"></div>
-  <div class="final-cta-inner">
-    <p class="sec-label" style="justify-content:center;">Letzter Schritt</p>
-    <h2>Bereit für<br><span>das Gespräch?</span></h2>
-    <p>20 Minuten. Kein Pitch. Kein Druck. Ich erkläre dir <strong>ehrlich</strong> ob das Business zu dir passt – und wenn nicht, sage ich dir das auch.</p>
-    <a href="https://wa.me/4915141336341?text=Hey%20Rodion%2C%20ich%20bin%20interessiert%20und%20m%C3%B6chte%20ein%20Gespr%C3%A4ch%20%C3%BCber%20das%20Chogan%20Business." class="wa-big" target="_blank">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-      Gespräch starten – kostenlos
-    </a>
-    <p class="cta-note">Nur WhatsApp. Keine E-Mail-Liste. Kein Spam.</p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <a href="/" class="footer-logo">POPOW<span>&</span>KAMNEW</a>
-  <ul class="footer-links">
-    <li><a href="/">Startseite</a></li>
-    <li><a href="/impressum">Impressum</a></li>
-    <li><a href="/datenschutz">Datenschutz</a></li>
-  </ul>
 </footer>
-
-<script>
-function toggleFaq(btn) {
-  const item = btn.parentElement;
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
-}
-</script>
 
 </body>
 </html>
