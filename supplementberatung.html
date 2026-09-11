@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>SuppleFit Analyse · Popow & Kamnew</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root {
-  --black:#0A0A0A;--black2:#111111;--black3:#181818;
-  --gold:#C8963E;--gold2:#E8B84B;
-  --off-white:#F5F0E8;--muted:#888880;
-  --border:rgba(200,150,62,0.18);
+  --black:#FFFFFF;--black2:#F6F5F3;--black3:#EFEEEB;
+  --gold:#1A1A1A;--gold2:#3A3A3C;
+  --off-white:#1A1A1A;--muted:#6E6E73;
+  --border:rgba(0,0,0,0.10);
   --green:#5ce07a;--red:#e05c5c;
-  --sans:'DM Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+  --sans:'Inter',sans-serif;--display:'Bodoni Moda',sans-serif;
   --ease:all 0.28s cubic-bezier(0.4,0,0.2,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -33,7 +33,7 @@ nav.on{display:flex}
 @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
 /* ─── Typography ─── */
-.hero{text-align:center;padding:50px 20px 40px;background:radial-gradient(ellipse at top,rgba(200,150,62,0.1) 0%,transparent 70%)}
+.hero{text-align:center;padding:50px 20px 40px;background:radial-gradient(ellipse at top,rgba(0,0,0,0.10) 0%,transparent 70%)}
 .hero-icon{font-size:40px;margin-bottom:15px}
 .hero h1{font-family:var(--display);font-size:clamp(36px,8vw,56px);line-height:1;letter-spacing:1px;margin-bottom:10px}
 .hero h1 span{color:var(--gold)}
@@ -59,7 +59,7 @@ input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 1px var(--gol
 .activity-result-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 .activity-result-val{font-family:var(--display);font-size:22px;color:var(--gold)}
 .steps-row{display:flex;align-items:center;gap:12px;margin-top:14px}
-.steps-badge{font-family:var(--display);font-size:32px;color:var(--gold);min-width:80px;text-align:center;background:rgba(200,150,62,0.08);border:1px solid var(--border);padding:4px 12px;transition:color .2s}
+.steps-badge{font-family:var(--display);font-size:32px;color:var(--gold);min-width:80px;text-align:center;background:rgba(0,0,0,0.10);border:1px solid var(--border);padding:4px 12px;transition:color .2s}
 .steps-badge.low{color:var(--red)}
 .steps-badge.mid{color:var(--gold2)}
 .steps-badge.high{color:var(--green)}
@@ -68,7 +68,7 @@ input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 1px var(--gol
 /* ─── Sliders ─── */
 .range-wrap{margin:20px 0;background:var(--black3);padding:20px;border:1px solid var(--border)}
 .range-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
-.range-val-badge{font-family:var(--display);font-size:28px;color:var(--gold);line-height:1;background:rgba(200,150,62,0.08);border:1px solid var(--border);padding:2px 12px;letter-spacing:1px;transition:color .2s,background .2s}
+.range-val-badge{font-family:var(--display);font-size:28px;color:var(--gold);line-height:1;background:rgba(0,0,0,0.10);border:1px solid var(--border);padding:2px 12px;letter-spacing:1px;transition:color .2s,background .2s}
 .range-val-badge.low{color:var(--red);border-color:rgba(224,92,92,0.3);background:rgba(224,92,92,0.08)}
 .range-val-badge.mid{color:var(--gold2)}
 .range-val-badge.high{color:var(--green);border-color:rgba(92,224,122,0.3);background:rgba(92,224,122,0.08)}
@@ -78,7 +78,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:24px;widt
 input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
 .auto-trigger-hint{display:none;font-size:11px;color:var(--red);margin-top:10px;padding:8px 12px;background:rgba(224,92,92,0.08);border-left:2px solid var(--red)}
 .slider-scale{margin-top:14px;display:flex;flex-direction:column;gap:6px}
-.scale-item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--black);border:1px solid rgba(200,150,62,0.08)}
+.scale-item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--black);border:1px solid rgba(0,0,0,0.10)}
 .scale-num{font-family:var(--display);font-size:15px;letter-spacing:1px;min-width:40px;flex-shrink:0;line-height:1.2;padding-top:1px}
 .scale-txt{font-size:12px;color:var(--muted);line-height:1.5;font-weight:300}
 .scale-low .scale-num{color:var(--red)}
@@ -88,7 +88,7 @@ input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
 /* ─── Goal Cards ─── */
 .card-choice{position:relative;background:var(--black);border:1px solid var(--border);padding:20px 15px;text-align:center;cursor:pointer;transition:var(--ease)}
 .card-choice input{position:absolute;opacity:0}
-.card-choice.sel{border-color:var(--gold);background:rgba(200,150,62,0.05)}
+.card-choice.sel{border-color:var(--gold);background:rgba(0,0,0,0.10)}
 .card-choice .icon{font-size:28px;display:block;margin-bottom:8px}
 .card-choice .ct{font-size:13px;font-weight:500;color:var(--muted);transition:var(--ease)}
 .card-choice.sel .ct{color:var(--gold)}
@@ -124,27 +124,27 @@ input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
 .btn-checkin:hover{background:rgba(92,224,122,0.25)}
 .mode-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:4px 10px;margin-bottom:16px}
 .mode-badge.checkin{background:rgba(92,224,122,0.1);border:1px solid rgba(92,224,122,0.3);color:var(--green)}
-.mode-badge.fresh{background:rgba(200,150,62,0.1);border:1px solid rgba(200,150,62,0.3);color:var(--gold)}
+.mode-badge.fresh{background:rgba(0,0,0,0.10);border:1px solid rgba(0,0,0,0.10);color:var(--gold)}
 
 /* ─── Category Section ─── */
 .cat-section{margin-bottom:32px}
-.cat-section-header{display:flex;align-items:center;gap:12px;background:rgba(200,150,62,0.06);border:1px solid var(--gold);border-bottom:none;padding:14px 18px}
+.cat-section-header{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,0.10);border:1px solid var(--gold);border-bottom:none;padding:14px 18px}
 .cat-section-icon{font-size:22px}
 .cat-section-title{font-family:var(--display);font-size:22px;letter-spacing:1.5px;color:var(--gold)}
 .cat-section-subtitle{font-size:11px;color:var(--muted);margin-top:2px}
-.cat-rationale{background:rgba(200,150,62,0.03);border:1px solid var(--gold);border-top:1px dashed rgba(200,150,62,0.3);border-bottom:none;padding:16px 18px;font-size:13px;font-weight:300;color:var(--off-white);line-height:1.7}
+.cat-rationale{background:rgba(0,0,0,0.10);border:1px solid var(--gold);border-top:1px dashed rgba(0,0,0,0.10);border-bottom:none;padding:16px 18px;font-size:13px;font-weight:300;color:var(--off-white);line-height:1.7}
 .cat-rationale strong{color:var(--gold);font-weight:600}
-.science-strip{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px;background:rgba(200,150,62,0.03);border:1px solid var(--gold);border-top:none;border-bottom:none}
-.sci-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:4px 10px;background:rgba(200,150,62,0.1);border:1px solid rgba(200,150,62,0.3);color:var(--gold2);white-space:nowrap}
+.science-strip{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px;background:rgba(0,0,0,0.10);border:1px solid var(--gold);border-top:none;border-bottom:none}
+.sci-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:4px 10px;background:rgba(0,0,0,0.10);border:1px solid rgba(0,0,0,0.10);color:var(--gold2);white-space:nowrap}
 .prod-card{background:var(--black);border:1px solid var(--gold);border-top:none;padding:20px;position:relative;transition:var(--ease)}
-.prod-card+.prod-card{border-top:1px solid rgba(200,150,62,0.18)}
-.prod-card:hover{background:rgba(200,150,62,0.03)}
+.prod-card+.prod-card{border-top:1px solid rgba(0,0,0,0.10)}
+.prod-card:hover{background:rgba(0,0,0,0.10)}
 .prod-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .prod-name{font-family:var(--display);font-size:24px;letter-spacing:1px;color:var(--off-white);line-height:1}
 .prod-code{font-size:10px;font-family:monospace;color:var(--muted);letter-spacing:1px;background:var(--black3);padding:4px 8px}
 .prod-info{font-size:13px;font-weight:300;color:var(--muted);line-height:1.7;margin-bottom:14px}
 .prod-info strong{color:var(--off-white);font-weight:500}
-.prod-dose-box{background:var(--black3);border:1px dashed rgba(200,150,62,0.25);padding:12px;margin-bottom:14px}
+.prod-dose-box{background:var(--black3);border:1px dashed rgba(0,0,0,0.10);padding:12px;margin-bottom:14px}
 .prod-dose-lbl{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:4px;display:block}
 .prod-dose-txt{font-size:13px;color:var(--off-white);font-weight:500}
 .prod-nutrients{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
@@ -190,13 +190,13 @@ input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
 /* ─── Tagesplan ─── */
 .tagesplan{background:var(--black3);border:1px solid var(--border);margin:24px 0 0}
 .tagesplan-title{padding:14px 18px;border-bottom:1px solid var(--border);font-family:var(--display);font-size:20px;letter-spacing:1px;color:var(--gold)}
-.tp-row{display:flex;gap:14px;padding:12px 18px;border-bottom:1px solid rgba(200,150,62,0.08);align-items:flex-start}
+.tp-row{display:flex;gap:14px;padding:12px 18px;border-bottom:1px solid rgba(0,0,0,0.10);align-items:flex-start}
 .tp-row:last-child{border-bottom:none}
 .tp-time{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;min-width:90px;padding-top:2px}
 .tp-items{font-size:13px;color:var(--off-white);line-height:1.6}
 
 /* ─── Preis + CTA ─── */
-.price-summary{background:rgba(200,150,62,0.06);border:1px solid var(--gold);padding:20px;margin:16px 0 0;display:flex;justify-content:space-between;align-items:center}
+.price-summary{background:rgba(0,0,0,0.10);border:1px solid var(--gold);padding:20px;margin:16px 0 0;display:flex;justify-content:space-between;align-items:center}
 .price-total-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
 .price-total-val{font-family:var(--display);font-size:36px;color:var(--gold);letter-spacing:1px}
 .btn-wa-full{display:flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:#000;padding:16px 24px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;text-decoration:none;transition:var(--ease);margin-top:10px}
@@ -215,6 +215,44 @@ input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
   #app{border:none;background:white}
   .prod-card,.cat-section-header,.cat-rationale,.science-strip,.biov-section,.biov-row{background:#f9f9f9!important;color:black!important;border-color:#ddd!important}
 }
+
+/* ===== Helles Redesign — Popow & Kamnew ===== */
+body::before { display: none !important; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  letter-spacing: -0.005em;
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+}
+h1, h2, h3, h4,
+.nav-logo, .footer-logo, .brand, .header-title {
+  font-family: 'Bodoni Moda', Georgia, serif !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.08 !important;
+  color: #1A1A1A !important;
+}
+/* Getrackte Versal-Labels neutralisieren */
+[class*="eyebrow"], [class*="-label"], .page-label, .block-label,
+.nav-back, .footer-links a, .toc p {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+[class*="eyebrow"]::before, .page-label::before, .block-label::before { display: none !important; }
+/* Weiche Kanten statt scharfer Rahmen */
+button, .btn, [class*="btn-"], [class*="button"] { border-radius: 999px !important; }
+[class*="card"], [class*="option"], [class*="tile"], [class*="box"],
+.toc, .result, [class*="panel"] { border-radius: 18px !important; }
+/* Haarlinien */
+[style*="border"], hr { border-color: #E4E2DE !important; }
+/* Fokus sichtbar halten */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #1A1A1A !important; outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
 </style>
 </head>
 <body>
