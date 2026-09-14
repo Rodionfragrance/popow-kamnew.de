@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2A1D2B">
+<title>Raumduft finden — Cooperativa Profumieri</title>
+<style>
+/* ————— Tokens ————— */
+:root{
+  --aubergine:#2A1D2B;
+  --aubergine-lift:#3A2A3B;
+  --ivory:#F4EFE6;
+  --ivory-dim:#DED6C8;
+  --gold:#C8A35A;
+  --ink:#1E161F;
+
+  --w-harmonie:#A89A88;
+  --w-vitalitaet:#C9A227;
+  --w-eleganz:#8C8E90;
+  --w-gemuet:#7A2233;
+  --w-tiefe:#171717;
+
+  --serif:"Didot","Bodoni MT","Playfair Display",Georgia,"Times New Roman",serif;
+  --sans:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--aubergine);
+  color:var(--ivory);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.wrap{max-width:560px;margin:0 auto;padding:28px 22px 60px}
+
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:.01em}
+h1{font-size:40px;line-height:1.05}
+h2{font-size:27px;line-height:1.15}
+h3{font-size:21px;line-height:1.2}
+p{margin:0 0 14px}
+.lede{color:var(--ivory-dim);font-size:15px;max-width:44ch}
+
+/* ————— Kopf ————— */
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:34px}
+.brand-mark{
+  width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;
+  display:grid;place-items:center;font-family:var(--serif);color:var(--gold);font-size:14px;
+}
+.brand-name{font-size:11.5px;letter-spacing:.22em;color:var(--ivory-dim)}
+
+/* ————— Fortschritt ————— */
+.progress{display:flex;gap:5px;margin:0 0 26px}
+.progress i{height:2px;flex:1;background:rgba(244,239,230,.18);transition:background .25s}
+.progress i.on{background:var(--gold)}
+
+/* ————— Schritte ————— */
+.step{display:none}
+.step.active{display:block}
+.q{margin:0 0 6px}
+.hint{color:var(--ivory-dim);font-size:14px;margin:0 0 22px}
+
+.opts{list-style:none;margin:0;padding:0;border-top:1px solid rgba(244,239,230,.14)}
+.opt{
+  display:flex;align-items:baseline;gap:14px;width:100%;
+  background:none;border:0;border-bottom:1px solid rgba(244,239,230,.14);
+  color:var(--ivory);font:inherit;text-align:left;
+  padding:17px 2px;cursor:pointer;
+}
+.opt:active{background:var(--aubergine-lift)}
+.opt:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.opt .bar{width:3px;align-self:stretch;background:var(--gold);flex:none;border-radius:2px}
+.opt .t{flex:1}
+.opt .t b{font-weight:400;font-family:var(--serif);font-size:19px;display:block}
+.opt .t span{display:block;color:var(--ivory-dim);font-size:13.5px;line-height:1.4;margin-top:2px}
+
+.back{
+  background:none;border:0;color:var(--ivory-dim);font:inherit;font-size:14px;
+  padding:18px 2px;cursor:pointer;
+}
+.back:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ————— Start ————— */
+.hero-rule{width:44px;height:1px;background:var(--gold);margin:20px 0 18px}
+.btn{
+  display:inline-block;background:var(--gold);color:var(--ink);
+  border:0;border-radius:2px;font:inherit;font-size:15px;font-weight:600;
+  padding:15px 28px;cursor:pointer;letter-spacing:.02em;
+}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:2px solid var(--ivory);outline-offset:2px}
+.btn-ghost{
+  background:none;color:var(--ivory);border:1px solid rgba(244,239,230,.35);
+  padding:14px 24px;
+}
+
+/* ————— Ergebnis ————— */
+.result{animation:rise .45s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.result{animation:none}}
+
+.match{
+  background:var(--ivory);color:var(--ink);
+  padding:26px 22px 24px;border-radius:2px;margin:0 0 18px;
+}
+.welt{
+  display:inline-block;font-size:11px;letter-spacing:.2em;
+  color:#fff;padding:4px 10px;margin-bottom:14px;
+}
+.match h2{margin-bottom:10px}
+.match .why{font-size:14px;color:#5A4F58;margin:0 0 18px}
+.match .desc{font-size:15px;line-height:1.6;margin:0 0 20px}
+
+.notes{border-top:1px solid rgba(30,22,31,.16);padding-top:16px;margin-bottom:20px}
+.note-row{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:7px 0;font-size:14px}
+.note-row dt{font-family:var(--serif);font-size:15px;color:#7A2233}
+.note-row dd{margin:0;color:#3C3340}
+
+.sizes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:0;list-style:none}
+.size{
+  border:1px solid rgba(30,22,31,.22);padding:9px 12px;border-radius:2px;
+  font-size:13px;line-height:1.3;min-width:86px;
+}
+.size.pick{border-color:var(--gold);background:rgba(200,163,90,.14)}
+.size b{display:block;font-family:var(--serif);font-size:16px;font-weight:400}
+.size span{color:#6B6070;font-size:11.5px;letter-spacing:.08em}
+.size em{display:block;font-style:normal;font-size:14px;margin-top:2px}
+
+.tip{font-size:13.5px;color:#6B6070;border-left:2px solid var(--gold);padding-left:12px;margin:0 0 20px}
+
+.alt{border-top:1px solid rgba(244,239,230,.14);padding:16px 0;display:flex;gap:14px;align-items:baseline;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;color:var(--ivory);font:inherit;text-align:left;cursor:pointer}
+.alt .bar{width:3px;align-self:stretch;flex:none;border-radius:2px}
+.alt b{font-family:var(--serif);font-weight:400;font-size:18px;display:block}
+.alt span{display:block;font-size:13px;color:var(--ivory-dim)}
+.alt .px{font-size:13px;color:var(--gold);white-space:nowrap}
+
+.cta{margin:28px 0 0;display:flex;flex-direction:column;gap:10px}
+.cta a,.cta button{width:100%;text-align:center;text-decoration:none}
+
+/* ————— Katalog ————— */
+.filters{display:flex;gap:7px;overflow-x:auto;padding:0 0 4px;margin:0 0 18px;-webkit-overflow-scrolling:touch}
+.filters button{
+  flex:none;background:none;border:1px solid rgba(244,239,230,.3);color:var(--ivory-dim);
+  font:inherit;font-size:13px;padding:7px 13px;border-radius:20px;cursor:pointer;white-space:nowrap;
+}
+.filters button.on{border-color:var(--gold);color:var(--gold)}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid rgba(244,239,230,.14);font-size:12px;color:rgba(244,239,230,.5);line-height:1.6}
+footer a{color:rgba(244,239,230,.65)}
+
+/* ═══ Warenkorb ═══ */
+.size{cursor:pointer;transition:border-color .15s,background .15s}
+.size:hover{border-color:#1A1A1A}
+.sizehint{font-size:13px;color:#6E6E73;margin:8px 0 0}
+#cartBar{position:fixed;left:0;right:0;bottom:0;z-index:90;display:none;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-top:1px solid #E4E2DE;padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+#cartBar.on{display:block}
+.cartbar-in{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.cartbar-in .sum{flex:1;min-width:0;line-height:1.3}
+.cartbar-in .sum b{display:block;font-size:16px}
+.cartbar-in .sum span{font-size:13px;color:#6E6E73}
+.cart-open{background:none;border:1px solid #E4E2DE;border-radius:999px;padding:10px 16px;
+  font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
+.cart-send{background:#25D366;color:#0b2e17;border:0;border-radius:999px;padding:13px 20px;
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;text-decoration:none;
+  display:inline-flex;align-items:center}
+#cartPanel{position:fixed;inset:0;z-index:95;display:none;background:rgba(0,0,0,.32)}
+#cartPanel.on{display:block}
+.cart-sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;
+  max-height:78vh;overflow:auto;padding:22px 20px calc(20px + env(safe-area-inset-bottom))}
+.cart-sheet h3{margin:0 0 14px;font-size:20px}
+.cart-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #E4E2DE}
+.cart-row .t{flex:1;min-width:0}
+.cart-row .t b{display:block;font-size:15px}
+.cart-row .t span{font-size:13px;color:#6E6E73}
+.cart-row .p{font-size:15px;white-space:nowrap}
+.cart-row .x{background:none;border:0;font:inherit;font-size:20px;line-height:1;color:#6E6E73;cursor:pointer;padding:4px 6px}
+.cart-total{display:flex;justify-content:space-between;padding:16px 0 6px;font-size:17px}
+.cart-note{font-size:13px;color:#6E6E73;margin-bottom:16px}
+.cart-empty{color:#6E6E73;padding:18px 0}
+body.has-cart{padding-bottom:92px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="brand-mark">CP</div>
+    <div class="brand-name">COOPERATIVA PROFUMIERI</div>
+  </div>
+
+  <div class="progress" id="prog" hidden>
+    <i></i><i></i><i></i><i></i><i></i>
+  </div>
+
+  <!-- START -->
+  <section class="step active" id="s0">
+    <h1>Welcher Duft<br>passt in deinen<br>Raum?</h1>
+    <div class="hero-rule"></div>
+    <p class="lede">Fünf Fragen, eine Empfehlung aus 22 italienischen Raumdüften — mit Duftnoten, Größe und Preis.</p>
+    <p style="margin-top:24px"><button class="btn" onclick="go(1)">Los geht's</button></p>
+    <p style="margin-top:18px"><button class="btn btn-ghost" onclick="showCatalog()">Lieber alle Düfte ansehen</button></p>
+  </section>
+
+  <!-- 1 RAUM -->
+  <section class="step" id="s1">
+    <h2 class="q">Für welchen Raum?</h2>
+    <p class="hint">Wo soll der Duft zu Hause sein?</p>
+    <ul class="opts" id="q1"></ul>
+    <button class="back" onclick="go(0)">Zurück</button>
+  </section>
+
+  <!-- 2 STIMMUNG -->
+  <section class="step" id="s2">
+    <h2 class="q">Wie soll sich der Raum anfühlen?</h2>
+    <p class="hint">Die fünf Duftwelten der Kollektion.</p>
+    <ul class="opts" id="q2"></ul>
+    <button class="back" onclick="go(1)">Zurück</button>
+  </section>
+
+  <!-- 3 RICHTUNG -->
+  <section class="step" id="s3">
+    <h2 class="q">Welche Duftrichtung magst du?</h2>
+    <p class="hint">Denk an deinen Lieblingsduft — wohin geht der?</p>
+    <ul class="opts" id="q3"></ul>
+    <button class="back" onclick="go(2)">Zurück</button>
+  </section>
+
+  <!-- 4 FORMAT -->
+  <section class="step" id="s4">
+    <h2 class="q">Dauerhaft oder auf Knopfdruck?</h2>
+    <p class="hint">Diffuser duften ständig, Sprays nur wenn du willst.</p>
+    <ul class="opts" id="q4"></ul>
+    <button class="back" onclick="go(3)">Zurück</button>
+  </section>
+
+  <!-- 5 GRÖSSE -->
+  <section class="step" id="s5">
+    <h2 class="q">Wie groß ist der Raum?</h2>
+    <p class="hint">Danach richtet sich die Flaschengröße.</p>
+    <ul class="opts" id="q5"></ul>
+    <button class="back" onclick="go(4)">Zurück</button>
+  </section>
+
+  <!-- ERGEBNIS -->
+  <section class="step" id="sr">
+    <div id="resultBox" class="result"></div>
+    <button class="back" onclick="restart()">Nochmal von vorn</button>
+  </section>
+
+  <!-- KATALOG -->
+  <section class="step" id="sc">
+    <h2 class="q">Alle Düfte</h2>
+    <p class="hint">22 Kompositionen, Made in Italy.</p>
+    <div class="filters" id="filters"></div>
+    <div id="catalogList"></div>
+    <button class="back" onclick="restart()">Zum Duft-Finder</button>
+  </section>
+
+  <footer>
+    Cooperativa Profumieri — vertrieben durch Chogan Group S.p.A., Barletta (BT), Italien.<br>
+    Alle Preise inkl. MwSt. Stäbchen bei Diffusern im Lieferumfang, Ersatz ab 2,50&nbsp;€.<br>
+    <span id="kontaktZeile"></span>
+  </footer>
+</div>
+
+<script>
+/* ═══ HIER DEINE DATEN EINTRAGEN ═══ */
+const KONTAKT = {
+  name: "Rodion",
+  whatsapp: "4915141336341",      // internationale Nummer ohne + und ohne 0
+  shop: ""                         // optional: Link zum offiziellen Shop
+};
+
+/* ═══ Duftwelten ═══ */
+const WELTEN = {
+  harmonie:   {label:"Harmonie",      color:"var(--w-harmonie)",  sub:"Ruhe, Ausgleich, Entschleunigung"},
+  vitalitaet: {label:"Vitalität",     color:"var(--w-vitalitaet)",sub:"Frische, Energie, Aufbruch"},
+  eleganz:    {label:"Eleganz",       color:"var(--w-eleganz)",   sub:"Zurückhaltung, Stil, Klarheit"},
+  gemuet:     {label:"Gemütlichkeit", color:"var(--w-gemuet)",    sub:"Wärme, Nähe, Geborgenheit"},
+  tiefe:      {label:"Tiefe",         color:"var(--w-tiefe)",     sub:"Charakter, Sinnlichkeit, Aura"}
+};
+
+const RAEUME = {
+  wohnzimmer:"Wohnzimmer", schlafzimmer:"Schlafzimmer", kueche:"Küche",
+  esszimmer:"Esszimmer", bad:"Badezimmer", buero:"Büro / Arbeitszimmer", eingang:"Eingang / Flur"
+};
+
+/* ═══ Produkte ═══ */
+const P = [
+// —— Diffuser ——
+{n:"Flower Garden",w:"harmonie",t:"d",r:["kueche","eingang"],ri:["blumig","frisch"],f:"Blumig-Fruchtig",
+ k:"Zitrone, Birne, rosa Pfeffer", h:"Türkische Rose, indischer Jasmin, schwarze Johannisbeere, Himbeere", b:"Patschuli, weißer Moschus",
+ d:"Rose und Jasmin im Mittelpunkt, umhüllt von zartem Moschus und süß-fruchtigen Nuancen. Wie ein verborgener Garten, den der Wind berührt.",
+ s:[[ "100 ml",24,"COP0001"],["200 ml",35,"COP0002"],["500 ml",70,"COP0003"],["1,5 l",190,"COP0004"],["3 l",350,"COP0005"]]},
+
+{n:"Fruity Blend",w:"vitalitaet",t:"d",r:["wohnzimmer"],ri:["fruchtig","gourmand"],f:"Orientalisch-Fruchtig",
+ k:"Sauerkirsche, Cognac", h:"Kirschsirup, Jasmin, türkische Rose", b:"Moschus, Tonkabohne, Vanille",
+ d:"Intensiv fruchtig und umhüllend. Warme Noten von Tonkabohne und Vanille geben Tiefe und einen vitalisierenden Energiekick.",
+ s:[["100 ml",24,"COP0006"],["200 ml",35,"COP0007"],["500 ml",70,"COP0008"],["1,5 l",190,"COP0009"],["3 l",350,"COP0010"]]},
+
+{n:"Mediterranean Pomegranate",w:"vitalitaet",t:"d",r:["eingang","wohnzimmer"],ri:["fruchtig","frisch"],f:"Blumig-Fruchtig",
+ k:"Schwarze Johannisbeere", h:"Rose, Granatapfel", b:"Weißer Moschus",
+ d:"Granatapfel mit saftiger, leuchtender Energie. Ein Duft, der Licht und Vitalität im ganzen Raum verbreitet.",
+ s:[["100 ml",24,"COP0011"],["200 ml",35,"COP0012"],["500 ml",70,"COP0013"],["1,5 l",190,"COP0014"],["3 l",350,"COP0015"]]},
+
+{n:"Bacchus Symphonies",w:"eleganz",t:"d",r:["buero","wohnzimmer"],ri:["fruchtig","gourmand"],f:"Fruchtig",
+ k:"Schwarze Johannisbeere, Erdbeere, Traube", h:"Pfirsich, Orangenblüte", b:"Rote Früchte, Himbeere, Vanille, Karamell, rauchige Noten",
+ d:"Intensiv-fruchtig und ausgewogen, mit gourmandiger Basis und zarten rauchigen Akzenten. Moderne Eleganz im Raum.",
+ s:[["100 ml",24,"COP0016"],["200 ml",35,"COP0017"],["500 ml",70,"COP0018"],["1,5 l",190,"COP0019"],["3 l",350,"COP0020"]]},
+
+{n:"Red Fruit Heart",w:"vitalitaet",t:"d",r:["eingang","wohnzimmer"],ri:["fruchtig","gourmand"],f:"Fruchtig",
+ k:"Schwarze Johannisbeere, Erdbeere, Grapefruit", h:"Pfirsich, Orangenblüte", b:"Vanille, Karamell, rauchige Noten, rote Früchte, Himbeere",
+ d:"Ein gourmandiger Akkord roter Früchte mit lebendiger Süße. Feine rauchige Noten halten die Atmosphäre wach.",
+ s:[["100 ml",24,"COP0021"],["200 ml",35,"COP0022"],["500 ml",70,"COP0023"],["1,5 l",190,"COP0024"],["3 l",350,"COP0025"]]},
+
+{n:"Magnolia Bouquet",w:"eleganz",t:"d",r:["kueche","bad"],ri:["blumig","frisch"],f:"Blumig-Fruchtig",
+ k:"Birne, Apfel, Zitrone", h:"Wassernoten, ozonische Noten, Rose, Magnolie, Jasmin, Orangenblüte", b:"Pudrige Noten, Ambra, Sandelholz, Zedernholz, Vetiver",
+ d:"Magnolienblüten treffen auf frische, aquatische Noten. Klarheit und Helligkeit, getragen von einer holzig-ambrierten Basis.",
+ s:[["100 ml",24,"COP0026"],["200 ml",35,"COP0027"],["500 ml",70,"COP0028"],["1,5 l",190,"COP0029"],["3 l",350,"COP0030"]]},
+
+{n:"Spice Symphony",w:"gemuet",t:"d",r:["wohnzimmer","buero"],ri:["holzig","gourmand"],f:"Blumig-Orientalisch-Holzig",
+ k:"Zitrusfrüchte, Pfirsich, Kampfer, Mandel", h:"Orchidee, Jasmin, Rose, Veilchen, Gewürznelken", b:"Zeder, Tonkabohne, Vanille, Moschus, Patschuli, Guajakholz, Vetiver",
+ d:"Zitrus und Pfirsich treffen auf umhüllende Gewürze. Warm-holzige Basis aus Guajakholz und Vanille — gemütlich und einladend.",
+ s:[["100 ml",24,"COP0031"],["200 ml",35,"COP0032"],["500 ml",70,"COP0033"]]},
+
+{n:"Mystic Ylang",w:"harmonie",t:"d",r:["bad"],ri:["blumig"],f:"Orientalisch-Blumig",
+ k:"Bergamotte, ozonische Noten", h:"Orchidee, Lavendel, Jasmin, Rose, Nelke, Tonkabohne, Ylang-Ylang", b:"Moschus, Vanille",
+ d:"Klare Luft und weite Horizonte im Auftakt, ein samtiges Herz aus Ylang-Ylang und Orchidee. Entspannung pur.",
+ s:[["100 ml",24,"COP0034"],["200 ml",35,"COP0035"],["500 ml",70,"COP0036"]]},
+
+{n:"Lush Oasis",w:"harmonie",t:"d",r:["kueche","esszimmer"],ri:["fruchtig","frisch"],f:"Blumig-Fruchtig",
+ k:"Granatapfel, Weintraube, Orange, Bergamotte, Kokosnuss, grüne Noten", h:"Jasmin, Lavendel, Gewürznelken", b:"Vanille",
+ d:"Saftig-fruchtiger Auftakt auf grünen, beruhigenden Akzenten. Cremige Vanillebasis, dezent und harmonisch.",
+ s:[["100 ml",24,"COP0037"],["200 ml",35,"COP0038"],["500 ml",70,"COP0039"]]},
+
+{n:"Golden Vanilla",w:"gemuet",t:"d",r:["schlafzimmer"],ri:["gourmand","blumig"],f:"Blumig-Fruchtig-Orientalisch",
+ k:"Pfirsich, Kokosnuss, Traube", h:"Jasmin, Weißdorn, Heliotrop", b:"Holznoten, Ambra, Moschus, Vanille",
+ d:"Fruchtig-cremige Eröffnung, warm und beruhigend. Vanille und ambrierte Hölzer schenken sofort ein Gefühl von Geborgenheit.",
+ s:[["100 ml",24,"COP0040"],["200 ml",35,"COP0041"],["500 ml",70,"COP0042"]]},
+
+{n:"Desert Woods",w:"tiefe",t:"d",r:["eingang","wohnzimmer"],ri:["holzig","gourmand"],f:"Holzig-Gourmand",
+ k:"Safran", h:"Jasmin, Papyrus, Karamell", b:"Moschus, Vanille, holzige Noten",
+ d:"Intensiv und raumfüllend, eröffnet mit warm-würzigem Safran. Zurück bleibt eine elegante Intensität mit geheimnisvoller Aura.",
+ s:[["100 ml",24,"COP0043"],["200 ml",35,"COP0044"],["500 ml",70,"COP0045"]]},
+
+{n:"Scarlet Temptation",w:"tiefe",t:"d",r:["esszimmer","wohnzimmer"],ri:["holzig","fruchtig"],f:"Blumig-Fruchtig",
+ k:"Bittere Mandel, Nelke, Pflaume", h:"Kirsche, Heliotrop, Rose", b:"Tonkabohne, Sandelholz, Vetiver, Benzoeharz",
+ d:"Reichhaltig und samtig, mit markanter Ausstrahlung. Gibt dem Raum Charakter und Tiefe, ohne aufdringlich zu sein.",
+ s:[["100 ml",24,"COP0046"],["200 ml",35,"COP0047"],["500 ml",70,"COP0048"]]},
+
+// —— Sprays ——
+{n:"Sun Mirage",w:"vitalitaet",t:"s",r:["wohnzimmer","kueche"],ri:["fruchtig","gourmand"],f:"Fruchtig-Gourmand",
+ k:"Mango, Mandarine, Passionsfrucht", h:"Guave, Ananas, Drachenfrucht", b:"Vanille, Karamell, helle Hölzer",
+ d:"Eine Explosion tropischer Früchte mit saftiger, sonniger Spur. Hell und energiegeladen.",
+ s:[["500 ml",35,"COPS0001"]]},
+
+{n:"Cotton Veil",w:"harmonie",t:"s",r:["schlafzimmer"],ri:["blumig","holzig"],f:"Blumig-Holzig",
+ k:"Feigenblatt, Kokosmilch", h:"Iris, Rose, Lavandin, Baumwollfaser", b:"Zedernholz, Tonkabohne, ambrierte Hölzer",
+ d:"Sauber und umhüllend — Baumwolle und Iris auf weichem Feigenblatt. Der Klassiker fürs Schlaf- und Ankleidezimmer.",
+ s:[["500 ml",35,"COPS0002"]]},
+
+{n:"Meadow Spirit",w:"vitalitaet",t:"s",r:["eingang","wohnzimmer"],ri:["frisch","blumig"],f:"Blumig-Fruchtig",
+ k:"Orange, Bergamotte, Apfel, grüne Früchte", h:"Maiglöckchen, weiße Blüten, Rose", b:"Moschus, helle Hölzer",
+ d:"Wie frische Luft: Zitrus, grüne Früchte und Apfel beleben den Raum in Sekunden.",
+ s:[["500 ml",35,"COPS0003"]]},
+
+{n:"Petal Infusion",w:"eleganz",t:"s",r:["bad","schlafzimmer"],ri:["blumig"],f:"Blumig",
+ k:"Bergamotte, grüne Früchte, Aldehyde", h:"Lavendel, Rose, weiße Blüten, Orangenblüten", b:"Tonkabohne, Vanille, Moschus, ambrierte Hölzer",
+ d:"Frisch-sauberer Auftakt, ausgewogenes blumiges Herz. Eine elegante, moderne Aura — dezent statt laut.",
+ s:[["500 ml",35,"COPS0004"]]},
+
+{n:"Velvet Citrus",w:"vitalitaet",t:"s",r:["kueche","esszimmer"],ri:["frisch","gourmand"],f:"Zitrus-Vanille",
+ k:"Orange, Mandarine", h:"Zimt, weiße Blüten", b:"Vanille, helle Hölzer",
+ d:"Orange und Mandarine mit würzig-blumigem Herz, weich abgerundet durch Vanille. Der Küchen-Allrounder nach dem Kochen.",
+ s:[["500 ml",35,"COPS0005"]]},
+
+{n:"Fruity Delight",w:"vitalitaet",t:"s",r:["wohnzimmer","eingang"],ri:["fruchtig","blumig"],f:"Blumig-Fruchtig",
+ k:"Bergamotte, grüne Früchte, Pfirsich, Mandarine", h:"Jasmin, Veilchen, Maiglöckchen", b:"Vanille, Moschus, ambrierte Hölzer, Sandelholz",
+ d:"Frisch und lebhaft im Auftakt, elegant im Herzen, warm im Fond — ohne zu beschweren.",
+ s:[["500 ml",35,"COPS0006"]]},
+
+{n:"Soft Hypnose",w:"harmonie",t:"s",r:["schlafzimmer","bad"],ri:["gourmand","blumig"],f:"Blumig-Fruchtig",
+ k:"Anis, Pfirsich, Kokosnuss", h:"Maiglöckchen, Jasmin", b:"Creme, weißer Moschus, Honig, Benzoeharz, sanfte Hölzer",
+ d:"Kokos und Pfirsich, gewürzt und floral gerundet. Honig und weißer Moschus hüllen den Raum samtig ein.",
+ s:[["500 ml",35,"COPS0007"]]},
+
+{n:"Musk Ritual",w:"harmonie",t:"s",r:["buero","wohnzimmer"],ri:["holzig","frisch"],f:"Holzig-Moschus",
+ k:"Bergamotte, Zitrone", h:"Jasmin, Kiefer, schwarze Johannisbeere", b:"Moschus, getrocknete Hölzer, Patschuli, weißer Moschus",
+ d:"Zitrisch klar, dann sauber und holzig. Vermittelt Ordnung und Gelassenheit — ideal für konzentriertes Arbeiten.",
+ s:[["500 ml",35,"COPS0008"]]},
+
+{n:"Sweet Symphonies",w:"gemuet",t:"s",r:["kueche"],ri:["fruchtig","gourmand"],f:"Fruchtig",
+ k:"Zitrone, Apfel, Pfirsich", h:"Himbeere, weiße Blüten, Birne", b:"Vanille, Patschuli",
+ d:"Frisch-fruchtiger Auftakt, weiches helles Herz. Vanille und Patschuli machen die Küche süß und behaglich.",
+ s:[["500 ml",35,"COPS0009"]]},
+
+{n:"Whispering Woods",w:"tiefe",t:"s",r:["buero"],ri:["holzig"],f:"Zitrus-Holzig",
+ k:"Bergamotte", h:"Patschuli", b:"Agarholz, Ambra, Moschus",
+ d:"Bergamotte trifft auf erdiges Patschuli, Agarholz und Ambra geben Wärme. Charakterstark und dezent zugleich.",
+ s:[["500 ml",35,"COPS0010"]]}
+];
+
+/* ═══ Fragen ═══ */
+const A = {raum:null, welt:null, richtung:null, typ:null, groesse:null};
+
+const Q1 = Object.entries(RAEUME).map(([k,v])=>({v:k,t:v,s:""}));
+const Q2 = Object.entries(WELTEN).map(([k,v])=>({v:k,t:v.label,s:v.sub,c:v.color}));
+const Q3 = [
+  {v:"frisch",   t:"Frisch & zitrisch",   s:"Bergamotte, Apfel, grüne Noten"},
+  {v:"blumig",   t:"Blumig",              s:"Rose, Jasmin, Iris, Lavendel"},
+  {v:"fruchtig", t:"Fruchtig",            s:"Beeren, Pfirsich, Granatapfel"},
+  {v:"gourmand", t:"Süß & warm",          s:"Vanille, Karamell, Honig"},
+  {v:"holzig",   t:"Holzig & würzig",     s:"Patschuli, Zeder, Safran, Moschus"},
+  {v:"egal",     t:"Weiß ich noch nicht", s:"Dann entscheidet die Stimmung"}
+];
+const Q4 = [
+  {v:"d", t:"Diffuser mit Stäbchen", s:"Duftet durchgehend, ab 24 €"},
+  {v:"s", t:"Raumduft-Spray",        s:"Ein paar Sprühstöße, wann du willst — 35 €"},
+  {v:"x", t:"Zeig mir beides",       s:"Ich entscheide danach"}
+];
+const Q5 = [
+  {v:0, t:"Klein",      s:"Bad, Flur, bis ca. 15 m²"},
+  {v:1, t:"Mittel",     s:"Schlafzimmer, Büro, 15–30 m²"},
+  {v:2, t:"Groß",       s:"Wohnzimmer, offener Wohnbereich"},
+  {v:3, t:"Sehr groß",  s:"Loft, Praxis, Laden, Empfang"}
+];
+
+function renderOpts(id, list, key, next){
+  document.getElementById(id).innerHTML = list.map((o,i)=>
+    `<li><button class="opt" data-v="${o.v}" data-i="${i}">
+       <span class="bar" style="background:${o.c||'var(--gold)'}"></span>
+       <span class="t"><b>${o.t}</b>${o.s?`<span>${o.s}</span>`:''}</span>
+     </button></li>`).join('');
+  document.getElementById(id).querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick = ()=>{
+      const raw = btn.dataset.v;
+      A[key] = (key==='groesse') ? Number(raw) : raw;
+      next===null ? showResult() : go(next);
+    };
+  });
+}
+renderOpts('q1',Q1,'raum',2);
+renderOpts('q2',Q2,'welt',3);
+renderOpts('q3',Q3,'richtung',4);
+renderOpts('q4',Q4,'typ',5);
+renderOpts('q5',Q5,'groesse',null);
+
+/* ═══ Navigation ═══ */
+function go(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  const prog = document.getElementById('prog');
+  prog.hidden = (n===0);
+  prog.querySelectorAll('i').forEach((el,i)=>el.classList.toggle('on', i < n));
+  window.scrollTo(0,0);
+}
+function restart(){
+  Object.keys(A).forEach(k=>A[k]=null);
+  go(0);
+}
+
+/* ═══ Matching ═══ */
+function score(p){
+  let sc = 0, why = [];
+  if(A.welt === p.w){ sc += 5; why.push(WELTEN[p.w].label.toLowerCase()); }
+  if(p.r.includes(A.raum)){ sc += 4; why.push("empfohlen fürs "+RAEUME[A.raum].split(' ')[0]); }
+  if(A.richtung !== 'egal' && p.ri.includes(A.richtung)){
+    sc += 3; why.push(Q3.find(q=>q.v===A.richtung).t.toLowerCase());
+  }
+  if(A.richtung !== 'egal' && p.ri[0] === A.richtung) sc += 1;
+  return {sc, why};
+}
+function pickSize(p){
+  if(p.t === 's') return 0;
+  const map = [0,1,2,3];              // klein → 100, mittel → 200, groß → 500, sehr groß → 1,5 l
+  let i = map[A.groesse ?? 1];
+  return Math.min(i, p.s.length-1);
+}
+
+function showResult(){
+  let pool = P.filter(p => A.typ === 'x' ? true : p.t === A.typ);
+  let ranked = pool.map(p => ({p, ...score(p)}))
+                   .sort((a,b)=> b.sc - a.sc || a.p.n.localeCompare(b.p.n));
+  render(ranked[0], ranked.slice(1,4));
+  go('r');
+}
+
+function render(top, alts){
+  const p = top.p, si = pickSize(p), sz = p.s[si];
+  const w = WELTEN[p.w];
+  const why = top.why.length
+    ? "Passt, weil du "+top.why.join(", ")+" gewählt hast."
+    : "Unsere Empfehlung aus deiner Auswahl.";
+
+  CUR = { p: p, si: si };
+  const sizes = p.s.map((s,i)=>
+    `<li class="size ${i===si?'pick':''}" data-i="${i}" onclick="selSize(${i})" role="button" tabindex="0"><b>${s[0]}</b><em>${s[1].toFixed(2).replace('.',',')} €</em><span>${s[2]}</span></li>`
+  ).join('');
+
+  const tip = p.t === 'd'
+    ? `Für ${Q5[A.groesse ?? 1].t.toLowerCase()}e Räume passt ${sz[0]} am besten. Stäbchen alle 4–6 Wochen wenden, dann bleibt der Duft gleichmäßig.`
+    : `Zwei bis drei Sprühstöße in die Raummitte reichen. Nicht direkt auf Textilien sprühen.`;
+
+  const waLink = `<button class="btn" onclick="addCur()">In den Warenkorb</button>`;
+  const shopLink = '';
+
+  document.getElementById('resultBox').innerHTML = `
+    <div class="match">
+      <span class="welt" style="background:${w.color}">${w.label}</span>
+      <h2>${p.n}</h2>
+      <p class="why">${why}</p>
+      <p class="desc">${p.d}</p>
+      <dl class="notes">
+        <div class="note-row"><dt>Kopf</dt><dd>${p.k}</dd></div>
+        <div class="note-row"><dt>Herz</dt><dd>${p.h}</dd></div>
+        <div class="note-row"><dt>Basis</dt><dd>${p.b}</dd></div>
+        <div class="note-row"><dt>Familie</dt><dd>${p.f}</dd></div>
+      </dl>
+      <ul class="sizes">${sizes}</ul>
+      <p class="sizehint">Größe antippen, um sie zu wählen.</p>
+      <p class="tip">${tip}</p>
+    </div>
+    <h3 style="margin:26px 0 4px">Passt auch zu dir</h3>
+    ${alts.map(a=>`
+      <button class="alt" onclick="jump('${a.p.n.replace(/'/g,"\\'")}')">
+        <span class="bar" style="background:${WELTEN[a.p.w].color}"></span>
+        <span style="flex:1"><b>${a.p.n}</b><span>${a.p.f} · ${a.p.t==='d'?'Diffuser':'Spray'}</span></span>
+        <span class="px">ab ${a.p.s[0][1]} €</span>
+      </button>`).join('')}
+    <div class="cta">${waLink}${shopLink}
+      <button class="btn btn-ghost" onclick="showCatalog()">Alle 22 Düfte ansehen</button>
+    </div>`;
+}
+
+function jump(name){
+  const idx = P.findIndex(x=>x.n===name);
+  if(idx<0) return;
+  render({p:P[idx], why:[], sc:0},
+         P.filter(x=>x.n!==name).slice(0,3).map(p=>({p})));
+  go('r');
+}
+
+function copyText(t){
+  navigator.clipboard?.writeText(t);
+  event.target.textContent = "Kopiert";
+}
+
+/* ═══ Katalog ═══ */
+let filter = 'alle';
+function showCatalog(){
+  const f = document.getElementById('filters');
+  f.innerHTML = [['alle','Alle'],...Object.entries(WELTEN).map(([k,v])=>[k,v.label])]
+    .map(([k,l])=>`<button data-f="${k}" class="${k===filter?'on':''}">${l}</button>`).join('');
+  f.querySelectorAll('button').forEach(b=> b.onclick = ()=>{ filter = b.dataset.f; showCatalog(); });
+  document.getElementById('catalogList').innerHTML =
+    P.filter(p=> filter==='alle' || p.w===filter)
+     .sort((a,b)=>a.t.localeCompare(b.t)||a.n.localeCompare(b.n))
+     .map(p=>`
+      <button class="alt" onclick="jump('${p.n.replace(/'/g,"\\'")}')">
+        <span class="bar" style="background:${WELTEN[p.w].color}"></span>
+        <span style="flex:1"><b>${p.n}</b><span>${p.f} · ${p.t==='d'?'Diffuser':'Spray 500 ml'}</span></span>
+        <span class="px">ab ${p.s[0][1]} €</span>
+      </button>`).join('');
+  go('c');
+}
+
+
+/* ═══ Warenkorb ═══ */
+let CUR  = null;
+let CART = [];
+
+function selSize(i){
+  if(!CUR) return;
+  CUR.si = i;
+  document.querySelectorAll('.sizes .size').forEach(el=>
+    el.classList.toggle('pick', +el.dataset.i === i));
+}
+
+function addCur(){
+  if(!CUR) return;
+  const p = CUR.p, s = p.s[CUR.si];
+  const key = p.n + '|' + s[2];
+  const hit = CART.find(x=>x.key===key);
+  if(hit){ hit.qty++; } else {
+    CART.push({key:key, name:p.n, size:s[0], price:s[1], code:s[2], qty:1});
+  }
+  drawCart();
+  const b = event && event.target;
+  if(b){ const t=b.textContent; b.textContent='Hinzugefügt'; setTimeout(()=>b.textContent=t,1400); }
+}
+
+function removeItem(key){
+  CART = CART.filter(x=>x.key!==key);
+  drawCart();
+  if(!CART.length) closeCart();
+}
+
+function cartTotal(){ return CART.reduce((s,x)=>s + x.price*x.qty, 0); }
+function eur(n){ return n.toFixed(2).replace('.',',') + ' €'; }
+
+function cartMessage(){
+  const lines = CART.map((x,i)=>
+    `${i+1}) ${x.name} – ${x.size} (${x.code})${x.qty>1?` × ${x.qty}`:''} – ${eur(x.price*x.qty)}`);
+  const total = cartTotal();
+  const versand = total >= 150
+    ? 'Versand ist ab 150 € frei.'
+    : `Noch ${eur(150-total)} bis zum kostenlosen Versand.`;
+  return encodeURIComponent(
+    `Hallo ${KONTAKT.name}, ich habe den Raumduft-Finder gemacht und möchte bestellen:\n\n` +
+    lines.join('\n') +
+    `\n\nZwischensumme: ${eur(total)}\n${versand}\n\nBitte melde dich kurz.`
+  );
+}
+
+function drawCart(){
+  const n = CART.reduce((s,x)=>s+x.qty,0);
+  document.getElementById('cartBar').classList.toggle('on', n>0);
+  document.body.classList.toggle('has-cart', n>0);
+  document.getElementById('cartSum').textContent   = eur(cartTotal());
+  document.getElementById('cartCount').textContent = n === 1 ? '1 Artikel' : n + ' Artikel';
+  document.getElementById('cartSend').href = 'https://wa.me/' + KONTAKT.whatsapp + '?text=' + cartMessage();
+
+  const total = cartTotal();
+  document.getElementById('cartList').innerHTML = CART.length ? (
+    CART.map(x=>`
+      <div class="cart-row">
+        <div class="t"><b>${x.name}</b><span>${x.size} · ${x.code}${x.qty>1?` · ${x.qty}×`:''}</span></div>
+        <div class="p">${eur(x.price*x.qty)}</div>
+        <button class="x" onclick="removeItem('${x.key.replace(/'/g,"\\'")}')" aria-label="Entfernen">×</button>
+      </div>`).join('') +
+    `<div class="cart-total"><span>Zwischensumme</span><b>${eur(total)}</b></div>
+     <p class="cart-note">${total>=150 ? 'Versand ist ab 150 € frei.' : 'Noch ' + eur(150-total) + ' bis zum kostenlosen Versand.'} Bezahlt wird erst nach Rücksprache.</p>
+     <a class="cart-send" style="width:100%;justify-content:center" href="https://wa.me/${KONTAKT.whatsapp}?text=${cartMessage()}">Per WhatsApp bestellen</a>`
+  ) : '<p class="cart-empty">Noch nichts ausgewählt.</p>';
+}
+
+function openCart(){ drawCart(); document.getElementById('cartPanel').classList.add('on'); }
+function closeCart(){ document.getElementById('cartPanel').classList.remove('on'); }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeCart(); });
+
+/* ═══ Fußzeile ═══ */
+document.getElementById('kontaktZeile').textContent =
+  KONTAKT.whatsapp.includes('X') ? "" : "Beratung: " + KONTAKT.name;
+</script>
+
+<div id="cartBar" aria-live="polite">
+  <div class="cartbar-in">
+    <div class="sum"><b id="cartSum">0,00 €</b><span id="cartCount">0 Artikel</span></div>
+    <button class="cart-open" onclick="openCart()">Ansehen</button>
+    <a class="cart-send" id="cartSend" href="#">Per WhatsApp bestellen</a>
+  </div>
+</div>
+<div id="cartPanel" onclick="if(event.target===this)closeCart()">
+  <div class="cart-sheet" role="dialog" aria-label="Warenkorb">
+    <h3>Deine Auswahl</h3>
+    <div id="cartList"></div>
+  </div>
+</div>
+</body>
+</html>
