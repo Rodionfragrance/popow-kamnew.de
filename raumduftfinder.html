@@ -45,7 +45,9 @@ p{margin:0 0 14px}
 .lede{color:var(--ivory-dim);font-size:15px;max-width:44ch}
 
 /* ————— Kopf ————— */
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:34px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:34px;text-decoration:none}
+.brand-back{margin-left:auto;font-size:12px;color:rgba(244,239,230,.55);white-space:nowrap}
+.brand:hover .brand-back{color:rgba(244,239,230,.9)}
 .brand-mark{
   width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;
   display:grid;place-items:center;font-family:var(--serif);color:var(--gold);font-size:14px;
@@ -188,10 +190,11 @@ body.has-cart{padding-bottom:92px}
 <body>
 <div class="wrap">
 
-  <div class="brand">
+  <a class="brand" href="https://popow-kamnew.de/" aria-label="Zurück zu Popow &amp; Kamnew">
     <div class="brand-mark">CP</div>
     <div class="brand-name">COOPERATIVA PROFUMIERI</div>
-  </div>
+    <span class="brand-back">Zur Startseite</span>
+  </a>
 
   <div class="progress" id="prog" hidden>
     <i></i><i></i><i></i><i></i><i></i>
@@ -264,7 +267,8 @@ body.has-cart{padding-bottom:92px}
   <footer>
     Cooperativa Profumieri — vertrieben durch Chogan Group S.p.A., Barletta (BT), Italien.<br>
     Alle Preise inkl. MwSt. Stäbchen bei Diffusern im Lieferumfang, Ersatz ab 2,50&nbsp;€.<br>
-    <span id="kontaktZeile"></span>
+    <span id="kontaktZeile"></span><br>
+    <a href="https://popow-kamnew.de/">Zurück zu Popow &amp; Kamnew</a> · <a href="https://popow-kamnew.de/impressum">Impressum</a> · <a href="https://popow-kamnew.de/datenschutz">Datenschutz</a>
   </footer>
 </div>
 
@@ -534,6 +538,7 @@ function render(top, alts){
       </button>`).join('')}
     <div class="cta">${waLink}${shopLink}
       <button class="btn btn-ghost" onclick="showCatalog()">Alle 22 Düfte ansehen</button>
+      <a class="btn btn-ghost" href="https://popow-kamnew.de/">Zur Startseite</a>
     </div>`;
 }
 
