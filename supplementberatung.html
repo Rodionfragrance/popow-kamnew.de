@@ -275,6 +275,53 @@ a:focus-visible, button:focus-visible {
   display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between;
   align-items:center;font-size:13px;background:#fff}
 @media print{.home-bar,.site-foot{display:none!important}}
+
+/* ═══ Sicherheit, Sport & Fakten (v2) ═══ */
+.warn-tag{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;margin-bottom:10px;border-radius:999px}
+.warn-tag.arzt{background:#FFF4E0;color:#8A5A00;border:1px solid #F0D49A}
+.warn-tag.info{background:#EEF4FF;color:#2B4C8C;border:1px solid #C9D8F5}
+.prod-warn{font-size:12px;line-height:1.6;color:#8A5A00;background:#FFF9EE;border:1px solid #F0D49A;padding:10px 12px;margin-bottom:14px;border-radius:12px}
+.safety-box{background:#FFF9EE;border:1px solid #F0D49A;border-left:4px solid #D99A1E;padding:18px;margin:0 0 24px;border-radius:18px}
+.safety-box h4{font-family:'Bodoni Moda',Georgia,serif;font-size:20px;margin-bottom:8px}
+.safety-box p,.safety-box li{font-size:13px;line-height:1.65;color:#3A3A3C}
+.safety-box ul{padding-left:18px;margin:8px 0}
+.safety-box.red{background:#FFF2F2;border-color:#F2C4C4;border-left-color:#C94B4B}
+.blocked-list{margin:24px 0;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:#fff}
+.blocked-list h4{padding:14px 18px;border-bottom:1px solid var(--border);font-family:'Bodoni Moda',Georgia,serif;font-size:19px}
+.blocked-row{padding:12px 18px;border-bottom:1px solid var(--border);font-size:13px;line-height:1.55}
+.blocked-row:last-child{border-bottom:none}
+.blocked-row b{display:block;color:#1A1A1A}
+.blocked-row span{color:#6E6E73}
+.facts{margin:28px 0;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--black3)}
+.facts-head{padding:16px 18px;border-bottom:1px solid var(--border)}
+.facts-head h3{font-size:22px}
+.facts-head p{font-size:12px;color:var(--muted);margin-top:4px}
+.fact-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);align-items:start;background:#fff}
+.fact-row:last-child{border-bottom:none}
+.fact-k{font-size:13px;line-height:1.55;color:#1A1A1A}
+.fact-k small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.fact-v{font-family:'Bodoni Moda',Georgia,serif;font-size:19px;white-space:nowrap;text-align:right}
+.fact-v.you{color:#1F7A3A}
+.fact-sec{padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:var(--black3);border-bottom:1px solid var(--border)}
+.myth{padding:12px 18px;border-bottom:1px solid var(--border);background:#fff;font-size:13px;line-height:1.6}
+.myth b{color:#1A1A1A}
+.cbar{padding:16px 18px;background:#fff}
+.cbar-track{height:12px;background:var(--black3);border-radius:999px;overflow:hidden;position:relative}
+.cbar-fill{height:100%;border-radius:999px;transition:width .8s ease}
+.cbar-legend{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+.cbar-parts{font-size:12px;color:#3A3A3C;line-height:1.7;margin-top:10px}
+.subform{display:none;background:var(--black3);border:1px solid var(--border);padding:18px;margin-top:4px;border-radius:18px}
+.subform.on{display:block}
+.chk-list{display:flex;flex-direction:column;gap:8px}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:#fff;border:1px solid var(--border);border-radius:14px;cursor:pointer;font-size:13px;line-height:1.5}
+.chk input{width:18px;height:18px;flex-shrink:0;margin-top:1px;appearance:auto;accent-color:#1A1A1A;padding:0}
+.chk small{display:block;color:var(--muted);font-size:11px}
+.chk.sel{border-color:#1A1A1A}
+.src-list{font-size:11px;color:var(--muted);line-height:1.7;padding:14px 18px;background:#fff;border-top:1px solid var(--border)}
+.grid-2 .card-choice:last-child:nth-child(odd){grid-column:1 / -1}
+.sci-badge{white-space:normal!important}
+.fact-k{min-width:0}
+.prod-header{gap:10px}
 </style>
 </head>
 <body>
@@ -286,7 +333,7 @@ a:focus-visible, button:focus-visible {
     <button id="backBtn" onclick="back()">← Zurück</button>
     <div class="nav-title">POPOW<span>&</span>KAMNEW</div>
     <a class="nav-home" href="https://popow-kamnew.de/">Startseite</a>
-    <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px" id="nStep">1/5</div>
+    <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px" id="nStep">1/6</div>
   </nav>
 
   <!-- S0: Intro -->
@@ -301,9 +348,9 @@ a:focus-visible, button:focus-visible {
       <h4>Die Lifestyle-Lücke — Warum gute Ernährung heute nicht mehr reicht</h4>
       <p style="margin-bottom:10px;color:var(--muted)">Drei Faktoren, die systematisch Nährstoffe rauben:</p>
       <ul style="padding-left:20px;color:var(--off-white);font-weight:300">
-        <li style="margin-bottom:8px"><strong>Bodenverarmung:</strong> Industrielle Landwirtschaft hat den Mikronährstoffgehalt in Obst & Gemüse in 50 Jahren um bis zu 40% reduziert (Journal of HortScience, 2004).</li>
-        <li style="margin-bottom:8px"><strong>Kortisol-Falle:</strong> Chronischer Stress verbraucht B-Vitamine und Magnesium 3–5× schneller als im Ruhezustand.</li>
-        <li><strong>Vitamin-D-Epidemie:</strong> Über 60% der Deutschen sind laut RKI suboptimal versorgt — unabhängig von Ernährung oder Aktivität.</li>
+        <li style="margin-bottom:8px"><strong>Weniger Nährstoffe im Gemüse:</strong> Bei 43 Gemüsesorten sanken einzelne Nährstoffe zwischen 1950 und 1999 um bis zu 38% — v.a. durch ertragsstarke Züchtungen (Davis et al., J Am Coll Nutr, 2004).</li>
+        <li style="margin-bottom:8px"><strong>Stress-Kreislauf:</strong> Chronischer Stress erhöht die Magnesium-Ausscheidung — und ein Magnesium-Defizit verstärkt wiederum die Stressreaktion (Pickering et al., Nutrients, 2020).</li>
+        <li><strong>Vitamin-D-Lücke:</strong> Rund 60% der Erwachsenen in Deutschland liegen unter dem empfohlenen Blutwert von 50 nmol/l (RKI, DEGS1).</li>
       </ul>
     </div>
     <div class="legal-box" style="margin-top:0;border:none;background:transparent">
@@ -320,11 +367,23 @@ a:focus-visible, button:focus-visible {
 
     <div class="f-group"><label>Vorname</label><input type="text" id="f_name" placeholder="z.B. Alex"></div>
     <div class="grid-2">
-      <div class="f-group"><label>Alter</label><input type="number" id="f_age" placeholder="35" min="16" max="99"></div>
+      <div class="f-group"><label>Alter</label><input type="number" id="f_age" placeholder="35" min="18" max="99"></div>
       <div class="f-group">
         <label>Geschlecht</label>
-        <div class="select-wrap"><select id="f_gender"><option value="m">Mann</option><option value="w">Frau</option></select></div>
+        <div class="select-wrap"><select id="f_gender" onchange="toggleFemale()"><option value="m">Mann</option><option value="w">Frau</option></select></div>
       </div>
+    </div>
+    <div class="subform" id="femaleBox" style="margin-bottom:20px">
+      <div class="f-group" style="margin-bottom:10px">
+        <label>Aktuelle Situation</label>
+        <div class="select-wrap"><select id="f_status">
+          <option value="none">Weder schwanger noch stillend</option>
+          <option value="wish">Kinderwunsch / ich versuche schwanger zu werden</option>
+          <option value="preg">Schwanger</option>
+          <option value="lact">Stillzeit</option>
+        </select></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6">Wichtig für deine Sicherheit: In Schwangerschaft und Stillzeit gelten andere Regeln — viele Produkte sind dann tabu, andere Nährstoffe werden Pflicht.</p>
     </div>
     <div class="grid-2">
       <div class="f-group"><label>Größe (cm)</label><input type="number" id="f_height" placeholder="180" min="140" max="220"></div>
@@ -434,7 +493,7 @@ a:focus-visible, button:focus-visible {
         <div class="scale-item scale-mid"><span class="scale-num">6–7</span><span class="scale-txt">Dauerhaft unter Druck. Gedanken kreisen auch in der Freizeit. Entspannen fällt schwer.</span></div>
         <div class="scale-item scale-low"><span class="scale-num">8–10</span><span class="scale-txt">Chronischer Stress. Schlecht schlafen, gereizt, kaum abschalten. Körper im Alarmzustand.</span></div>
       </div>
-      <div class="auto-trigger-hint" id="stressHint">⚠️ Hoher Stress — B-Vitamine & Fokus-Support automatisch hinzugefügt. Chronischer Stress verbraucht Magnesium &amp; B-Vitamine 3–5× schneller.</div>
+      <div class="auto-trigger-hint" id="stressHint">⚠️ Hoher Stress — B-Vitamine & Fokus-Support automatisch hinzugefügt. Chronischer Stress erhöht nachweislich die Magnesium-Ausscheidung.</div>
     </div>
 
     <!-- SONNE -->
@@ -453,6 +512,20 @@ a:focus-visible, button:focus-visible {
       </div>
       <div class="auto-trigger-hint" id="sunHint">⚠️ Wenig Sonne — Vitamin D3 Protokoll (Skelboost) wird automatisch hinzugefügt. In Deutschland reicht Sonnenlicht von Oktober–April nicht zur Vitamin-D-Synthese.</div>
     </div>
+
+    <!-- KOFFEIN -->
+    <div class="range-wrap">
+      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">☕ Dein Koffein-Konsum pro Tag</label>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Wir rechnen dein Koffein-Budget aus — damit Supplements + Kaffee nie über die sichere Grenze gehen.</p>
+      <div class="grid-2" style="margin-bottom:0">
+        <div class="f-group" style="margin-bottom:0"><label>Tassen Kaffee (à ~90 mg)</label>
+          <div class="select-wrap"><select id="f_coffee"><option value="0">0</option><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div></div>
+        <div class="f-group" style="margin-bottom:0"><label>Energy-Drinks (Dose 250 ml, ~80 mg)</label>
+          <div class="select-wrap"><select id="f_energydrink"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3+</option></select></div></div>
+      </div>
+      <div class="f-group" style="margin:14px 0 0"><label>Wann gehst du meistens schlafen?</label>
+        <div class="select-wrap"><select id="f_bed"><option value="21">21 Uhr</option><option value="22">22 Uhr</option><option value="23" selected>23 Uhr</option><option value="24">0 Uhr</option><option value="25">1 Uhr oder später</option></select></div></div>
+    </div>
   </div>
 
   <!-- S3: Fokus -->
@@ -465,6 +538,20 @@ a:focus-visible, button:focus-visible {
       <label class="card-choice"><input type="checkbox" name="goal" value="beauty" onchange="toggleSel(this.parentElement)"><span class="icon">✨</span><span class="ct">Beauty (Haut/Haare)</span></label>
       <label class="card-choice"><input type="checkbox" name="goal" value="energy" onchange="toggleSel(this.parentElement)"><span class="icon">⚡</span><span class="ct">Energie &amp; Fokus</span></label>
       <label class="card-choice"><input type="checkbox" name="goal" value="detox" onchange="toggleSel(this.parentElement)"><span class="icon">🌿</span><span class="ct">Detox &amp; Balance</span></label>
+      <label class="card-choice"><input type="checkbox" name="goal" value="sport" id="goalSport" onchange="toggleSel(this.parentElement);toggleSport()"><span class="icon">🏋️</span><span class="ct">Sport, Kraft &amp; Muskelaufbau</span></label>
+    </div>
+    <div class="subform" id="sportBox">
+      <div class="activity-split-title">Dein Training</div>
+      <div class="grid-2">
+        <div class="f-group" style="margin-bottom:0"><label>Trainingstage / Woche</label>
+          <div class="select-wrap"><select id="f_trainDays"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div></div>
+        <div class="f-group" style="margin-bottom:0"><label>Meist trainierst du …</label>
+          <div class="select-wrap"><select id="f_trainTime"><option value="8">morgens (vor 10 Uhr)</option><option value="11">vormittags (10–13 Uhr)</option><option value="15">nachmittags (13–17 Uhr)</option><option value="18" selected>abends (17–20 Uhr)</option><option value="20">spät (nach 20 Uhr)</option></select></div></div>
+      </div>
+      <div class="f-group" style="margin:14px 0 0"><label>Art des Trainings</label>
+        <div class="select-wrap"><select id="f_trainType"><option value="kraft">Krafttraining / Fitnessstudio</option><option value="hiit">HIIT, CrossFit, Kampfsport, Sprints</option><option value="team">Mannschaftssport (Fußball, Handball …)</option><option value="ausdauer">Ausdauer (Laufen, Rad, Schwimmen)</option></select></div></div>
+      <div class="f-group" style="margin:14px 0 0"><label>Isst du täglich genug Eiweiß? (≈ 1,6 g pro kg Körpergewicht)</label>
+        <div class="select-wrap"><select id="f_protein"><option value="unsure">Weiß ich nicht</option><option value="yes">Ja, meistens</option><option value="no">Eher nicht / ich esse vegan oder wenig Fleisch</option></select></div></div>
     </div>
   </div>
 
@@ -481,8 +568,30 @@ a:focus-visible, button:focus-visible {
     </div>
   </div>
 
-  <!-- S5: Ergebnis -->
+  <!-- S5: Sicherheits-Check -->
   <div class="scr" id="s5">
+    <span class="lbl">Schritt 5</span>
+    <div class="ttl">Sicherheits-Check</div>
+    <div class="sub">Kreuze alles an, was auf dich zutrifft. Produkte, die dazu nicht passen, werden automatisch aussortiert oder markiert. Nichts zutreffend? Einfach weiter.</div>
+    <div class="chk-list">
+      <label class="chk"><input type="checkbox" name="risk" value="anticoag" onchange="toggleSel(this.parentElement)"><div>Blutverdünner<small>z.B. Marcumar/Phenprocoumon, Xarelto, Eliquis, ASS als Dauertherapie</small></div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="serotonin" onchange="toggleSel(this.parentElement)"><div>Antidepressiva oder Migränemittel<small>z.B. SSRI/SNRI, MAO-Hemmer, Triptane, Johanniskraut</small></div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="heart" onchange="toggleSel(this.parentElement)"><div>Bluthochdruck, Herzrhythmusstörungen oder Herzmedikamente<small>inkl. Nitrate oder Potenzmittel</small></div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="kidney" onchange="toggleSel(this.parentElement)"><div>Nierenerkrankung oder eingeschränkte Nierenfunktion</div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="liver" onchange="toggleSel(this.parentElement)"><div>Lebererkrankung</div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="diabetes" onchange="toggleSel(this.parentElement)"><div>Diabetes / blutzuckersenkende Medikamente</div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="thyroid" onchange="toggleSel(this.parentElement)"><div>Schilddrüsenmedikamente<small>z.B. L-Thyroxin</small></div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="sedative" onchange="toggleSel(this.parentElement)"><div>Schlaf- oder Beruhigungsmittel</div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="caffeine" onchange="toggleSel(this.parentElement)"><div>Ich vertrage Koffein schlecht<small>Herzrasen, Unruhe, Angstgefühle, Schlafprobleme nach Kaffee</small></div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="fish" onchange="toggleSel(this.parentElement)"><div>Fisch-Allergie</div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="milk" onchange="toggleSel(this.parentElement)"><div>Milcheiweiß-Allergie</div></label>
+      <label class="chk"><input type="checkbox" name="risk" value="meds" onchange="toggleSel(this.parentElement)"><div>Sonstige Medikamente, die ich regelmäßig nehme</div></label>
+    </div>
+    <div class="fact-box"><h4>Warum fragen wir das?</h4><p style="color:var(--muted)">Pflanzenextrakte und Nährstoffe können mit Medikamenten wechselwirken — z.B. Vitamin K2 mit Marcumar oder 5-HTP mit Antidepressiva. Eine gute Beratung empfiehlt nicht nur, sie schließt auch aus.</p></div>
+  </div>
+
+  <!-- S6: Ergebnis -->
+  <div class="scr" id="s6">
     <div class="res-header">
       <h2 id="resName">DEIN PROTOKOLL</h2>
       <p id="resDate" style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px"></p>
@@ -540,14 +649,17 @@ a:focus-visible, button:focus-visible {
         <div class="lm-val" id="resSun" style="color:var(--gold2)">5/10</div>
       </div>
     </div>
+    <div id="safetyContainer"></div>
     <div id="basisBanner"></div>
     <div class="lbl" style="margin-top:8px">Strategie &amp; Einnahmeplan</div>
     <div id="recContainer"></div>
+    <div id="blockedContainer"></div>
+    <div id="factsContainer"></div>
     <div id="biovContainer"></div>
     <div id="tagesplanContainer"></div>
     <div id="priceSummaryContainer"></div>
     <div class="legal-box">
-      <strong>Rechtlicher Hinweis:</strong> Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene Ernährung. Empfohlene Tagesdosen nicht überschreiten. Bei Medikamenteneinnahme Arzt konsultieren. Alle % VNR gemäß EU-VO 1169/2011.
+      <strong>Rechtlicher Hinweis:</strong> Diese Analyse ist eine Produktberatung, keine medizinische Diagnose oder Therapie. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene Ernährung. Empfohlene Tagesdosen nicht überschreiten. Bei Medikamenteneinnahme, Vorerkrankungen, in Schwangerschaft und Stillzeit vorher Arzt, Hebamme oder Apotheke fragen. Alle % VNR gemäß EU-VO 1169/2011.
     </div>
   </div>
 
@@ -563,7 +675,7 @@ a:focus-visible, button:focus-visible {
 
 <script>
 // ─── State ────────────────────────────────────────────────────
-let cur = 0; const total = 5;
+let cur = 0; const total = 6;
 let isCheckin = false;
 let prevData = null;
 const STORAGE_KEY = 'supplefit_last';
@@ -636,12 +748,24 @@ function checkAutoTriggers() {
 }
 
 function toggleSel(el) { el.classList.toggle('sel'); }
+function toggleFemale() {
+  const w = document.getElementById('f_gender').value === 'w';
+  document.getElementById('femaleBox').classList.toggle('on', w);
+  if (!w) document.getElementById('f_status').value = 'none';
+}
+function toggleSport() {
+  document.getElementById('sportBox').classList.toggle('on', document.getElementById('goalSport').checked);
+}
 
 // ─── Navigation ───────────────────────────────────────────────
 function next() {
   if (cur === 1) {
     if (!document.getElementById('f_height').value || !document.getElementById('f_weight').value) {
       alert("Bitte Größe und Gewicht eintragen."); return;
+    }
+    const a = parseFloat(document.getElementById('f_age').value);
+    if (a && a < 18) {
+      alert("Die SuppleFit-Analyse ist für Erwachsene ab 18 Jahren. Mehrere Produkte (u.a. Kreatin, Koffein, Pflanzenextrakte) sind laut Hersteller nicht für Kinder und Jugendliche bestimmt."); return;
     }
   }
   if (cur < total) { cur++; update(); }
@@ -738,9 +862,21 @@ function calculateMetrics() {
   const bmi    = (weight / Math.pow(height/100, 2)).toFixed(1);
   const bmiStatus = bmi < 18.5 ? 'Untergewicht' : bmi < 25 ? 'Normalgewicht' : bmi < 30 ? 'Präadipositas' : 'Adipositas';
   let bmr = gender === 'm' ? 10*weight + 6.25*height - 5*age + 5 : 10*weight + 6.25*height - 5*age - 161;
+  const status = gender === 'w' ? document.getElementById('f_status').value : 'none';
+  const sport = document.getElementById('goalSport').checked;
   return {
     bmi, bmiStatus, bmr: Math.round(bmr), tdee: Math.round(bmr * pal), pal: pal.toFixed(2),
-    steps, weight, age,
+    steps, weight, age, gender, status,
+    pregLact: status === 'preg' || status === 'lact',
+    coffee: +document.getElementById('f_coffee').value,
+    energyDrinks: +document.getElementById('f_energydrink').value,
+    bed: +document.getElementById('f_bed').value,
+    sport,
+    trainDays: +document.getElementById('f_trainDays').value,
+    trainTime: +document.getElementById('f_trainTime').value,
+    trainType: document.getElementById('f_trainType').value,
+    protein: document.getElementById('f_protein').value,
+    risks: Array.from(document.querySelectorAll('input[name="risk"]:checked')).map(i=>i.value),
     energy: +document.getElementById('f_energy_val').value,
     sleep:  +document.getElementById('f_sleep_val').value,
     stress: +document.getElementById('f_stress_val').value,
@@ -749,164 +885,199 @@ function calculateMetrics() {
 }
 
 // ─── Product Database ─────────────────────────────────────────
+// safe.preg: 'block' = in Schwangerschaft/Stillzeit ausgeschlossen · 'arzt' = nur nach Rücksprache
+// safe.r: Risiko-Regeln je Sicherheits-Check-Antwort → ['block'|'arzt', Begründung]
 const DB = {
   weight: {
     icon:'⚖️', title:'Gewichtsmanagement', subtitle:'Blutzucker · Sättigung · Wasserhaushalt',
-    rationale: (d) => `<strong>Dein Profil:</strong> BMI ${d.bmi} (${d.bmiStatus}), Tagesbedarf ${d.tdee} kcal (PAL ${d.pal}). Gewichtsmanagement ist kein reines Kalorienproblem — es ist ein <strong>Signal- und Hormonproblem</strong>. Glucomannan ist der einzige pflanzliche Wirkstoff mit EU Health Claim zur Gewichtsabnahme im Rahmen einer kalorienreduzierten Diät.`,
-    science: ['✅ EU Health Claim: Glucomannan trägt zur Gewichtsabnahme bei','📊 Sättigungseffekt nach 15–30 Min durch Magenquellung'],
+    rationale: (d) => `<strong>Dein Profil:</strong> BMI ${d.bmi} (${d.bmiStatus}), Tagesbedarf ${d.tdee} kcal (PAL ${d.pal}). Gewichtsmanagement ist nicht nur eine Kalorienfrage — Sättigung, Blutzucker und Wasserhaushalt spielen mit. Glucomannan hat einen zugelassenen <strong>EU Health Claim zur Gewichtsabnahme</strong> (3 g/Tag im Rahmen einer kalorienreduzierten Ernährung).`,
+    science: ['✅ EU Health Claim: Glucomannan trägt im Rahmen einer kalorienarmen Ernährung zur Gewichtsabnahme bei','📊 Sättigung durch Quellung im Magen'],
     items: [
-      { name:"Meal Shake", code:"SU0004", dose:"31g + 250ml Milch 1,5% (Shaker). 1–2 Mahlzeiten/Tag ersetzen.", info:"<strong>25 Vitamine & Mineralien</strong> in einer Portion: 21g Eiweiß, 12g Ballaststoffe, nur 236 kcal. Kein Mangel trotz Kaloriendefizit. Glutenfrei, GMO-frei.", nutrients:[['Eiweiß','21g'],['Ballaststoffe','12g'],['Kcal','236'],['Vit C','101% VNR'],['Magnesium','30% VNR']], price:65.00, timing:'abends' },
-      { name:"Garci Max +", code:"INTB044", dose:"3× täglich 2 Kapseln VOR den Hauptmahlzeiten mit 1–2 Gläsern Wasser.", info:"<strong>GSG-COMPLEX™:</strong> Glucomannan quillt im Magen und aktiviert das Sättigungshormon CCK vor dem Essen. Spirulina: pflanzliches Protein + Chlorophyll. Garcinia Cambogia: hemmt das Fettbildungsenzym Citratlyase.", nutrients:[['Glucomannan','aktiv'],['Spirulina','enthalten'],['Garcinia','enthalten']], price:19.00, timing:'vor-mahlzeiten' },
-      { name:"Dren Fast Entwässerung", code:"INTB007", dose:"1 Stick morgens in 1L Wasser auflösen, über Vormittag trinken.", info:"<strong>EQUITULLAS™:</strong> Ananas-Bromelain fördert Mikrozirkulation, lindert Schwere-Beine-Gefühl. Birke & Ackerschachtelhalm: EU-anerkannte Entwässerungspflanzen. Enthält Folsäure (100% VNR). Oft ist 'Gewicht' zu 30–40% eingelagertes Gewebewasser.", nutrients:[['Bromelain','aktiv'],['Birkenextrakt','enthalten'],['Folsäure','100% VNR']], price:39.00, timing:'morgens' }
+      { name:"Meal Shake", code:"SU0004", dose:"31g + 250ml Milch 1,5% (Shaker). 1–2 Mahlzeiten/Tag ersetzen.", info:"<strong>25 Vitamine & Mineralien</strong> in einer Portion: 21g Eiweiß, 12g Ballaststoffe, nur 236 kcal. Kein Mangel trotz Kaloriendefizit. Glutenfrei, GMO-frei. Enthält Milcheiweiß.", nutrients:[['Eiweiß','21g'],['Ballaststoffe','12g'],['Kcal','236'],['Vit C','101% VNR'],['Magnesium','30% VNR']], price:65.00, timing:'abends',
+        safe:{ preg:'block', pregTxt:'Mahlzeitenersatz zur Gewichtsreduktion ist in Schwangerschaft & Stillzeit nicht geeignet.', r:{ milk:['block','Enthält Milcheiweiß.'], kidney:['arzt','Eiweißreich — bei Nierenerkrankung vorher ärztlich abklären.'], diabetes:['arzt','Mahlzeitenersatz verändert die Kohlenhydratzufuhr — Medikation ggf. anpassen lassen.'] } } },
+      { name:"Garci Max +", code:"INTB044", dose:"3× täglich 2 Kapseln VOR den Hauptmahlzeiten mit 1–2 Gläsern Wasser.", info:"<strong>GSG-COMPLEX™:</strong> Glucomannan quillt im Magen und sorgt für Sättigung vor dem Essen. Spirulina: pflanzliches Protein. Garcinia Cambogia (HCA). <strong>Immer mit ausreichend Wasser</strong> einnehmen.", nutrients:[['Glucomannan','aktiv'],['Spirulina','enthalten'],['Garcinia','enthalten']], price:19.00, timing:'vor-mahlzeiten',
+        safe:{ preg:'block', pregTxt:'Abnehmprodukt mit Garcinia — in Schwangerschaft & Stillzeit nicht geeignet.', r:{ liver:['block','Zu Garcinia-Präparaten gibt es Fallberichte über Leberschäden.'], diabetes:['arzt','Glucomannan kann den Blutzucker senken — Unterzuckerungsrisiko mit Medikamenten.'], thyroid:['arzt','Glucomannan kann die Aufnahme von Medikamenten verringern — mind. 4 Std. Abstand zu L-Thyroxin.'], meds:['arzt','Glucomannan kann die Aufnahme von Medikamenten verringern — mit Abstand einnehmen.'] } } },
+      { name:"Dren Fast Entwässerung", code:"INTB007", dose:"1 Stick morgens in 1L Wasser auflösen, über den Vormittag trinken.", info:"<strong>EQUITULLAS™:</strong> Ananas-Bromelain für die Mikrozirkulation, Birke & Ackerschachtelhalm unterstützen die Ausscheidung von Wasser. Enthält Folsäure (100% VNR).", nutrients:[['Bromelain','aktiv'],['Birkenextrakt','enthalten'],['Folsäure','100% VNR']], price:39.00, timing:'morgens',
+        safe:{ preg:'block', pregTxt:'Entwässernde Pflanzen (Ackerschachtelhalm, Birke) sind in Schwangerschaft & Stillzeit nicht empfohlen.', r:{ heart:['arzt','Entwässernde Pflanzen können mit Blutdruck- und Entwässerungsmitteln zusammenwirken.'], kidney:['arzt','Entwässernde Wirkung — bei Nierenerkrankung nur nach Rücksprache.'] } } }
     ]
   },
   beauty: {
-    icon:'✨', title:'Beauty – Haut, Haare, Nägel', subtitle:'Kollagen Typ I+III · Zellverjüngung · Hautbarriere',
-    rationale: (d) => `<strong>Wissenschaftlicher Fakt:</strong> Kollagenabbau beginnt mit ~25 Jahren und beschleunigt sich nach 30 mit ca. 1–2% pro Jahr (Varani et al., J. Invest. Dermatol. 2006). Bei dir${d.age >= 25 ? ` mit ${d.age} Jahren` : ''} ist externe Zufuhr klinisch relevant. Cremes penetrieren nur die Epidermis — <strong>Kollagen muss oral zugeführt werden</strong> um die Dermis (Matrix) zu erreichen.`,
-    science: ['📊 Klinisch: Hydrolysiertes Kollagen zeigt Hautverbesserung nach 4–8 Wochen','✅ 12,4g Kollagen Typ I+III pro Portion — Marktspitze'],
+    icon:'✨', title:'Beauty – Haut, Haare, Nägel', subtitle:'Kollagen Typ I+III · Antioxidantien · Hautbarriere',
+    rationale: (d) => `<strong>Fakt:</strong> Ab etwa Mitte 20 sinkt die körpereigene Kollagenproduktion — häufig zitiert wird ein Rückgang von rund 1% pro Jahr. Bei dir${d.age >= 25 ? ` mit ${d.age} Jahren` : ''} lohnt sich die Zufuhr von innen: Cremes erreichen nur die oberste Hautschicht, <strong>hydrolysiertes Kollagen wird als Peptid über den Darm aufgenommen</strong>.`,
+    science: ['📊 Meta-Analyse (19 Studien): Hautfeuchtigkeit & Elastizität verbessert nach ca. 8–12 Wochen','✅ 12,4g Kollagen Typ I+III pro Portion'],
     items: [
-      { name:"Skinail Collagen", code:"INTB042", dose:"1 Beutel in 250ml zimmerwarmem Wasser, morgens nüchtern.", info:"<strong>CBH-TOTAL™: 12,4g hydrolysiertes Kollagen Typ I & III</strong> — durch Hydrolyse-Vorspaltung sofort bioverfügbar. + Heidelbeere, Granatapfel, Weinbeere, Acai (Antioxidantien) + Biotin 400% VNR, Zink 100% VNR, alle B-Vitamine 100% VNR. Pfirsich-Geschmack.", nutrients:[['Kollagen I+III','12,4g'],['Biotin','400% VNR'],['Zink','100% VNR'],['Vit C','100% VNR']], price:139.00, timing:'morgens-nüchtern' },
-      { name:"Skinpure", code:"INTB048", dose:"2× täglich 1 Kapsel zwischen den Mahlzeiten.", info:"<strong>NIKSPRO™:</strong> Brokkoli-Extrakt + Erdrauch fördern Leber-Entgiftung (Phase-II-Enzyme). Große Klette: antimikrobiell, entzündungshemmend bei Akne. Niacinamid: talgregulierend, stärkt Hautbarriere (klinisch belegt).", nutrients:[['Brokkoliextrakt','NIKSPRO™'],['Niacinamid','talgregulierend'],['Klette','antimikrobiell']], price:24.90, timing:'zwischen-mahlzeiten' }
+      { name:"Skinail Collagen", code:"INTB042", dose:"1 Beutel in ca. 250ml zimmerwarmem Wasser auflösen, morgens oder abends trinken.", info:"<strong>CBH-TOTAL™: 12,4g hydrolysiertes Kollagen Typ I & III</strong> (Rind, ca. 2000 Dalton — gut löslich). + Heidelbeere, Granatapfel, Weinbeere, Kirsche, Acai. Vitamin C trägt zur normalen Kollagenbildung bei. Biotin, Zink, B2, B3, B5, B6, B12 je 100% VNR. Pfirsich-Geschmack.", nutrients:[['Kollagen I+III','12,4g'],['Vit C','100% VNR'],['Zink','100% VNR'],['Biotin','100% VNR']], price:139.00, timing:'morgens',
+        safe:{ preg:'arzt', pregTxt:'Laut Hersteller: Schwangere und Stillende vor der Einnahme ärztlichen Rat einholen.', r:{} } },
+      { name:"Skinpure", code:"INTB048", dose:"2× täglich 1 Kapsel zwischen den Mahlzeiten.", info:"<strong>NIKSPRO™:</strong> Brokkoli-Extrakt + Erdrauch unterstützen die Entschlackungsfunktionen. Große Klette, dazu Niacinamid — talgregulierend, stärkt die Hautbarriere.", nutrients:[['Brokkoliextrakt','NIKSPRO™'],['Niacinamid','talgregulierend'],['Klette','enthalten']], price:24.90, timing:'zwischen-mahlzeiten',
+        safe:{ preg:'block', pregTxt:'Für Erdrauch- und Klettenextrakt gibt es keine ausreichenden Sicherheitsdaten in Schwangerschaft & Stillzeit.', r:{} } }
     ]
   },
   energy: {
     icon:'⚡', title:'Energie & Fokus', subtitle:'B-Vitamine · L-Carnitin · Kognition',
-    rationale: (d) => `<strong>Energie ${d.energy}/10 · Stress ${d.stress}/10.</strong> ${d.stress > 6 ? `Bei Stresslevel ${d.stress}/10 verbraucht dein Körper B-Vitamine und Magnesium <strong>3–5× schneller</strong> als normal — das erklärt direkt dein Energiedefizit.` : d.energy <= 4 ? 'Ein Wert unter 5 deutet auf ein B-Vitamin-Defizit hin.' : 'Selbst moderate Tiefs signalisieren zelluläre Nährstoffknappheit.'} Koffein ist kein Fix — es blockiert Adenosin-Rezeptoren ohne den Akku aufzuladen. <strong>B-Vitamine sind Pflicht für mitochondriale ATP-Produktion.</strong>`,
-    science: ['📊 B1 (Multigelvit): 12,5mg = 1136% VNR — High-Dose für schnellen Ausgleich','✅ L-Carnitin: Transportiert Fettsäuren in die Mitochondrien'],
+    rationale: (d) => `<strong>Energie ${d.energy}/10 · Stress ${d.stress}/10.</strong> ${d.stress > 6 ? `Bei Stresslevel ${d.stress}/10 steigt nachweislich die Magnesium-Ausscheidung — Stress und Nährstoffbedarf schaukeln sich gegenseitig hoch.` : 'B-Vitamine tragen nachweislich zur Verringerung von Müdigkeit und Ermüdung bei (EU Health Claim).'} Koffein ist kein Fix — es blockiert Adenosin-Rezeptoren, ohne den Akku aufzuladen. <strong>Ehrlich:</strong> Hält die Erschöpfung über Wochen an, lass ein Blutbild machen (Eisen/Ferritin, B12, Schilddrüse) — Supplements ersetzen keine Abklärung.`,
+    science: ['✅ EU Health Claim: B1, B6, B12, Vit C → Verringerung von Müdigkeit','📊 B1 (Multigelvit): 12,5mg = 1136% VNR'],
     items: [
-      { name:"Multigelvit", code:"INTB026", dose:"1 Stick morgens direkt in den Mund (kein Wasser). Mandarinen-Gel.", info:"<strong>IPERVITAMY™:</strong> Vit C 320mg (400% VNR), B1 12,5mg (1136% VNR), B6 5mg (357% VNR), B12 (400% VNR), Biotin (400% VNR) + L-Carnitin 150mg. Gel → direkte Resorption über Mundschleimhaut ohne Magenpassage-Verlust. Vegan, glutenfrei, laktosefrei.", nutrients:[['Vit C','400% VNR'],['Vit B1','1136% VNR'],['Vit B6','357% VNR'],['B12','400% VNR'],['L-Carnitin','150mg']], price:24.90, timing:'morgens' },
-      { name:"MyBrain", code:"INTB040", dose:"1 Stick täglich, idealerweise vor Phasen hoher Konzentration.", info:"<strong>DL-Phosphoserin</strong> — einziger Nährstoff mit FDA-anerkanntem Health Claim für kognitive Funktion. + Ginkgo biloba (Gehirn-Durchblutung), Bacopa monnieri (Gedächtnis, klinisch studiert), Griffonia-5-HTP (Serotonin-Wohlbefinden), Taigawurzel (Adaptogen). Lakritz-Gel.", nutrients:[['Phosphoserin','aktiv'],['Ginkgo biloba','enthalten'],['Bacopa','enthalten'],['5-HTP','aus Griffonia']], price:57.90, timing:'nach-bedarf' }
+      { name:"Multigelvit", code:"INTB026", dose:"1 Stick morgens direkt in den Mund (kein Wasser nötig). Mandarinen-Gel.", info:"<strong>IPERVITAMY™:</strong> Vit C 320mg (400% VNR), B1 12,5mg (1136% VNR), B6 5mg (357% VNR), B12 (400% VNR), Biotin (400% VNR) + L-Carnitin 150mg. Gel — ohne Wasser einnehmbar. Glutenfrei, laktosefrei.", nutrients:[['Vit C','400% VNR'],['Vit B1','1136% VNR'],['Vit B6','357% VNR'],['B12','400% VNR'],['L-Carnitin','150mg']], price:24.90, timing:'morgens',
+        safe:{ preg:'arzt', pregTxt:'Hochdosierte Vitamine — in Schwangerschaft & Stillzeit nur nach Rücksprache. Ersetzt kein Schwangerschafts-Präparat (keine Folsäure, kein Jod).', r:{} } },
+      { name:"MyBrain", code:"INTB040", dose:"1 Stick täglich, idealerweise vor Phasen hoher Konzentration.", info:"<strong>MEMORY FOCUS™:</strong> DL-Phosphoserin + Ginkgo biloba, Bacopa monnieri, Griffonia (natürliche Quelle von 5-HTP) und Taigawurzel. Lakritz-Gel.", nutrients:[['Phosphoserin','aktiv'],['Ginkgo biloba','enthalten'],['Bacopa','enthalten'],['5-HTP','aus Griffonia']], price:57.90, timing:'nach-bedarf',
+        safe:{ preg:'block', pregTxt:'Ginkgo, Bacopa und 5-HTP sind in Schwangerschaft & Stillzeit nicht empfohlen.', r:{ serotonin:['block','Enthält 5-HTP (Griffonia) — zusammen mit Antidepressiva/Triptanen Risiko eines Serotonin-Syndroms.'], anticoag:['arzt','Ginkgo kann die Blutungsneigung verstärken.'] } } },
+      { name:"Vigoractive", code:"INTB053", dose:"1× täglich 1 Portionsstick direkt einnehmen — ohne Wasser. Bananen-Gel.", info:"<strong>ACTIVECHARGE™:</strong> Maca (150mg), Damiana (150mg), Burzeldorn/Tribulus (150mg, 40% Saponine), L-Arginin (50mg) + Rote Bete, Kakao, L-Citrullin, Schisandra, Mate. Laut Hersteller: Burzeldorn und Maca wirken anregend, Maca, Burzeldorn und Damiana helfen bei körperlicher und geistiger Erschöpfung. Enthält nur <strong>2 mg Koffein</strong> (praktisch vernachlässigbar). Vegan.", nutrients:[['Maca','150mg'],['Tribulus','150mg'],['Damiana','150mg'],['Koffein','2mg']], price:74.90, timing:'morgens', caffeine:2,
+        when:(d)=> d.energy <= 4 || d.sport,
+        safe:{ preg:'block', pregTxt:'Laut Hersteller nicht für Schwangere empfohlen.', r:{ heart:['arzt','Arginin, Citrullin und Tribulus können den Blutdruck beeinflussen — v.a. mit Nitraten/Potenzmitteln ärztlich abklären.'], diabetes:['arzt','Enthält Fructose und Tribulus — Blutzucker im Blick behalten.'] } } }
+    ]
+  },
+  sport: {
+    icon:'🏋️', title:'Sport, Kraft & Muskelaufbau', subtitle:'TYTANIX by SuppleFit · Kreatin · Pre-Workout · BCAA',
+    rationale: (d) => {
+      const ref = (d.weight*0.1).toFixed(1).replace('.',',');
+      let t = `<strong>Dein Training:</strong> ${d.trainDays}× pro Woche, ${({kraft:'Kraft',hiit:'HIIT/Schnellkraft',team:'Mannschaftssport',ausdauer:'Ausdauer'})[d.trainType]}. <strong>Kreatin-Monohydrat ist das am besten untersuchte Sport-Supplement überhaupt</strong> — mit EU Health Claim ab 3 g/Tag. Wissenschaftlicher Referenzwert für dich: <strong>~${ref} g/Tag</strong> (0,1 g pro kg Körpergewicht).`;
+      if (d.trainType === 'ausdauer') t += ` <strong>Ehrlich:</strong> Bei reinem Ausdauertraining ist der Kreatin-Effekt deutlich kleiner als bei Kraft- und Sprintbelastung.`;
+      if (d.gender === 'w') t += ` <strong>Für Frauen:</strong> Frauen haben im Schnitt niedrigere körpereigene Kreatinspeicher und nehmen über die Nahrung weniger auf — Studien zeigen Vorteile für Kraft und Muskelmasse über alle Lebensphasen (Smith-Ryan et al., Nutrients 2021).`;
+      if (d.age >= 55) t += ` <strong>Ab 55:</strong> Laut EU Health Claim verstärken 3 g Kreatin täglich die Wirkung von Krafttraining (mind. 3×/Woche) auf die Muskelkraft.`;
+      return t;
+    },
+    science: ['✅ EU Health Claim: 3 g Kreatin/Tag erhöht die Leistung bei Schnellkrafttraining','📊 ISSN: bis 30 g/Tag über 5 Jahre ohne Schäden bei Gesunden','✅ WADA-konform'],
+    items: [
+      { name:"Powergain", code:"INTS001", dose:"1× täglich 1 Messlöffel (3,43 g) in einem Glas Wasser — jeden Tag, auch an Ruhetagen. Uhrzeit egal, ideal vor dem Training.", info:"<strong>MUSCLEMAX™:</strong> 3 g reines Kreatin-Monohydrat + Vitamin B6 (8,4 mg, als aktive Form P-5-P). Kreatin erhöht die körperliche Leistung bei Schnellkrafttraining (EU-Claim). <strong>200 Mesh</strong> = sehr feines Pulver, löst sich ohne Bodensatz. Koffeinfrei, vegan, laktose- & glutenfrei. 90 Portionen = 3 Monate.", nutrients:[['Kreatin','3g'],['Vit B6','600% VNR'],['Koffein','0'],['Portionen','90']], price:30.00, timing:'morgens', creatine:3,
+        safe:{ preg:'block', pregTxt:'Laut Hersteller: in Schwangerschaft und Stillzeit nicht verwenden.', r:{ kidney:['block','Kreatin bei Nierenerkrankung nur nach ärztlicher Empfehlung (Verbraucherzentrale/BfR).'] } } },
+      { name:"Ultrablast Pre-Workout", code:"INTS002", dose:"2 Messlöffel (15,2 g) in ca. 400 ml Wasser, 30–60 Min vor dem Training. Nur an Trainingstagen.", info:"<strong>HYPERCHARGE™:</strong> Kreatin 3 g + Beta-Alanin 3,2 g + <strong>Koffein 200 mg</strong> + Vitamin B6. Dazu Arginin-AKG 2,5 g, L-Citrullin 2,5 g, L-Glutamin 1 g, Magnesium, Zink, B1, B3. Zitronengeschmack, vegan. <strong>Gut zu wissen:</strong> Beta-Alanin kann ein harmloses Kribbeln auf der Haut auslösen — klingt nach 30–60 Min ab.", nutrients:[['Koffein','200mg'],['Kreatin','3g'],['Beta-Alanin','3,2g'],['Citrullin','2,5g'],['Portionen','20']], price:34.90, timing:'vor-training', creatine:3, caffeine:200,
+        exclude:(d)=>{
+          const cutoff = d.bed - 9;
+          if (d.sleep < 5) return `Dein Schlafwert liegt bei ${d.sleep}/10 — 200 mg Koffein würden genau das verschlechtern. Nimm stattdessen POWERGAIN (koffeinfrei).`;
+          if (d.trainTime > cutoff) return `Du trainierst meist ab ca. ${d.trainTime} Uhr und schläfst gegen ${d.bed>24?'1':d.bed===24?'0':d.bed} Uhr. 200 mg Koffein so spät verkürzen nachweislich den Schlaf (Meta-Analyse 2023). POWERGAIN liefert dir das Kreatin ohne Koffein.`;
+          const base = d.coffee*90 + d.energyDrinks*80;
+          if (base + 200 > d.cafLimit + 90) return `Mit deinem aktuellen Kaffee-/Energy-Konsum (~${base} mg) würdest du an Trainingstagen deutlich über die sichere Grenze von ${d.cafLimit} mg/Tag kommen.`;
+          return null;
+        },
+        warn:(d)=>{
+          const w = []; const base = d.coffee*90 + d.energyDrinks*80;
+          const cups = Math.max(0, Math.floor((d.cafLimit - 200 - d.energyDrinks*80)/90));
+          if (base + 200 > d.cafLimit) w.push(`☕ An Ultrablast-Tagen max. <strong>${cups} Tasse${cups===1?'':'n'} Kaffee</strong> — sonst über ${d.cafLimit} mg Koffein.`);
+          if (d.weight < 60) w.push(`⚖️ Bei ${d.weight} kg sind 200 mg Koffein über 3 mg/kg — starte mit <strong>1 Messlöffel</strong> (100 mg) und teste deine Verträglichkeit.`);
+          if (d.trainTime > d.bed - 13) w.push(`🌙 Pre-Workouts mit ~200 mg Koffein können den Schlaf noch bis zu 13 Std. später beeinflussen — achte auf deinen Schlaf.`);
+          return w;
+        },
+        safe:{ preg:'block', pregTxt:'Laut Hersteller: in Schwangerschaft und Stillzeit nicht verwenden (Kreatin + 200 mg Koffein).', r:{ heart:['block','200 mg Koffein pro Portion — bei Bluthochdruck/Herzrhythmusstörungen nicht geeignet.'], kidney:['block','Enthält Kreatin — bei Nierenerkrankung nur nach ärztlicher Empfehlung.'], caffeine:['block','200 mg Koffein pro Portion — bei Koffein-Unverträglichkeit nicht geeignet.'], meds:['arzt','Koffein kann mit einigen Medikamenten wechselwirken — kurz in der Apotheke nachfragen.'] } } },
+      { name:"Recoverypro BCAA 4:1:1", code:"INTS003", dose:"1× täglich 1 Messlöffel (6,5 g) in einem Glas Wasser — vor, während oder nach dem Training.", info:"<strong>AMINOBOOST™:</strong> 5 g BCAA im Verhältnis 4:1:1 — L-Leucin 3,33 g, L-Isoleucin 0,83 g, L-Valin 0,83 g + Vitamin B6 (P-5-P). Zitrone, vegan. <strong>Ehrlich:</strong> BCAA bringen vor allem dann etwas, wenn du nüchtern trainierst oder zu wenig Eiweiß isst. Laut Hersteller nicht ohne ärztlichen Rat über längere Zeit einnehmen.", nutrients:[['BCAA','5g'],['Leucin','3,33g'],['Vit B6','100% VNR'],['Portionen','45']], price:24.90, timing:'training',
+        exclude:(d)=> (d.protein === 'yes' && d.trainDays < 5) ? 'Du isst laut eigener Angabe genug Eiweiß — dann bringen zusätzliche BCAA kaum messbaren Nutzen. Spar dir das Geld.' : null,
+        safe:{ preg:'block', pregTxt:'Laut Hersteller: in Schwangerschaft und Stillzeit nicht verwenden.', r:{ kidney:['arzt','Aminosäuren-Präparat — bei Nierenerkrankung vorher ärztlich abklären.'] } } }
     ]
   },
   detox: {
-    icon:'🌿', title:'Detox & Balance', subtitle:'Darmberuhigung · Entschlackung · Basisch',
-    rationale: () => `<strong>Das Fundament aller Körperfunktionen:</strong> Ein belastetes Verdauungssystem mindert die Nährstoffaufnahme aller anderen Supplemente um bis zu 50%. Bio-Aloe Vera ist der einzige Pflanzenwirkstoff, der gleichzeitig entschlackt, Darmschleimhaut beruhigt und basisch wirkt — ohne Laxativ-Effekt.`,
-    science: ['✅ 100% Bio — ohne Zucker, Süßungsmittel & Konservierungsstoffe','📊 Rückfettend, beruhigend, entschlackend'],
+    icon:'🌿', title:'Detox & Balance', subtitle:'Darmberuhigung · Entschlackung',
+    rationale: () => `<strong>Das Fundament:</strong> Verdauung ist die Basis dafür, dass Nährstoffe überhaupt ankommen. Bio-Aloe-Vera-Saft unterstützt die Entschlackung und wirkt wohltuend auf die Schleimhäute — ohne Zucker und Zusatzstoffe.`,
+    science: ['✅ 100% Bio — ohne Zucker, Süßungsmittel & Konservierungsstoffe'],
     items: [
-      { name:"Bio Aloe Vera Saft", code:"OINT01", dose:"2–3× täglich 30ml, 30 Min VOR Mahlzeiten (pur oder verdünnt).", info:"<strong>100% Bio, ungefiltert:</strong> Gepresst aus Blattmark biologisch zertifizierter Aloe-Vera-Pflanzen. Frei von Zucker, Süßungsmitteln und Konservierungsstoffen. Wirkt rückfettend auf Schleimhäute, basisch und entschlackend.", nutrients:[['Bio-zertifiziert','100%'],['Konservierungsfrei','✓'],['Zuckerfrei','✓']], price:24.90, timing:'vor-mahlzeiten' }
+      { name:"Bio Aloe Vera Saft", code:"OINT01", dose:"2–3× täglich 30ml, 30 Min VOR Mahlzeiten (pur oder verdünnt).", info:"<strong>100% Bio:</strong> Gepresst aus dem Blattmark biologisch zertifizierter Aloe-Vera-Pflanzen. Frei von Zucker, Süßungsmitteln und Konservierungsstoffen.", nutrients:[['Bio-zertifiziert','100%'],['Konservierungsfrei','✓'],['Zuckerfrei','✓']], price:24.90, timing:'vor-mahlzeiten',
+        safe:{ preg:'block', pregTxt:'Aloe-Vera-Produkte zum Trinken werden in Schwangerschaft & Stillzeit vorsorglich nicht empfohlen.', r:{ diabetes:['arzt','Aloe Vera kann den Blutzucker beeinflussen.'] } } }
     ]
   },
   sleep: {
-    icon:'🌙', title:'Schlaf & Regeneration', subtitle:'Melatonin EU-zugelassen · 5-HTP · Entspannung',
-    rationale: (d) => `<strong>Schlafwert: ${d.sleep}/10.</strong> ${d.sleep <= 3 ? '⚠️ Kritischer Bereich: Unter 4 bedeutet Schlafentzug — das supprimiert Testosteron, erhöht Cortisol und blockiert Regeneration vollständig.' : 'Schlechter Schlaf ist kein Lifestyle-Problem, sondern ein Neurochemie-Problem.'} Melatonin ist der einzige Stoff mit EU Health Claim zur Verkürzung der Einschlafzeit. <strong>5-HTP aus Griffonia</strong> (Serotonin-Vorstufe) adressiert die Tiefschlafqualität.`,
-    science: ['✅ EU Health Claim: Melatonin 1mg verkürzt die Einschlafzeit','📊 5-HTP 20mg aus Griffonia — Serotonin-Vorstufe für Tiefschlaf'],
+    icon:'🌙', title:'Schlaf & Regeneration', subtitle:'Melatonin · 5-HTP · Entspannung',
+    rationale: (d) => `<strong>Schlafwert: ${d.sleep}/10.</strong> ${d.sleep <= 3 ? '⚠️ Kritischer Bereich: Schon eine Woche mit 5 Std. Schlaf senkte in Studien den Testosteronspiegel junger Männer um 10–15% (Leproult & Van Cauter, JAMA 2011).' : 'Schlechter Schlaf bremst Regeneration, Stimmung und Leistung.'} Melatonin hat einen <strong>EU Health Claim zur Verkürzung der Einschlafzeit</strong> (1 mg kurz vor dem Schlafengehen).${d.coffee*90 + d.energyDrinks*80 >= 300 ? ` <strong>Ehrlich:</strong> Mit ~${d.coffee*90 + d.energyDrinks*80} mg Koffein am Tag liegt ein Teil der Lösung in deiner Tasse — letzter Kaffee spätestens 9 Std. vor dem Schlafen.` : ''}`,
+    science: ['✅ EU Health Claim: Melatonin 1mg verkürzt die Einschlafzeit','📊 5-HTP 20mg aus Griffonia'],
     items: [
-      { name:"Speedsleep", code:"INTB028", dose:"1 Stick 30 Min vor dem Schlafen direkt einnehmen.", info:"<strong>SOMNIWELL™:</strong> Melatonin 1mg (EU-zugelassen), 5-HTP 20mg aus Griffonia, Klatschmohn 100mg (Verspannungen), Passionsblume (Nervensystem), Sommerlinde-Flavonoide 5mg, Kalifornischer Mohn (Stress-Entspannung). Gel → schnelle Wirkung.", nutrients:[['Melatonin','1mg – EU-Claim'],['5-HTP','20mg'],['Klatschmohn','100mg'],['Passionsblume','enthalten']], price:27.90, timing:'abends-schlaf' }
+      { name:"Speedsleep", code:"INTB028", dose:"1 Stick kurz (ca. 30 Min) vor dem Schlafen direkt einnehmen.", info:"<strong>SOMNIWELL™:</strong> Melatonin 1mg, 5-HTP 20mg aus Griffonia, Klatschmohn 100mg, Passionsblume, Sommerlinde, Kalifornischer Mohn. Gel.", nutrients:[['Melatonin','1mg – EU-Claim'],['5-HTP','20mg'],['Klatschmohn','100mg'],['Passionsblume','enthalten']], price:27.90, timing:'abends-schlaf',
+        safe:{ preg:'block', pregTxt:'Melatonin und 5-HTP sind in Schwangerschaft & Stillzeit nicht empfohlen.', r:{ serotonin:['block','Enthält 5-HTP — zusammen mit Antidepressiva/Triptanen Risiko eines Serotonin-Syndroms.'], sedative:['arzt','Melatonin und Pflanzenextrakte können die Wirkung von Schlaf-/Beruhigungsmitteln verstärken.'], anticoag:['arzt','Melatonin kann die Wirkung von Blutverdünnern beeinflussen.'] } } }
     ]
   },
   joints: {
-    icon:'🦴', title:'Gelenke & Knochen', subtitle:'Vitamin D3 2000 IU · K2 · Calcium · PEA',
-    rationale: (d) => `<strong>Deutschland-Fakten${d.sun < 7 ? ` · Deine Sonne: ${d.sun}/10` : ''}:</strong> ${d.sun < 4 ? `Bei Sonnenwert ${d.sun}/10 produziert dein Körper fast kein Vitamin D.` : 'Selbst bei moderater Sonnenexposition gilt:'} Das RKI empfiehlt 800 IU/Tag — über 60% der Deutschen erreichen das nicht. Vitamin D ist kein "Sonnen-Vitamin", sondern ein <strong>Steroidhormon</strong>, das Calcium-Aufnahme, Immunsystem und Muskelkraft steuert. <strong>Ohne K2 landet Calcium im Blut statt im Knochen</strong> (Verkalkungsrisiko!).`,
-    science: ['✅ Vitamin D3: 2000 IU = 1000% VNR — therapeutisch für Mangelausgleich','📊 K2 (67% VNR): dirigiert Calcium in Knochen, verhindert Gefäßverkalkung','⚠️ >60% Deutschen suboptimal versorgt (RKI 2023)'],
+    icon:'🦴', title:'Gelenke & Knochen', subtitle:'Vitamin D3 2000 IE · K2 · Calcium · PEA',
+    rationale: (d) => `<strong>Deutschland-Fakten${d.sun < 7 ? ` · Deine Sonne: ${d.sun}/10` : ''}:</strong> ${d.sun < 4 ? `Bei Sonnenwert ${d.sun}/10 bildet dein Körper kaum eigenes Vitamin D.` : 'Von Oktober bis März reicht die Sonne in Deutschland nicht zur Vitamin-D-Bildung.'} Die DGE nennt 800 IE/Tag als Schätzwert, wenn keine Eigenbildung stattfindet — rund 60% der Erwachsenen liegen unter dem empfohlenen Blutwert. Vitamin D trägt zur Erhaltung normaler Knochen und Muskelfunktion bei. <strong>K2 aktiviert Proteine, die Calcium in die Knochen einbauen</strong> — deshalb gehören D3 und K2 zusammen.`,
+    science: ['✅ Vitamin D3: 2000 IE — unter der EFSA-Obergrenze von 4000 IE/Tag','📊 K2 (67% VNR) + Calcium aus Meeresalge','⚠️ ~60% unter 50 nmol/l (RKI, DEGS1)'],
     items: [
-      { name:"Sore Stop +", code:"INTB043", dose:"3× täglich 2 Kapseln (morgens, mittags, abends) mit Wasser.", info:"<strong>PEA-ARTICOL™:</strong> Palmitoylethanolamid (PEA) — körpereigenes Signalmolekül zur lokalen Entzündungsregulation. + Vitamin D und B-Vitamine für Energiestoffwechsel und Stressresistenz. Unterstützt Gelenkfunktionalität bei körperlicher Belastung.", nutrients:[['PEA-ARTICOL™','patentiert'],['Vitamin D','enthalten'],['B-Vitamine','enthalten']], price:39.00, timing:'morgens' },
-      { name:"Skelboost", code:"INTB047", dose:"1 Kapsel täglich ZU einer Mahlzeit (fettlöslich — wichtig!).", info:"<strong>DALKO™-Komplex:</strong> Vitamin D3 <strong>2000 IU (1000% VNR)</strong> — weit über RKI-Empfehlung für therapeutischen Ausgleich. K2 0,05mg (67% VNR): dirigiert Calcium präzise in die Knochenmatrix. Calcium 120mg aus Lithothamnium Calcareum (Meeresalge) — bessere Bioverfügbarkeit als synthetisches CaCO3.", nutrients:[['Vit D3','2000 IU = 1000% VNR'],['Vit K2','67% VNR'],['Calcium','120mg Meeresalge']], price:24.90, timing:'mittags' }
+      { name:"Sore Stop +", code:"INTB043", dose:"3× täglich 2 Kapseln (morgens, mittags, abends) mit Wasser.", info:"<strong>PEA-ARTICOL™:</strong> Palmitoylethanolamid (PEA) — körpereigenes Lipid-Signalmolekül. + Vitamin D und B-Vitamine für Energiestoffwechsel und Immunsystem.", nutrients:[['PEA-ARTICOL™','patentiert'],['Vitamin D','enthalten'],['B-Vitamine','enthalten']], price:39.00, timing:'morgens',
+        safe:{ preg:'block', pregTxt:'Für PEA gibt es keine ausreichenden Sicherheitsdaten in Schwangerschaft & Stillzeit.', r:{} } },
+      { name:"Skelboost", code:"INTB047", dose:"1 Kapsel täglich ZU einer Mahlzeit (fettlöslich — wichtig!).", info:"<strong>DALKO™-Komplex:</strong> Vitamin D3 <strong>2000 IE (1000% VNR)</strong> — sicher unter der EFSA-Obergrenze von 4000 IE. K2 0,05mg (67% VNR) für die normale Blutgerinnung und Knochen. Calcium 120mg aus Lithothamnium (Meeresalge).", nutrients:[['Vit D3','2000 IE'],['Vit K2','67% VNR'],['Calcium','120mg Meeresalge']], price:24.90, timing:'mittags',
+        safe:{ preg:'arzt', pregTxt:'Vitamin D in Schwangerschaft & Stillzeit nach ärztlicher Beratung (Verbraucherzentrale/Netzwerk Gesund ins Leben).', r:{ anticoag:['arzt','Vitamin K2 kann die Wirkung von Marcumar/Phenprocoumon abschwächen — unbedingt ärztlich abklären.'], kidney:['arzt','Vitamin D + Calcium bei Nierenerkrankung nur nach Rücksprache.'] } } }
     ]
   },
   gut: {
     icon:'🌪️', title:'Darm & Verdauung', subtitle:'25 Mrd. KBE · 3 Stämme · Mikrobiom',
-    rationale: () => `<strong>Das Mikrobiom steuert alles:</strong> 70–80% des Immunsystems sitzen im Darm. Dysbiose durch Stress, Antibiotika oder Ernährung reduziert die Nährstoffaufnahme aller anderen Supplemente. <strong>25 Milliarden lebende Kulturen</strong> aus 3 klinisch relevanten Stämmen sind die wissenschaftlich belegte Dosierung für Mikrobiom-Wiederaufbau.`,
-    science: ['📊 25 Milliarden KBE/Kapsel — klinisch effektive Dosierung','✅ 3 Stämme: L. acidophilus + L. plantarum + L. rhamnosus'],
+    rationale: () => `<strong>Das Mikrobiom:</strong> Ein großer Teil der Immunzellen sitzt im Darm. Stress, Antibiotika und einseitige Ernährung bringen die Darmflora aus dem Gleichgewicht. Vitalflora liefert <strong>25 Milliarden lebende Kulturen</strong> aus 3 Lactobacillus-Stämmen.`,
+    science: ['📊 25 Milliarden KBE pro Kapsel','✅ 3 Stämme: L. acidophilus + L. plantarum + L. rhamnosus'],
     items: [
-      { name:"Vitalflora", code:"INTB049", dose:"1 Kapsel täglich zu einer Hauptmahlzeit.", info:"<strong>MICROCORE™:</strong> Lactobacillus acidophilus 5 Mrd. + L. plantarum 10 Mrd. + L. rhamnosus 10 Mrd. = 25 Mrd. KBE gesamt. Magenresistente Kapsel sichert Überlebensfähigkeit bis zum Darm. Besiedelt Darmflora nach Stress, schlechter Ernährung oder Antibiotika neu.", nutrients:[['L. acidophilus','5 Mrd.'],['L. plantarum','10 Mrd.'],['L. rhamnosus','10 Mrd.'],['Gesamt','25 Mrd. KBE']], price:29.90, timing:'mittags' }
+      { name:"Vitalflora", code:"INTB049", dose:"1 Kapsel täglich zu einer Hauptmahlzeit.", info:"<strong>MICROCORE™:</strong> Lactobacillus acidophilus 5 Mrd. + L. plantarum 10 Mrd. + L. rhamnosus 10 Mrd. = 25 Mrd. KBE. Ideal nach Antibiotika, Stress oder einseitiger Ernährung.", nutrients:[['L. acidophilus','5 Mrd.'],['L. plantarum','10 Mrd.'],['L. rhamnosus','10 Mrd.'],['Gesamt','25 Mrd. KBE']], price:29.90, timing:'mittags',
+        safe:{ preg:'arzt', pregTxt:'Milchsäurebakterien gelten als gut verträglich — in Schwangerschaft & Stillzeit trotzdem kurz mit Arzt/Hebamme absprechen.', r:{} } }
     ]
   },
   heart: {
     icon:'❤️', title:'Herz & Vitalität', subtitle:'Omega-3 1500mg · EPA 570mg · DHA 375mg · CoQ10',
-    rationale: () => `<strong>Omega-3: Die stärkste Datenlage aller Supplemente weltweit.</strong> Die DGE empfiehlt 250mg EPA+DHA/Tag — die durchschnittliche deutsche Versorgung liegt bei 50–70mg. OMEGAPOWER liefert <strong>1500mg Omega-3</strong> (EPA 570mg + DHA 375mg) = 6× DGE-Empfehlung. EPA & DHA: EU Health Claim für normale Herzfunktion. DHA: EU Health Claim für Gehirnfunktion und Sehkraft.`,
-    science: ['✅ EU Health Claim: EPA+DHA → normale Herzfunktion','✅ EU Health Claim: DHA → Gehirnfunktion & Sehkraft','📊 1500mg Omega-3 = 6× DGE-Tagesempfehlung','🧬 CoQ10 30mg — mitochondriales Antioxidans'],
+    rationale: () => `<strong>Omega-3 gehört zu den am besten untersuchten Nährstoffen.</strong> Die EFSA nennt 250 mg EPA+DHA pro Tag als Referenzwert — wer nicht 1–2× pro Woche fetten Seefisch isst, erreicht das meist nicht. OMEGAPOWER liefert <strong>945 mg EPA+DHA</strong> (≈ 3,8× Referenzwert). EPA & DHA tragen zu einer normalen Herzfunktion bei, DHA zur Erhaltung normaler Gehirnfunktion und Sehkraft (EU Health Claims).`,
+    science: ['✅ EU Health Claim: EPA+DHA → normale Herzfunktion','✅ EU Health Claim: DHA → Gehirnfunktion & Sehkraft','🧬 CoQ10 30mg'],
     items: [
-      { name:"Omegapower", code:"INTB050", dose:"3 Weichkapseln täglich NACH einer Mahlzeit (Resorption +50% mit Fett).", info:"<strong>VIVACORE™:</strong> Fischöl 2400mg, Omega-3 <strong>1500mg</strong> (EPA 570mg + DHA 375mg). CoQ10 30mg als mitochondriales Antioxidans. Vitamin E 24mg (200% VNR) als natürlicher Oxidationsschutz. Senkt stille Entzündungen (CRP), schützt Gefäßendothel.", nutrients:[['Fischöl','2400mg'],['Omega-3','1500mg'],['EPA','570mg'],['DHA','375mg'],['CoQ10','30mg'],['Vit E','200% VNR']], price:32.90, timing:'nach-mahlzeit' }
+      { name:"Omegapower", code:"INTB050", dose:"3 Weichkapseln täglich NACH einer Mahlzeit (mit Fett besser aufgenommen).", info:"<strong>VIVACORE™:</strong> Fischöl 2400mg, Omega-3 <strong>1500mg</strong> (EPA 570mg + DHA 375mg). CoQ10 30mg. Vitamin E 24mg (200% VNR) schützt die Zellen vor oxidativem Stress.", nutrients:[['Fischöl','2400mg'],['Omega-3','1500mg'],['EPA','570mg'],['DHA','375mg'],['CoQ10','30mg'],['Vit E','200% VNR']], price:32.90, timing:'nach-mahlzeit',
+        safe:{ preg:'arzt', pregTxt:'DHA (200 mg/Tag) wird Schwangeren & Stillenden empfohlen, die kaum Fisch essen — Omegapower nur nach Rücksprache mit Arzt/Hebamme (enthält zusätzlich CoQ10).', r:{ fish:['block','Enthält Fischöl.'], anticoag:['arzt','Hochdosiertes Omega-3 kann die Blutungsneigung leicht verstärken.'] } } }
     ]
   }
 };
 
 const BASIS = {
-  vitD:   { code:'INTB047', name:'Skelboost',       reason:'Vitamin D3 2000 IU — >60% der Deutschen mangelhaft (RKI 2023)' },
-  omega:  { code:'INTB050', name:'Omegapower',      reason:'Omega-3 — Ø Deutsche: 50–70mg/Tag statt empfohlener 250mg (DGE)' },
-  collagen:{ code:'INTB042', name:'Skinail Collagen',reason:'Kollagen ab 25 — körpereigener Abbau ~1–2%/Jahr (Varani et al.)' }
+  vitD:   { code:'INTB047', name:'Skelboost',       reason:'Vitamin D3 2000 IE + K2 — rund 60% der Erwachsenen unter dem empfohlenen Blutwert (RKI)' },
+  omega:  { code:'INTB050', name:'Omegapower',      reason:'Omega-3 — ohne 1–2 Fischmahlzeiten pro Woche wird der EFSA-Referenzwert von 250 mg EPA+DHA meist verfehlt' },
+  collagen:{ code:'INTB042', name:'Skinail Collagen',reason:'Kollagen ab Mitte 20 — die körpereigene Produktion nimmt jedes Jahr ab' }
 };
+const ALL_ITEMS = {}; Object.values(DB).forEach(c=>c.items.forEach(p=>{ ALL_ITEMS[p.code]=p; }));
+
+// ─── Sicherheitsprüfung ───────────────────────────────────────
+// liefert {level:'ok'|'arzt'|'block', reasons:[]}
+function checkSafety(p, d) {
+  const s = p.safe || {}; let level = 'ok'; const reasons = [];
+  const up = (l, txt) => { if (l === 'block' || (l === 'arzt' && level === 'ok')) level = l; reasons.push(txt); };
+  if (d.pregLact) up(s.preg || 'arzt', s.pregTxt || 'In Schwangerschaft & Stillzeit nur nach Rücksprache mit Arzt/Hebamme.');
+  (d.risks||[]).forEach(r => { if (s.r && s.r[r]) up(s.r[r][0], s.r[r][1]); });
+  return { level, reasons };
+}
 
 // ─── Bioverfügbarkeit Section ─────────────────────────────────
+function biovRow(badName, badDetail, badLbl, badW, goodTitle, goodName, goodDetail, goodLbl, goodW) {
+  return `<div class="biov-row">
+      <div class="biov-cell">
+        <div class="biov-cell-lbl bad">❌ Standard-Markt</div>
+        <div class="biov-cell-name">${badName}</div>
+        <div class="biov-cell-detail">${badDetail}</div>
+        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill bad" style="width:${badW}%"></div></div><div class="biov-bar-pct bad">${badLbl}</div></div>
+      </div>
+      <div class="biov-cell">
+        <div class="biov-cell-lbl good">✅ ${goodTitle}</div>
+        <div class="biov-cell-name">${goodName}</div>
+        <div class="biov-cell-detail">${goodDetail}</div>
+        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill good" style="width:${goodW}%"></div></div><div class="biov-bar-pct good">${goodLbl}</div></div>
+      </div>
+    </div>`;
+}
 function buildBiovSection() {
   return `
   <div class="biov-section">
     <div class="biov-header">
       <span>⚗️</span>
-      <h3>Warum Qualität entscheidet — Bioverfügbarkeit im Vergleich</h3>
+      <h3>Warum Qualität entscheidet</h3>
     </div>
     <div class="biov-intro">
-      <strong>Der größte Fehler beim Supplementieren:</strong> Ein Omega-3 aus der Drogerie für 9,99 € kann genauso viel kosten wie keins nehmen — wenn das Fischöl ranzig ist oder die Absorption bei 20% liegt. Bioverfügbarkeit = der Anteil eines Nährstoffs, den dein Körper tatsächlich aufnimmt und verwendet.
+      <strong>Der größte Fehler beim Supplementieren:</strong> die falsche Form oder die falsche Kombination. Entscheidend ist nicht, was auf der Packung steht — sondern was dein Körper davon tatsächlich nutzen kann.
     </div>
-    <div class="biov-row">
-      <div class="biov-cell">
-        <div class="biov-cell-lbl bad">❌ Standard-Markt</div>
-        <div class="biov-cell-name">Magnesiumoxid (Drogerie)</div>
-        <div class="biov-cell-detail">Billigste Form. Hauptsächlich als Abführmittel bekannt — der Körper scheidet es größtenteils aus.</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill bad" style="width:4%"></div></div><div class="biov-bar-pct bad">~4% Absorption</div></div>
-      </div>
-      <div class="biov-cell">
-        <div class="biov-cell-lbl good">✅ Chogan SuppleFit</div>
-        <div class="biov-cell-name">Magnesiumcitrat</div>
-        <div class="biov-cell-detail">Organisch gebunden — der Körper erkennt die Verbindung und nimmt sie gezielt auf.</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill good" style="width:90%"></div></div><div class="biov-bar-pct good">~90% Absorption</div></div>
-      </div>
-    </div>
-    <div class="biov-row">
-      <div class="biov-cell">
-        <div class="biov-cell-lbl bad">❌ Standard-Markt</div>
-        <div class="biov-cell-name">Kollagen-Creme (topisch)</div>
-        <div class="biov-cell-detail">Kollagenmoleküle sind zu groß um die Haut zu penetrieren. Sie bleiben in der Epidermis — ohne Wirkung auf die Dermis (Matrix).</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill bad" style="width:2%"></div></div><div class="biov-bar-pct bad">~0% Dermis-Penetration</div></div>
-      </div>
-      <div class="biov-cell">
-        <div class="biov-cell-lbl good">✅ Skinail Collagen</div>
-        <div class="biov-cell-name">Hydrolysiertes Kollagen oral</div>
-        <div class="biov-cell-detail">Durch Hydrolyse vorgespalten → Peptide erreichen die Dermis über den Blutkreislauf. 12,4g Typ I+III pro Portion.</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill good" style="width:90%"></div></div><div class="biov-bar-pct good">~90% systemische Verfügbarkeit</div></div>
-      </div>
-    </div>
-    <div class="biov-row">
-      <div class="biov-cell">
-        <div class="biov-cell-lbl bad">❌ Standard-Markt</div>
-        <div class="biov-cell-name">Billig-Omega-3 / Fischkapsel</div>
-        <div class="biov-cell-detail">Oft oxidiert (ranzig) durch schlechte Lagerung oder günstige Rohstoffe. Oxidiertes Öl wirkt kontraproduktiv — erhöht oxidativen Stress.</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill bad" style="width:20%"></div></div><div class="biov-bar-pct bad">~20% effektiv (wenn überhaupt)</div></div>
-      </div>
-      <div class="biov-cell">
-        <div class="biov-cell-lbl good">✅ Omegapower VIVACORE™</div>
-        <div class="biov-cell-name">1500mg Omega-3 + Vit E Schutz</div>
-        <div class="biov-cell-detail">Hochrein, Vitamin E (200% VNR) als eingebauter Oxidationsschutz. EPA 570mg + DHA 375mg — exakt dokumentiert.</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill good" style="width:85%"></div></div><div class="biov-bar-pct good">~85% bioverfügbar (mit Mahlzeit)</div></div>
-      </div>
-    </div>
-    <div class="biov-row">
-      <div class="biov-cell">
-        <div class="biov-cell-lbl bad">❌ Standard-Markt</div>
-        <div class="biov-cell-name">Vitamin D3 ohne K2</div>
-        <div class="biov-cell-detail">Vitamin D erhöht die Calcium-Aufnahme — aber ohne K2 landet das Calcium im Blut und in Gefäßen statt im Knochen. Verkalkungsrisiko.</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill bad" style="width:35%"></div></div><div class="biov-bar-pct bad">Fehlgeleitetes Calcium</div></div>
-      </div>
-      <div class="biov-cell">
-        <div class="biov-cell-lbl good">✅ Skelboost DALKO™</div>
-        <div class="biov-cell-name">D3 2000 IU + K2 + Calcium</div>
-        <div class="biov-cell-detail">K2 aktiviert Osteocalcin — das Protein das Calcium gezielt in die Knochenmatrix dirigiert. Das korrekte Trio.</div>
-        <div class="biov-bar-wrap"><div class="biov-bar-bg"><div class="biov-bar-fill good" style="width:95%"></div></div><div class="biov-bar-pct good">Calcium geht dorthin wo es hingehört</div></div>
-      </div>
-    </div>
+    ${biovRow('Teure „Spezial-Kreatine“','Kre-Alkalyn, Kreatin-HCl, Kreatin-Ethylester: höherer Preis, aber in Studien nicht besser als Monohydrat — Ethylester zerfällt sogar teilweise zu Kreatinin.','Kein belegter Vorteil',30,'Powergain','Kreatin-Monohydrat, 200 Mesh','Die Form, mit der praktisch alle Kreatin-Studien gemacht wurden — fein vermahlen für gute Löslichkeit.','Goldstandard der Forschung',95)}
+    ${biovRow('Kollagen-Creme (topisch)','Kollagenmoleküle sind zu groß, um in die tiefere Haut (Dermis) einzudringen — sie bleiben an der Oberfläche.','Erreicht die Dermis nicht',5,'Skinail Collagen','Hydrolysiertes Kollagen oral','Durch Hydrolyse in kleine Peptide (~2000 Da) gespalten — wird über den Darm aufgenommen. 12,4g Typ I+III pro Portion.','Peptide im Blut nachweisbar',85)}
+    ${biovRow('Billig-Omega-3 / Fischkapsel','Fischöl ist empfindlich: schlecht gelagert oder billig produziert oxidiert es (ranzig) — Geschmack, Geruch und Qualität leiden.','Oxidationsrisiko',30,'Omegapower VIVACORE™','1500mg Omega-3 + Vitamin E','Vitamin E schützt die Zellen vor oxidativem Stress. EPA 570mg + DHA 375mg — exakt deklariert. Zur Mahlzeit einnehmen.','Mit Mahlzeit besser aufgenommen',85)}
+    ${biovRow('Vitamin D3 ohne K2','Vitamin D steigert die Calcium-Aufnahme. Ohne K2 fehlt der Partner, der Calcium-bindende Proteine im Knochen aktiviert.','Halbe Lösung',40,'Skelboost DALKO™','D3 2000 IE + K2 + Calcium','K2 aktiviert Osteocalcin — das Protein, das Calcium in die Knochenmatrix einbaut. Das komplette Trio.','Das korrekte Trio',95)}
   </div>`;
 }
 
 // ─── HTML Builders ────────────────────────────────────────────
-function buildProductCard(p, name, m) {
+function buildProductCard(p, name, m, saf) {
   const waMsg = encodeURIComponent(
     `Hey Rodion! 👋 SuppleFit Protokoll – ${name}\n\n` +
     `📊 BMI: ${m.bmi} | GU: ${m.bmr} kcal | Tagesbedarf: ${m.tdee} kcal | PAL: ${m.pal}\n` +
-    `🚶 Schritte/Tag: ~${(m.steps/1000).toFixed(1)}k | ⚡ ${m.energy}/10 | 🌙 ${m.sleep}/10 | 🧠 Stress: ${m.stress}/10 | ☀️ ${m.sun}/10\n\n` +
-    `Bestellung:\n➡️ ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
+    `🚶 Schritte/Tag: ~${(m.steps/1000).toFixed(1)}k | ⚡ ${m.energy}/10 | 🌙 ${m.sleep}/10 | 🧠 Stress: ${m.stress}/10 | ☀️ ${m.sun}/10\n` +
+    (saf.level === 'arzt' ? `⚠️ Hinweis: vorher Rücksprache mit Arzt/Hebamme\n` : '') +
+    `\nBestellung:\n➡️ ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
   );
   const chips = (p.nutrients||[]).map(n=>`<div class="nut-chip">${n[0]} <span>${n[1]}</span></div>`).join('');
+  const warns = [];
+  if (saf.level === 'arzt') warns.push(...saf.reasons.map(r=>'🩺 '+r));
+  if (p.warn) warns.push(...p.warn(m));
   return `<div class="prod-card">
+    ${saf.level === 'arzt' ? '<span class="warn-tag arzt">Nur nach Rücksprache mit Arzt / Hebamme</span>' : ''}
     <div class="prod-header">
       <span class="prod-name">${p.name}</span>
       <span class="prod-code">${p.code}</span>
@@ -916,6 +1087,7 @@ function buildProductCard(p, name, m) {
       <span class="prod-dose-lbl">Einnahme-Anleitung:</span>
       <span class="prod-dose-txt">${p.dose}</span>
     </div>
+    ${warns.length ? `<div class="prod-warn">${warns.join('<br>')}</div>` : ''}
     <div class="prod-info">${p.info}</div>
     <div class="prod-bot">
       <span class="prod-price">${p.price.toFixed(2).replace('.',',')} €</span>
@@ -924,13 +1096,19 @@ function buildProductCard(p, name, m) {
   </div>`;
 }
 
-function buildCategorySection(key, m, name, seen, allProducts) {
+function buildCategorySection(key, m, name, seen, allProducts, blocked) {
   const cat = DB[key]; if (!cat) return '';
   let cards = '';
   cat.items.forEach(p => {
     if (seen.has(p.code)) return;
-    seen.add(p.code); allProducts.push(p);
-    cards += buildProductCard(p, name, m);
+    if (p.when && !p.when(m)) return;
+    seen.add(p.code);
+    const saf = checkSafety(p, m);
+    if (saf.level === 'block') { blocked.push({p, why: saf.reasons.join(' '), kind:'safety'}); return; }
+    const ex = p.exclude ? p.exclude(m) : null;
+    if (ex) { blocked.push({p, why: ex, kind:'fit'}); return; }
+    allProducts.push(p);
+    cards += buildProductCard(p, name, m, saf);
   });
   if (!cards) return '';
   const badges = cat.science.map(s=>`<div class="sci-badge">${s}</div>`).join('');
@@ -949,10 +1127,100 @@ function buildCategorySection(key, m, name, seen, allProducts) {
   </div>`;
 }
 
+// ─── Schwangerschaft / Stillzeit / Kinderwunsch ──────────────
+function buildSafetyBox(m) {
+  if (m.status === 'preg' || m.status === 'lact') {
+    const preg = m.status === 'preg';
+    return `<div class="safety-box red">
+      <h4>${preg ? '🤰 Schwangerschaft' : '🍼 Stillzeit'} — deine Sicherheitsregeln</h4>
+      <p>Dein Protokoll wurde angepasst: Alles mit Kreatin, Koffein-Booster, Melatonin, 5-HTP, Abnehm- und Entwässerungswirkstoffen sowie Pflanzenextrakten ohne Sicherheitsdaten ist <strong>automatisch ausgeschlossen</strong>. Was übrig bleibt, nur nach Rücksprache mit Frauenarzt oder Hebamme.</p>
+      <p style="margin-top:10px"><strong>Was du laut offiziellen Empfehlungen wirklich brauchst:</strong></p>
+      <ul>
+        ${preg ? '<li><strong>Folsäure 400 µg/Tag</strong> — mindestens bis Ende des 1. Schwangerschaftsdrittels</li><li><strong>Jod 100–150 µg/Tag</strong> — bei Schilddrüsenerkrankung vorher ärztlich abklären</li>' : '<li><strong>Jod 100 µg/Tag</strong> — bei Schilddrüsenerkrankung vorher ärztlich abklären</li>'}
+        <li><strong>DHA 200 mg/Tag</strong>, wenn du kaum fetten Meeresfisch isst</li>
+        <li><strong>Vitamin D</strong> nach ärztlicher Beratung · <strong>Eisen</strong> nur bei nachgewiesenem Mangel</li>
+        <li><strong>Vitamin B12</strong> zwingend, wenn du vegan lebst</li>
+        <li><strong>Koffein max. 200 mg/Tag</strong> (EFSA) — das sind ca. 2 Tassen Kaffee</li>
+      </ul>
+      <p><strong>Ehrlich:</strong> Folsäure und Jod gibt es im SuppleFit-Sortiment nicht. Dafür ist ein Präparat aus der Apotheke oder vom Frauenarzt die richtige Wahl. Rodion berät dich gern zu allem danach.</p>
+    </div>`;
+  }
+  if (m.status === 'wish') {
+    return `<div class="safety-box">
+      <h4>💛 Kinderwunsch — das ist jetzt wichtig</h4>
+      <ul>
+        <li><strong>Folsäure 400 µg/Tag schon jetzt starten</strong> — idealerweise mind. 4 Wochen vor der Schwangerschaft (nicht im SuppleFit-Sortiment → Apotheke/Frauenarzt)</li>
+        <li>Sobald der Test positiv ist: <strong>Kreatin, Pre-Workout, Vigoractive, MyBrain, Speedsleep und Abnehm-Produkte sofort absetzen</strong> und das Protokoll neu machen.</li>
+        <li>Koffein schon jetzt im Blick behalten — in der Schwangerschaft gilt max. 200 mg/Tag.</li>
+      </ul>
+    </div>`;
+  }
+  return '';
+}
+
+// ─── Kreatin & Koffein Fakten ─────────────────────────────────
+function buildFacts(m, allProducts) {
+  const hasCreatine = allProducts.some(p=>p.creatine);
+  const cafProducts = allProducts.filter(p=>p.caffeine);
+  const base = m.coffee*90 + m.energyDrinks*80;
+  const showCaf = m.sport || cafProducts.length || base >= 300;
+  if (!m.sport && !showCaf) return '';
+  const f = (n)=> String(n).replace('.',',');
+  let h = `<div class="facts"><div class="facts-head"><h3>🔬 Kreatin &amp; Koffein — die Fakten</h3><p>Aktuelle Studienlage & offizielle Grenzwerte, umgerechnet auf deine ${m.weight} kg.</p></div>`;
+
+  if (m.sport && m.pregLact) {
+    h += `<div class="fact-sec">Kreatin & Pre-Workout</div>
+      <div class="myth"><b>In Schwangerschaft & Stillzeit tabu:</b> Laut Hersteller kein Kreatin und kein Pre-Workout. Studien am Menschen fehlen — die Verbraucherzentrale rät: nur nach ärztlicher Empfehlung. Bewegung selbst ist meist ausdrücklich erwünscht — sprich Intensität mit Frauenarzt/Hebamme ab.</div>`;
+  } else if (m.sport) {
+    const cr = allProducts.filter(p=>p.creatine).reduce((s,p)=>s+p.creatine,0);
+    h += `<div class="fact-sec">Kreatin-Monohydrat</div>
+      <div class="fact-row"><div class="fact-k">Tägliche Erhaltungsdosis<small>ISSN-Positionspapier · DGE akzeptiert bis 5 g für Sportler</small></div><div class="fact-v">3–5 g</div></div>
+      <div class="fact-row"><div class="fact-k">Referenz nach Körpergewicht: 0,1 g pro kg<small>1 g pro 10 kg — in Studien gut untersucht</small></div><div class="fact-v you">${f((m.weight*0.1).toFixed(1))} g</div></div>
+      <div class="fact-row"><div class="fact-k">Optionale Ladephase: 0,3 g/kg für 5–7 Tage<small>Nicht nötig — mit 3–5 g sind die Speicher nach 3–4 Wochen genauso voll</small></div><div class="fact-v">${Math.round(m.weight*0.3)} g</div></div>
+      <div class="fact-row"><div class="fact-k">Langzeit-Sicherheit bei Gesunden<small>ISSN 2017: keine Schäden bis 30 g/Tag über 5 Jahre</small></div><div class="fact-v">✓</div></div>
+      ${hasCreatine ? `<div class="fact-row"><div class="fact-k">Dein Kreatin aus dem Protokoll<small>${cr>3 ? 'Powergain + Ultrablast an Trainingstagen — Powergain allein an Ruhetagen' : 'Jeden Tag 1 Messlöffel, auch an Ruhetagen'}</small></div><div class="fact-v you">${cr} g</div></div>` : ''}
+      <div class="myth"><b>Mythos Nieren:</b> Bei gesunden Nieren kein Schaden nachgewiesen. Aber: Kreatin erhöht den Laborwert <b>Kreatinin</b> — das ist kein Nierenschaden, sag deinem Arzt vor einer Blutabnahme Bescheid.</div>
+      <div class="myth"><b>Mythos Haarausfall:</b> 12-Wochen-Studie (2025, 5 g/Tag): kein Anstieg von DHT, keine Veränderung von Haardichte oder Haardicke gegenüber Placebo.</div>
+      <div class="myth"><b>Wassereinlagerung:</b> In den ersten Wochen +1–2 kg möglich — das Wasser sitzt <b>in</b> der Muskelzelle, nicht unter der Haut. Kein „aufgeschwemmter“ Look.</div>
+      <div class="myth"><b>Nicht geeignet:</b> Schwangerschaft & Stillzeit (laut Hersteller), unter 18 Jahren, Nierenerkrankungen nur nach ärztlicher Empfehlung.</div>`;
+  }
+
+  if (showCaf) {
+    const prodCaf = cafProducts.reduce((s,p)=>s+p.caffeine,0);
+    const total = base + prodCaf; const lim = m.cafLimit;
+    const pct = Math.min(100, Math.round(total/lim*100));
+    const col = total > lim ? 'var(--red)' : total > lim*0.8 ? '#D99A1E' : 'var(--green)';
+    const cutCoffee = m.bed - 9, cutPre = m.bed - 13;
+    const hh = (x)=> (x<=0?x+24:x>24?x-24:x) + ':00';
+    h += `<div class="fact-sec">Koffein</div>
+      <div class="fact-row"><div class="fact-k">Sicher pro Tag für gesunde Erwachsene<small>EFSA 2015 · über den Tag verteilt</small></div><div class="fact-v">400 mg</div></div>
+      <div class="fact-row"><div class="fact-k">Sichere Einzeldosis<small>EFSA · auch bis 2 Std. vor intensivem Sport · ≈ 3 mg/kg bei 70 kg</small></div><div class="fact-v">200 mg</div></div>
+      <div class="fact-row"><div class="fact-k">Schwangere & Stillende<small>EFSA · pro Tag</small></div><div class="fact-v">200 mg</div></div>
+      ${m.pregLact ? '' : `      <div class="fact-row"><div class="fact-k">Leistungssteigernd: 3–6 mg/kg, 30–60 Min vor dem Training<small>ISSN 2021 · über 9 mg/kg mehr Nebenwirkungen, kein Zusatznutzen</small></div><div class="fact-v you">${Math.round(m.weight*3)}–${Math.round(m.weight*6)} mg</div></div>
+      <div class="fact-row"><div class="fact-k">Letzter Kaffee (~100 mg) vor dem Schlafen<small>Meta-Analyse 2023: Koffein verkürzt den Schlaf im Schnitt um 45 Min</small></div><div class="fact-v you">bis ${hh(cutCoffee)}</div></div>
+      <div class="fact-row"><div class="fact-k">Letzter Pre-Workout (~200 mg) vor dem Schlafen<small>Gleiche Meta-Analyse: mind. 13 Std. Abstand</small></div><div class="fact-v you">bis ${hh(cutPre)}</div></div>`}
+      <div class="cbar">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">Dein Koffein-Budget${cafProducts.some(p=>p.caffeine>=100) ? ' (an Trainingstagen)' : ''}: ${total} mg von ${lim} mg</div>
+        <div class="cbar-track"><div class="cbar-fill" style="width:${pct}%;background:${col}"></div></div>
+        <div class="cbar-legend"><span>0</span><span>${lim} mg${m.pregLact ? ' (Schwangerschaft/Stillzeit)' : ''}</span></div>
+        <div class="cbar-parts">☕ Kaffee: ${m.coffee} × 90 mg = ${m.coffee*90} mg${m.energyDrinks ? `<br>🥤 Energy-Drinks: ${m.energyDrinks} × 80 mg = ${m.energyDrinks*80} mg` : ''}${cafProducts.map(p=>`<br>💊 ${p.name}: ${p.caffeine} mg`).join('')}
+        ${total > lim ? `<br><strong style="color:var(--red)">⚠️ Über der sicheren Tagesmenge — reduziere Kaffee oder Energy-Drinks.</strong>` : ''}</div>
+      </div>`;
+  }
+  h += `<div class="src-list">Quellen: ISSN Position Stand Kreatin (Kreider et al., 2017) · EU Health Claims Kreatin (VO 432/2012) · Verbraucherzentrale „Kreatin“ (Stand 04/2026) · Ashtary-Larky et al., JISSN 2025 (Haarausfall) · EFSA Scientific Opinion on the safety of caffeine (2015) · ISSN Position Stand Koffein (Guest et al., 2021) · Gardiner et al., Sleep Med Rev 2023</div></div>`;
+  return h;
+}
+
+function buildBlocked(blocked) {
+  if (!blocked.length) return '';
+  return `<div class="blocked-list"><h4>🚫 Bewusst NICHT in deinem Protokoll</h4>${blocked.map(b=>`<div class="blocked-row"><b>${b.p.name} (${b.p.code})</b><span>${b.why}</span></div>`).join('')}</div>`;
+}
+
 // ─── Generate Results ─────────────────────────────────────────
 function genResults() {
   const name = document.getElementById('f_name').value || "Kunde";
   const m    = calculateMetrics();
+  m.cafLimit = m.pregLact ? 200 : 400;
 
   // Save for 30-day tracking
   saveCurrent(m);
@@ -963,9 +1231,10 @@ function genResults() {
 
   // Metabolic
   document.getElementById('resBMI').textContent    = m.bmi;
-  document.getElementById('resBMIStatus').textContent = m.bmiStatus;
+  document.getElementById('resBMIStatus').textContent = m.status === 'preg' ? 'in der Schwangerschaft nicht aussagekräftig' : m.bmiStatus;
   document.getElementById('resBMR').innerHTML      = m.bmr + ' <span style="font-size:14px">kcal</span>';
-  document.getElementById('resTDEE').textContent   = 'Tagesbedarf: ca. ' + m.tdee + ' kcal (PAL ' + m.pal + ')';
+  document.getElementById('resTDEE').textContent   = 'Tagesbedarf: ca. ' + m.tdee + ' kcal (PAL ' + m.pal + ')' +
+    (m.status === 'preg' ? ' · ab 4. Monat ca. +250, im letzten Drittel ca. +500 kcal' : m.status === 'lact' ? ' · Stillzeit: Mehrbedarf, Abnehmen nur behutsam' : '');
 
   // Lifestyle bars + delta
   function barColor(val, invert) {
@@ -1000,28 +1269,40 @@ function genResults() {
       </div>`;
   }
 
+  // Sicherheits-Box
+  let safetyHtml = buildSafetyBox(m);
+  if ((m.risks||[]).length) {
+    safetyHtml += `<div class="safety-box"><h4>🩺 Dein Sicherheits-Check</h4><p>Du hast Medikamente oder Vorerkrankungen angegeben. Passende Produkte wurden aussortiert oder markiert. <strong>Zeig dieses Protokoll vor dem Start deinem Arzt oder deiner Apotheke</strong> — das dauert 2 Minuten und gibt dir Sicherheit.</p></div>`;
+  }
+  document.getElementById('safetyContainer').innerHTML = safetyHtml;
+
   // Product keys
   const selectedGoals  = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(i=>i.value);
   const selectedIssues = Array.from(document.querySelectorAll('input[name="issue"]:checked')).map(i=>i.value);
   let allKeys = [...new Set([...selectedGoals, ...selectedIssues])];
+  // In Schwangerschaft/Stillzeit keine Abnehm- oder Sport-Booster-Kategorien automatisch nachschieben
   if (m.energy < 6 && !allKeys.includes('energy')) allKeys.push('energy');
   if (m.sleep  < 5 && !allKeys.includes('sleep'))  allKeys.push('sleep');
   if (m.stress > 6 && !allKeys.includes('energy')) allKeys.push('energy');
   if (m.sun    < 7 && !allKeys.includes('joints')) allKeys.push('joints');
 
-  const seen = new Set(); const allProducts = [];
+  const seen = new Set(); const allProducts = []; const blocked = [];
   let html = '';
-  allKeys.forEach(key => { html += buildCategorySection(key, m, name, seen, allProducts); });
-  document.getElementById('recContainer').innerHTML = html || "<p style='color:var(--muted);text-align:center;padding:20px 0'>Bitte wähle Ziele oder Indikatoren aus.</p>";
+  allKeys.forEach(key => { html += buildCategorySection(key, m, name, seen, allProducts, blocked); });
+  document.getElementById('recContainer').innerHTML = html || "<p style='color:var(--muted);text-align:center;padding:20px 0'>Bitte wähle Ziele oder Indikatoren aus — oder sprich direkt mit Rodion.</p>";
+  document.getElementById('blockedContainer').innerHTML = buildBlocked(blocked);
+  document.getElementById('factsContainer').innerHTML = buildFacts(m, allProducts);
 
-  // Basis-Banner
+  // Basis-Banner (nur Produkte, die die Sicherheitsprüfung bestehen)
   const basisItems = [];
-  if (!seen.has('INTB047')) basisItems.push(BASIS.vitD);
-  if (!seen.has('INTB050')) basisItems.push(BASIS.omega);
-  if (m.age >= 25 && !seen.has('INTB042')) basisItems.push(BASIS.collagen);
+  const basisOk = (code) => !seen.has(code) && checkSafety(ALL_ITEMS[code], m).level !== 'block';
+  if (basisOk('INTB047')) basisItems.push(BASIS.vitD);
+  if (basisOk('INTB050')) basisItems.push(BASIS.omega);
+  if (m.age >= 25 && !m.pregLact && basisOk('INTB042')) basisItems.push(BASIS.collagen);
   document.getElementById('basisBanner').innerHTML = basisItems.length
     ? '<div class="lbl" style="margin-top:20px">Basis-Empfehlung Wissenschaft</div>' +
-      basisItems.map(b=>`<div class="basis-banner"><span class="basis-banner-icon">🔬</span><div class="basis-banner-text"><strong>Wissenschaftliche Basis-Empfehlung</strong><strong>${b.name} (${b.code})</strong>${b.reason} — nicht in deinem Protokoll. Sprich Rodion an.</div></div>`).join('')
+      basisItems.map(b=>{ const a = checkSafety(ALL_ITEMS[b.code], m).level === 'arzt';
+        return `<div class="basis-banner"><span class="basis-banner-icon">🔬</span><div class="basis-banner-text"><strong>Wissenschaftliche Basis-Empfehlung</strong><strong>${b.name} (${b.code})</strong>${b.reason} — nicht in deinem Protokoll. ${a ? '<em>Nur nach Rücksprache mit Arzt/Hebamme.</em> ' : ''}Sprich Rodion an.</div></div>`; }).join('')
     : '';
 
   // Bioverfügbarkeit
@@ -1029,24 +1310,30 @@ function genResults() {
 
   // Tagesplan
   if (allProducts.length) {
-    const plan = {'morgens-nüchtern':[],'morgens':[],'vor-mahlzeiten':[],'mittags':[],'zwischen-mahlzeiten':[],'nach-mahlzeit':[],'nach-bedarf':[],'abends':[],'abends-schlaf':[]};
-    const tLabel = {'morgens-nüchtern':'🌅 Morgens nüchtern','morgens':'🌤️ Morgens','vor-mahlzeiten':'🍽️ Vor Mahlzeiten','mittags':'☀️ Mittags','zwischen-mahlzeiten':'⏱️ Zwischen Mahlzeiten','nach-mahlzeit':'✅ Nach Mahlzeit','nach-bedarf':'💡 Nach Bedarf','abends':'🌆 Abends','abends-schlaf':'🌙 Vor dem Schlafen'};
+    const plan = {'morgens-nüchtern':[],'morgens':[],'vor-mahlzeiten':[],'mittags':[],'zwischen-mahlzeiten':[],'vor-training':[],'training':[],'nach-mahlzeit':[],'nach-bedarf':[],'abends':[],'abends-schlaf':[]};
+    const tLabel = {'morgens-nüchtern':'🌅 Morgens nüchtern','morgens':'🌤️ Morgens','vor-mahlzeiten':'🍽️ Vor Mahlzeiten','mittags':'☀️ Mittags','zwischen-mahlzeiten':'⏱️ Zwischen Mahlzeiten','vor-training':'🏋️ 30–60 Min vor Training','training':'💧 Rund ums Training','nach-mahlzeit':'✅ Nach Mahlzeit','nach-bedarf':'💡 Nach Bedarf','abends':'🌆 Abends','abends-schlaf':'🌙 Vor dem Schlafen'};
     allProducts.forEach(p=>{ if(plan[p.timing]!==undefined) plan[p.timing].push(p.name); });
     let tp = '<div class="tagesplan"><div class="tagesplan-title">📅 Dein Tagesplan</div>';
     Object.entries(plan).forEach(([k,items])=>{ if(!items.length) return; tp+=`<div class="tp-row"><div class="tp-time">${tLabel[k]}</div><div class="tp-items">${items.join('<br>')}</div></div>`; });
     document.getElementById('tagesplanContainer').innerHTML = tp + '</div>';
+  } else {
+    document.getElementById('tagesplanContainer').innerHTML = '';
   }
 
   // Preis + WA Komplett
   if (allProducts.length) {
     const tot = allProducts.reduce((s,p)=>s+p.price,0);
-    const list = allProducts.map(p=>`• ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €`).join('\n');
+    const list = allProducts.map(p=>`• ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €${checkSafety(p,m).level==='arzt'?' ⚠️ Arzt-Rücksprache':''}`).join('\n');
+    const statusTxt = {none:'',wish:'💛 Kinderwunsch\n',preg:'🤰 Schwanger\n',lact:'🍼 Stillzeit\n'}[m.status] || '';
+    const riskTxt = (m.risks||[]).length ? `🩺 Sicherheits-Check: ${m.risks.join(', ')}\n` : '';
     const waFull = encodeURIComponent(
       `Hey Rodion! 👋 Komplettes SuppleFit Protokoll\n\n` +
       `📋 ${name} | ${new Date().toLocaleDateString('de-DE')}\n` +
       `📊 BMI ${m.bmi} | GU ${m.bmr} kcal | TB ${m.tdee} kcal | PAL ${m.pal} | 🚶 ~${(m.steps/1000).toFixed(1)}k Schritte\n` +
-      `⚡ ${m.energy}/10 | 🌙 ${m.sleep}/10 | 🧠 ${m.stress}/10 | ☀️ ${m.sun}/10\n\n` +
-      `🛒 Produkte:\n${list}\n\n💰 Gesamt: ${tot.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
+      `⚡ ${m.energy}/10 | 🌙 ${m.sleep}/10 | 🧠 ${m.stress}/10 | ☀️ ${m.sun}/10 | ☕ ${m.coffee*90 + m.energyDrinks*80} mg Koffein/Tag\n` +
+      (m.sport ? `🏋️ Training ${m.trainDays}×/Woche, ca. ${m.trainTime} Uhr\n` : '') +
+      statusTxt + riskTxt +
+      `\n🛒 Produkte:\n${list}\n\n💰 Gesamt: ${tot.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
     );
     document.getElementById('priceSummaryContainer').innerHTML =
       `<div class="price-summary">
@@ -1059,6 +1346,8 @@ function genResults() {
       <a href="https://wa.me/4915141336341?text=${waFull}" class="btn-wa-full" target="_blank">
         ${WA_SVG.replace(/14/g,'18')} Komplettes Protokoll bestellen
       </a>`;
+  } else {
+    document.getElementById('priceSummaryContainer').innerHTML = '';
   }
 }
 
