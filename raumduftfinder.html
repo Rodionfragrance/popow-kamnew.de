@@ -204,7 +204,7 @@ body.has-cart{padding-bottom:92px}
   <section class="step active" id="s0">
     <h1>Welcher Duft<br>passt in deinen<br>Raum?</h1>
     <div class="hero-rule"></div>
-    <p class="lede">Fünf Fragen, eine Empfehlung aus 22 italienischen Raumdüften — mit Duftnoten, Größe und Preis.</p>
+    <p class="lede">Fünf Fragen, eine Empfehlung aus 27 italienischen Raumdüften und Duftkerzen — mit Duftnoten, Größe und Preis.</p>
     <p style="margin-top:24px"><button class="btn" onclick="go(1)">Los geht's</button></p>
     <p style="margin-top:18px"><button class="btn btn-ghost" onclick="showCatalog()">Lieber alle Düfte ansehen</button></p>
   </section>
@@ -235,8 +235,8 @@ body.has-cart{padding-bottom:92px}
 
   <!-- 4 FORMAT -->
   <section class="step" id="s4">
-    <h2 class="q">Dauerhaft oder auf Knopfdruck?</h2>
-    <p class="hint">Diffuser duften ständig, Sprays nur wenn du willst.</p>
+    <h2 class="q">Diffuser, Spray oder Kerze?</h2>
+    <p class="hint">Diffuser duften ständig, Sprays nur wenn du willst, Kerzen geben zusätzlich Licht.</p>
     <ul class="opts" id="q4"></ul>
     <button class="back" onclick="go(3)">Zurück</button>
   </section>
@@ -258,7 +258,7 @@ body.has-cart{padding-bottom:92px}
   <!-- KATALOG -->
   <section class="step" id="sc">
     <h2 class="q">Alle Düfte</h2>
-    <p class="hint">22 Kompositionen, Made in Italy.</p>
+    <p class="hint">27 Kompositionen, Made in Italy.</p>
     <div class="filters" id="filters"></div>
     <div id="catalogList"></div>
     <button class="back" onclick="restart()">Zum Duft-Finder</button>
@@ -266,7 +266,7 @@ body.has-cart{padding-bottom:92px}
 
   <footer>
     Cooperativa Profumieri — vertrieben durch Chogan Group S.p.A., Barletta (BT), Italien.<br>
-    Alle Preise inkl. MwSt. Stäbchen bei Diffusern im Lieferumfang, Ersatz ab 2,50&nbsp;€.<br>
+    Alle Preise inkl. MwSt. Stäbchen bei Diffusern im Lieferumfang, Ersatz ab 2,50&nbsp;€. Duftkerzen mit Baumwolldocht, handgefertigt in Italien.<br>
     <span id="kontaktZeile"></span><br>
     <a href="https://popow-kamnew.de/">Zurück zu Popow &amp; Kamnew</a> · <a href="https://popow-kamnew.de/impressum">Impressum</a> · <a href="https://popow-kamnew.de/datenschutz">Datenschutz</a>
   </footer>
@@ -406,7 +406,33 @@ const P = [
 {n:"Whispering Woods",w:"tiefe",t:"s",r:["buero"],ri:["holzig"],f:"Zitrus-Holzig",
  k:"Bergamotte", h:"Patschuli", b:"Agarholz, Ambra, Moschus",
  d:"Bergamotte trifft auf erdiges Patschuli, Agarholz und Ambra geben Wärme. Charakterstark und dezent zugleich.",
- s:[["500 ml",35,"COPS0010"]]}
+ s:[["500 ml",35,"COPS0010"]]},
+
+// —— Duftkerzen ——
+{n:"NOIRÉ — Sweet Woods",w:"harmonie",t:"k",r:["wohnzimmer","buero"],ri:["holzig"],f:"Holzig-Orientalisch",
+ k:"Bergamotte, Zitrone", h:"Jasmin, Rose, Sandelholz, Veilchen", b:"Ambra, Eichenmoos, Moschus, Patschuli, Tonkabohne, Vanille, Zeder",
+ d:"Warme Tiefe sanfter Hölzer für Charakter und Klasse im Raum. Harmonisch, ausgewogen, zeitlos.",
+ s:[["190 g",39.90,"COPC0001"],["400 g",64.90,"COPC0002"]]},
+
+{n:"MÉLIA — Honey & Jasmine",w:"vitalitaet",t:"k",r:["wohnzimmer","kueche"],ri:["gourmand","blumig"],f:"Blumig-Gourmand",
+ k:"Bergamotte, Tee, Zitrone", h:"Akazie, Honig, Iris, Jasmin", b:"Ambra, Mandel, Patschuli, Sandelholz, Vanille",
+ d:"Eine goldene Aura aus Honig und Jasmin. Lebendig und anregend, mit positiver Energie und Leichtigkeit.",
+ s:[["190 g",39.90,"COPC0003"],["400 g",64.90,"COPC0004"]]},
+
+{n:"LAVÉA — Velvet Lavender",w:"harmonie",t:"k",r:["schlafzimmer","bad"],ri:["blumig"],f:"Blumig-Frisch",
+ k:"Bergamotte, Lavendel, Zitrone", h:"Iris, Neroli, Vanille, Veilchen", b:"Sandelholz, Tonkabohne, weißer Moschus",
+ d:"Beruhigender Lavendel verwandelt jeden Raum in eine Wohlfühloase. Lädt zum Innehalten ein.",
+ s:[["190 g",39.90,"COPC0005"],["400 g",64.90,"COPC0006"]]},
+
+{n:"MUSKÉ — White Musk",w:"tiefe",t:"k",r:["schlafzimmer","wohnzimmer"],ri:["holzig","gourmand"],f:"Moschus-Orientalisch",
+ k:"Campher", h:"Cassia, Karamell, Moschus, Muskat, Sandelholz, Tonkabohne, Zimt", b:"Ambra, Leder, Safran, Vanille, Zeder",
+ d:"Sanfter weißer Moschus trifft auf intensiv-süße, würzige Noten. Umhüllend und verführerisch.",
+ s:[["190 g",39.90,"COPC0007"],["400 g",64.90,"COPC0008"]]},
+
+{n:"ROSÉA — Rose & Cinnamon",w:"gemuet",t:"k",r:["wohnzimmer","esszimmer"],ri:["blumig","gourmand"],f:"Blumig-Gourmand",
+ k:"Bergamotte, Mandel, Zimt, Zitrone", h:"Iris, Jasmin, Orangenblüte, Rose, Tuberose", b:"Ambra, Kaffee, Kakao, Kaschmirholz, Moschus, Patschuli, Sandelholz, Tonkabohne, Vanille, Zeder",
+ d:"Elegante Rose und würzig-süßer Zimt umschmeicheln die Sinne. Gemütlich und einladend.",
+ s:[["190 g",39.90,"COPC0009"],["400 g",64.90,"COPC0010"]]}
 ];
 
 /* ═══ Fragen ═══ */
@@ -425,7 +451,8 @@ const Q3 = [
 const Q4 = [
   {v:"d", t:"Diffuser mit Stäbchen", s:"Duftet durchgehend, ab 24 €"},
   {v:"s", t:"Raumduft-Spray",        s:"Ein paar Sprühstöße, wann du willst — 35 €"},
-  {v:"x", t:"Zeig mir beides",       s:"Ich entscheide danach"}
+  {v:"k", t:"Duftkerze",             s:"Flackerndes Licht und Duft zugleich, ab 39,90 €"},
+  {v:"x", t:"Zeig mir alles",        s:"Ich entscheide danach"}
 ];
 const Q5 = [
   {v:0, t:"Klein",      s:"Bad, Flur, bis ca. 15 m²"},
@@ -481,6 +508,7 @@ function score(p){
 }
 function pickSize(p){
   if(p.t === 's') return 0;
+  if(p.t === 'k') return (A.groesse ?? 1) >= 2 ? 1 : 0;   // klein/mittel → 190 g, groß/sehr groß → 400 g
   const map = [0,1,2,3];              // klein → 100, mittel → 200, groß → 500, sehr groß → 1,5 l
   let i = map[A.groesse ?? 1];
   return Math.min(i, p.s.length-1);
@@ -508,6 +536,8 @@ function render(top, alts){
 
   const tip = p.t === 'd'
     ? `Für ${Q5[A.groesse ?? 1].t.toLowerCase()}e Räume passt ${sz[0]} am besten. Stäbchen alle 4–6 Wochen wenden, dann bleibt der Duft gleichmäßig.`
+    : p.t === 'k'
+    ? `Docht vor dem ersten Anzünden auf ca. 5 mm kürzen und die Kerze randvoll abbrennen lassen — dann bleibt der Wachsspiegel gleichmäßig und der Duft hält länger.`
     : `Zwei bis drei Sprühstöße in die Raummitte reichen. Nicht direkt auf Textilien sprühen.`;
 
   const waLink = `<button class="btn" onclick="addCur()">In den Warenkorb</button>`;
@@ -533,11 +563,11 @@ function render(top, alts){
     ${alts.map(a=>`
       <button class="alt" onclick="jump('${a.p.n.replace(/'/g,"\\'")}')">
         <span class="bar" style="background:${WELTEN[a.p.w].color}"></span>
-        <span style="flex:1"><b>${a.p.n}</b><span>${a.p.f} · ${a.p.t==='d'?'Diffuser':'Spray'}</span></span>
-        <span class="px">ab ${a.p.s[0][1]} €</span>
+        <span style="flex:1"><b>${a.p.n}</b><span>${a.p.f} · ${a.p.t==='d'?'Diffuser':a.p.t==='k'?'Duftkerze':'Spray'}</span></span>
+        <span class="px">ab ${a.p.s[0][1].toFixed(2).replace('.',',')} €</span>
       </button>`).join('')}
     <div class="cta">${waLink}${shopLink}
-      <button class="btn btn-ghost" onclick="showCatalog()">Alle 22 Düfte ansehen</button>
+      <button class="btn btn-ghost" onclick="showCatalog()">Alle 27 Düfte ansehen</button>
       <a class="btn btn-ghost" href="https://popow-kamnew.de/">Zur Startseite</a>
     </div>`;
 }
@@ -568,8 +598,8 @@ function showCatalog(){
      .map(p=>`
       <button class="alt" onclick="jump('${p.n.replace(/'/g,"\\'")}')">
         <span class="bar" style="background:${WELTEN[p.w].color}"></span>
-        <span style="flex:1"><b>${p.n}</b><span>${p.f} · ${p.t==='d'?'Diffuser':'Spray 500 ml'}</span></span>
-        <span class="px">ab ${p.s[0][1]} €</span>
+        <span style="flex:1"><b>${p.n}</b><span>${p.f} · ${p.t==='d'?'Diffuser':p.t==='k'?'Duftkerze':'Spray 500 ml'}</span></span>
+        <span class="px">ab ${p.s[0][1].toFixed(2).replace('.',',')} €</span>
       </button>`).join('');
   go('c');
 }
