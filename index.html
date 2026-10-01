@@ -266,6 +266,19 @@ footer{border-top:1px solid var(--hairline);padding:56px 0 44px;font-size:14px;c
 .scent h2{margin-bottom:16px}
 .scent p{color:var(--ink-soft);max-width:44ch}
 @media(max-width:880px){.scent{grid-template-columns:1fr}.scent-imgs{order:-1}}
+
+/* ===== Schnellzugriff Analysen ===== */
+.quick{padding-block:clamp(48px,6vw,72px) 0}
+.quick-h{text-align:center;font-size:14px;color:var(--ink-soft);margin-bottom:18px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.quick-grid a{display:flex;flex-direction:column;gap:4px;background:var(--surface);border-radius:18px;padding:20px 22px;text-decoration:none;transition:background .2s;position:relative}
+.quick-grid a:hover{background:#EFEEEB}
+.quick-grid .q-ic{font-size:22px;margin-bottom:6px}
+.quick-grid b{font-weight:500;font-size:16px}
+.quick-grid span{font-size:13px;color:var(--ink-soft);line-height:1.45}
+.quick-grid .q-new{position:absolute;top:14px;right:14px;font-size:11px;font-weight:600;background:var(--ink);color:#fff;border-radius:999px;padding:3px 9px}
+@media(max-width:880px){.quick-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.quick-grid a{padding:16px}}
 </style>
 </head>
 <body>
@@ -279,7 +292,7 @@ footer{border-top:1px solid var(--hairline);padding:56px 0 44px;font-size:14px;c
         <li><a href="#kollektionen">Kollektionen</a></li>
         <li><a href="raumduftfinder.html">Raumduft</a></li>
         <li><a href="hautberatung.html">Hautberatung</a></li>
-        <li><a href="#mehr">Pflege &amp; Vitalität</a></li>
+        <li><a href="supplements.html">Supplements</a></li>
         <li><a href="#uns">Über uns</a></li>
       </ul>
     </nav>
@@ -301,6 +314,19 @@ footer{border-top:1px solid var(--hairline);padding:56px 0 44px;font-size:14px;c
   </div>
   <div class="hero-shot reveal">
     <img src="img/olfazeta-luxury-parfum-gold.jpg" alt="Olfazeta Luxury Flakon in Gold" width="900" height="900">
+  </div>
+</section>
+
+<!-- SCHNELLZUGRIFF -->
+<section class="quick" aria-label="Kostenlose Beratungen">
+  <div class="wrap">
+    <p class="quick-h">Kostenlose Beratung — wähle, wo du starten willst</p>
+    <div class="quick-grid">
+      <a href="duft-orakel.html"><span class="q-ic">✨</span><b>Parfüm finden</b><span>5 Fragen bis zu deinem Duft</span></a>
+      <a href="supplementberatung.html"><span class="q-new">Neu</span><span class="q-ic">🔬</span><b>Supplement-Analyse</b><span>Dein Protokoll in 3 Minuten</span></a>
+      <a href="hautberatung.html"><span class="q-ic">🧴</span><b>Hautanalyse</b><span>Pflegeroutine für deinen Hauttyp</span></a>
+      <a href="raumduftfinder.html"><span class="q-ic">🏠</span><b>Raumduft finden</b><span>Der passende Duft für Zuhause</span></a>
+    </div>
   </div>
 </section>
 
@@ -419,10 +445,10 @@ footer{border-top:1px solid var(--hairline);padding:56px 0 44px;font-size:14px;c
         <h3>Pflege</h3>
         <p>Duschpflege, Hautroutine und Haarpflege. Mit kostenloser Hautanalyse von Margarita.</p>
       </a>
-      <a href="supplementberatung.html">
+      <a href="supplements.html">
         <img src="img/supplefit-skin-pure-kapseln.jpg" alt="SuppleFit Skin Pure Nahrungsergänzung" loading="lazy">
         <h3>SuppleFit</h3>
-        <p>Nahrungsergänzung für Haut, Schlaf, Energie und Balance. Mit kostenloser Analyse.</p>
+        <p>Nahrungsergänzung für Haut, Schlaf, Energie, Balance und Sport. Mit kostenloser Analyse.</p>
       </a>
       <a href="https://wa.me/4915141336341?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20Aloe%20Vera.">
         <img src="img/aloe-vera-double-concentrate.jpg" alt="Aloe Vera Double Concentrate" loading="lazy">
@@ -434,6 +460,10 @@ footer{border-top:1px solid var(--hairline);padding:56px 0 44px;font-size:14px;c
         <h3>Kollagen</h3>
         <p>Skinail Collagen für Haut, Haare und Nägel. Eine Monatskur pro Packung.</p>
       </a>
+    </div>
+    <div class="btn-row center" style="margin-top:40px">
+      <a class="btn btn-primary" href="supplementberatung.html">Kostenlose Supplement-Analyse</a>
+      <a class="btn btn-quiet" href="supplements.html">Alle Supplements ansehen</a>
     </div>
   </div>
 </section>
@@ -510,6 +540,8 @@ footer{border-top:1px solid var(--hairline);padding:56px 0 44px;font-size:14px;c
       <ul class="foot-links">
         <li><a href="index.html#finder">Duft finden</a></li>
         <li><a href="index.html#kollektionen">Kollektionen</a></li>
+        <li><a href="supplements.html">Supplements</a></li>
+        <li><a href="supplementberatung.html">Supplement-Analyse</a></li>
         <li><a href="https://www.instagram.com/rodionpopow/">Instagram</a></li>
         <li><a href="https://www.tiktok.com/@rodionfragrance">TikTok</a></li>
         <li><a href="impressum.html">Impressum</a></li>
