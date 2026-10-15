@@ -244,6 +244,25 @@ footer{border-top:1px solid var(--hairline);padding:56px 0 44px;font-size:14px;c
   footer{padding-bottom:110px}
 }
 </style>
+<!-- Besucherstatistik: GoatCounter (cookielos, keine personenbezogenen Daten) -->
+<script data-goatcounter="https://popowkamnew.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+(function(){
+  var page=(location.pathname.split('/').pop()||'startseite').replace('.html','')||'startseite';
+  function ev(n){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:n,title:n,event:true});}catch(e){}}
+  window.pkTrack=ev;
+  var started=false;
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest)return;
+    var a=t.closest('a');
+    if(a){var h=a.href||'';
+      if(h.indexOf('wa.me')>-1){ev('whatsapp-klick/'+page);return;}
+      if(h.indexOf('chogangroup')>-1){ev('shop-klick/'+page);return;}
+    }
+    if(!started&&t.closest('[onclick*="toggleFilter"],[onclick*="go("]')){started=true;ev('quiz-start/'+page);}
+  },true);
+})();
+</script>
 </head>
 <body>
 

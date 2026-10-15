@@ -90,6 +90,25 @@ a:focus-visible, button:focus-visible {
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
 </style>
+<!-- Besucherstatistik: GoatCounter (cookielos, keine personenbezogenen Daten) -->
+<script data-goatcounter="https://popowkamnew.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+(function(){
+  var page=(location.pathname.split('/').pop()||'startseite').replace('.html','')||'startseite';
+  function ev(n){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:n,title:n,event:true});}catch(e){}}
+  window.pkTrack=ev;
+  var started=false;
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest)return;
+    var a=t.closest('a');
+    if(a){var h=a.href||'';
+      if(h.indexOf('wa.me')>-1){ev('whatsapp-klick/'+page);return;}
+      if(h.indexOf('chogangroup')>-1){ev('shop-klick/'+page);return;}
+    }
+    if(!started&&t.closest('[onclick*="toggleFilter"],[onclick*="go("]')){started=true;ev('quiz-start/'+page);}
+  },true);
+})();
+</script>
 </head>
 <body>
 
@@ -186,6 +205,9 @@ a:focus-visible, button:focus-visible {
     <h3>Google Fonts</h3>
     <p>Diese Seite nutzt Google Fonts zur einheitlichen Darstellung von Schriftarten. Beim Aufruf einer Seite lädt Ihr Browser die benötigten Fonts aus Google-Servern. Dabei erhält Google Kenntnis über die IP-Adresse des Besuchers.</p>
     <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Weitere Informationen: <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
+    <h3>Besucherstatistik (GoatCounter)</h3>
+    <p>Wir nutzen GoatCounter, um anonym zu zählen, wie oft unsere Seiten aufgerufen und Funktionen wie der Duft-Finder genutzt werden. GoatCounter setzt keine Cookies, speichert keine IP-Adressen und erstellt keine Nutzerprofile. Erfasst werden nur aufgerufene Seite, Referrer, Bildschirmgröße, Browser, Land sowie ein nicht rückverfolgbarer, täglich wechselnder Kennwert zur Unterscheidung von Besuchen. Anbieter ist GoatCounter (Martin Tournoij, Niederlande).</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer datensparsamen Reichweitenmessung). Weitere Informationen: <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">goatcounter.com/help/privacy</a></p>
     <h3>WhatsApp</h3>
     <p>Diese Website enthält Links zum WhatsApp-Dienst (Meta Platforms Ireland Limited). Wenn Sie auf einen WhatsApp-Link klicken, werden Sie zu WhatsApp weitergeleitet. Die Datenverarbeitung durch WhatsApp erfolgt nach deren eigenen Datenschutzbedingungen.</p>
     <p style="margin-top:40px;font-size:12px;color:rgba(110,110,115,0.5);">Quelle: <a href="https://www.e-recht24.de" target="_blank" rel="noopener" style="color:rgba(110,110,115,0.5);">e-recht24.de</a> · Angepasst für Popow & Kamnew</p>

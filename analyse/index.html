@@ -10,6 +10,25 @@
     <script>
         window.location.replace("https://tally.so/r/QK5R08");
     </script>
+<!-- Besucherstatistik: GoatCounter (cookielos, keine personenbezogenen Daten) -->
+<script data-goatcounter="https://popowkamnew.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+(function(){
+  var page=(location.pathname.split('/').pop()||'startseite').replace('.html','')||'startseite';
+  function ev(n){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:n,title:n,event:true});}catch(e){}}
+  window.pkTrack=ev;
+  var started=false;
+  document.addEventListener('click',function(e){
+    var t=e.target; if(!t||!t.closest)return;
+    var a=t.closest('a');
+    if(a){var h=a.href||'';
+      if(h.indexOf('wa.me')>-1){ev('whatsapp-klick/'+page);return;}
+      if(h.indexOf('chogangroup')>-1){ev('shop-klick/'+page);return;}
+    }
+    if(!started&&t.closest('[onclick*="toggleFilter"],[onclick*="go("]')){started=true;ev('quiz-start/'+page);}
+  },true);
+})();
+</script>
 </head>
 <body style="background-color: #0A0A0A; color: #F5F0E8; font-family: 'DM Sans', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0;">
     
