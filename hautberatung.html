@@ -224,14 +224,14 @@ hr.d{border:none;border-top:1px solid var(--g100);margin:22px 0}
 /* ===== Helles Redesign — Popow & Kamnew ===== */
 body::before { display: none !important; }
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  font-family: Arial, system-ui, -apple-system, sans-serif !important;
   letter-spacing: -0.005em;
   background: #FFFFFF !important;
   color: #1A1A1A !important;
 }
 h1, h2, h3, h4,
 .nav-logo, .footer-logo, .brand, .header-title {
-  font-family: 'Bodoni Moda', Georgia, serif !important;
+  font-family: Georgia, Georgia, serif !important;
   font-weight: 400 !important;
   text-transform: none !important;
   letter-spacing: -0.01em !important;
@@ -281,25 +281,7 @@ a:focus-visible, button:focus-visible {
   align-items:center;font-size:13px;background:#fff}
 @media print{.home-bar,.site-foot{display:none!important}}
 </style>
-<!-- Besucherstatistik: GoatCounter (cookielos, keine personenbezogenen Daten) -->
-<script data-goatcounter="https://popowkamnew.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script>
-(function(){
-  var page=(location.pathname.split('/').pop()||'startseite').replace('.html','')||'startseite';
-  function ev(n){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:n,title:n,event:true});}catch(e){}}
-  window.pkTrack=ev;
-  var started=false;
-  document.addEventListener('click',function(e){
-    var t=e.target; if(!t||!t.closest)return;
-    var a=t.closest('a');
-    if(a){var h=a.href||'';
-      if(h.indexOf('wa.me')>-1){ev('whatsapp-klick/'+page);return;}
-      if(h.indexOf('chogangroup')>-1){ev('shop-klick/'+page);return;}
-    }
-    if(!started&&t.closest('[onclick*="toggleFilter"],[onclick*="go("]')){started=true;ev('quiz-start/'+page);}
-  },true);
-})();
-</script>
+<!-- Keine externe Besucherstatistik auf Beratungsseiten mit sensiblen Eingaben. -->
 </head>
 <body>
 <div id="app">
