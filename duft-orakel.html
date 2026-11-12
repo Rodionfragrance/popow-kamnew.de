@@ -1025,7 +1025,7 @@ function filterResults() {
       <div class="results-grid">${list.map((p,i) => buildCard(p,i,hasOther)).join('')}</div>
     </div>`;
   updateProgress();
-  if (hasOther) setTimeout(() => area.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+  // Ergebnisse aktualisieren, ohne die Scrollposition beim Filtern zu verändern.
 }
  
 function buildCard(p, i, showScore) {
