@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Hautberatung · Margarita Kamnew · Chogan  · ET </title>
+<title>Hautberatung · Margarita Kamnew | Popow & Kamnew</title>
+<link rel="canonical" href="https://popow-kamnew.de/hautberatung.html">
+<meta name="description" content="Kostenlose interaktive Hautberatung von Margarita Kamnew: Hauttyp und Pflegeziele erfassen und passende Produkte entdecken.">
 
 <style>
 :root {
@@ -914,9 +916,9 @@ function buildPlanner(face, body) {
   var html = all.map(function(p, i) {
     var prVal = p.pr ? p.pr.replace(' €','').replace(',','.') : '';
     return '<div class="plst">' +
-      '<div class="pllbl">Schritt ' + (i+1) + ' · ' + p.t + '</div>' +
+      '<div class="pllbl">Schritt ' + (i+1) + ' · ' + escapeHTML(p.t) + '</div>' +
       '<div class="r2">' +
-      '<div class="f"><label>Produkt</label><input type="text" id="pp_' + i + '" value="' + p.nm.replace(/"/g,'&quot;') + '"></div>' +
+      '<div class="f"><label>Produkt</label><input type="text" id="pp_' + i + '" value="' + escapeHTML(p.nm) + '"></div>' +
       '<div class="f"><label>Art.-Nr.</label><input type="text" id="pc_' + i + '" value="' + p.cd + '"></div>' +
       '</div><div class="r2">' +
       '<div class="f"><label>Anzahl</label><input type="number" id="pq_' + i + '" value="1" min="1" max="10" oninput="calcT()"></div>' +
