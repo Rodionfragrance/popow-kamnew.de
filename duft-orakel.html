@@ -299,6 +299,20 @@
     text-transform: uppercase;
   }
  
+  /* ── Favoriten, Vergleich und Sammelanfrage ── */
+  .favorites-panel{margin:24px 16px;padding:22px;border:1px solid var(--gold);background:var(--black2)}
+  .favorites-panel h2{font-family:Georgia,serif;color:var(--off-white);font-size:25px;margin-bottom:8px}
+  .favorites-panel p{color:var(--muted);font-size:13px;line-height:1.6}
+  .favorites-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .fav-action,.fav-toggle{cursor:pointer;border:1px solid var(--gold);padding:11px 15px;background:transparent;color:var(--gold);font:600 12px Arial,sans-serif}
+  .fav-action.primary,.fav-toggle[aria-pressed="true"]{background:var(--gold);color:var(--black)}
+  .fav-action:disabled{opacity:.4;cursor:not-allowed}
+  .compare-wrap{overflow-x:auto;margin-top:16px}
+  .compare-table{width:100%;border-collapse:collapse;min-width:520px;color:var(--off-white);font-size:12px}
+  .compare-table th,.compare-table td{border:1px solid var(--border);padding:10px;text-align:left;vertical-align:top;line-height:1.5}
+  .compare-table th{color:var(--gold)}
+  .alternative-note{margin:0 16px 18px;padding:15px;border:1px solid var(--border);color:var(--muted);font-size:13px;line-height:1.5}
+  @media(min-width:700px){.favorites-panel{margin:24px}}
   /* ── Product Cards ── */
   .results-grid {
     display: grid;
@@ -715,6 +729,7 @@ a:focus-visible, button:focus-visible {
     </div>
   </div>
  
+  <section class="favorites-panel" id="favoritesPanel" aria-live="polite" hidden></section>
   <!-- ─── Results ─── -->
   <div id="resultsArea">
     <div class="oracle-message">
@@ -928,6 +943,36 @@ const parfums = [
 
   
 let selectedFilters = {};
+const favorites = new Set();
+let compareOpen = false;
+const MAX_FAVORITES = 3;
+function safeText(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function toggleFavorite(id){
+  if(favorites.has(id)) favorites.delete(id);
+  else if(favorites.size < MAX_FAVORITES) favorites.add(id);
+  else { alert('Du kannst maximal drei Düfte vergleichen. Entferne zuerst einen Favoriten.'); return; }
+  renderFavorites();
+  document.querySelectorAll('[data-favorite-id]').forEach(button=>{
+    const chosen=favorites.has(button.dataset.favoriteId);
+    button.setAttribute('aria-pressed',String(chosen));
+    button.textContent=chosen?'♥ Merkliste entfernen':'♡ Merken & vergleichen';
+  });
+}
+function renderFavorites(){
+  const panel=document.getElementById('favoritesPanel');
+  const items=[...favorites].map(id=>parfums.find(p=>p.id===id)).filter(Boolean);
+  panel.hidden=!items.length;
+  if(!items.length){compareOpen=false;panel.innerHTML='';return;}
+  const lines=items.map(p=>'• '+p.name).join('\n');
+  const wa='https://wa.me/4915141336341?text='+encodeURIComponent('Hallo Rodion, ich interessiere mich für folgende Düfte aus dem Duft-Orakel:\n'+lines+'\n\nBitte schick mir Informationen zur Bestellung.');
+  const rows=[['Duftcharakter','dufttyp'],['Anlass','anlass'],['Jahreszeit','jahreszeit'],['Duftnoten','notes']].map(([label,key])=>'<tr><th scope="row">'+label+'</th>'+items.map(p=>'<td>'+safeText(Array.isArray(p[key])?p[key].join(', '):p[key]||'Keine Angabe')+'</td>').join('')+'</tr>').join('');
+  panel.innerHTML='<h2>Deine Merkliste ('+items.length+'/'+MAX_FAVORITES+')</h2><p>'+items.map(p=>safeText(p.name)).join(' · ')+'</p>'+
+    '<div class="favorites-actions"><button type="button" class="fav-action" onclick="compareOpen=!compareOpen;renderFavorites()">'+(compareOpen?'Vergleich schließen':'Düfte vergleichen')+'</button>'+
+    '<a class="fav-action primary" href="'+wa+'" target="_blank" rel="noopener">Alle zusammen auf WhatsApp anfragen</a>'+
+    '<button type="button" class="fav-action" onclick="favorites.clear();renderFavorites();filterResults()">Merkliste leeren</button></div>'+
+    (compareOpen?'<div class="compare-wrap"><table class="compare-table"><thead><tr><th>Merkmal</th>'+items.map(p=>'<th scope="col">'+safeText(p.name)+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div>':'');
+}
+
 const weights = { dufttyp:3, jahreszeit:1, anlass:1, entdecken:0.5 };
  
 function toggleFilter(cat, val) {
@@ -972,6 +1017,7 @@ function updateProgress() {
 function resetFilters() {
   selectedFilters = {};
   syncButtons(); unlockSections(); updateProgress();
+  renderFavorites();
   document.getElementById('countBadge').innerHTML = '<span>Wähle zuerst ein Geschlecht</span>';
   document.getElementById('resultsArea').innerHTML = `
     <div class="oracle-message">
@@ -1001,43 +1047,42 @@ function filterResults() {
   }
   let list = parfums.filter(p => selectedFilters.geschlecht.includes(p.geschlecht)).map(p => ({...p, sc: calcScore(p)}));
   const hasOther = Object.keys(selectedFilters).some(k => k !== 'geschlecht' && selectedFilters[k].length);
+  let alternatives = false;
   if (hasOther) {
-    list = list.filter(p => p.sc.pct >= 60);
-    list.sort((a,b) => b.sc.raw - a.sc.raw || b.sc.pct - a.sc.pct);
-    if (!list.length) {
-      area.innerHTML = `<div class="oracle-message"><span class="oracle-icon">🤔</span><p>Keine Matches. Versuche weniger Filter.</p></div>`;
-      badge.innerHTML = '<strong>0</strong><span>Matches</span>';
-      updateProgress(); return;
-    }
-    const best = list[0].sc.raw;
-    list.forEach((p,i) => { p.sc.display = i === 0 ? 100 : Math.round((p.sc.raw/best)*99); });
+    list.sort((a,b) => b.sc.pct - a.sc.pct || b.sc.raw - a.sc.raw || a.name.localeCompare(b.name));
+    const matches = list.filter(p => p.sc.pct >= 60);
+    alternatives = matches.length === 0;
+    list = alternatives ? list.slice(0,3) : matches;
+    list.forEach(p => { p.sc.display = p.sc.pct; });
   } else {
     list.sort((a,b) => a.name.localeCompare(b.name));
     list.forEach(p => p.sc.display = null);
   }
-  badge.innerHTML = `<strong>${list.length}</strong><span>${hasOther ? 'Matches gefunden' : 'Düfte verfügbar'}</span>`;
+  badge.innerHTML = `<strong>${list.length}</strong><span>${alternatives ? 'Alternativen' : hasOther ? 'Matches gefunden' : 'Düfte verfügbar'}</span>`;
   area.innerHTML = `
     <div class="results-section">
+      ${alternatives ? '<div class="alternative-note">Kein Duft erreicht 60 % Übereinstimmung. Hier sind die drei nächstbesten Alternativen – inklusive der nicht erfüllten Kriterien.</div>' : ''}
       <div class="results-header">
-        <h2>${hasOther ? '🏆 Deine <span style="color:var(--gold)">Empfehlungen</span>' : '✨ Alle <span style="color:var(--gold)">Düfte</span>'}</h2>
+        <h2>${alternatives ? 'Deine <span style="color:var(--gold)">Alternativen</span>' : hasOther ? '🏆 Deine <span style="color:var(--gold)">Empfehlungen</span>' : '✨ Alle <span style="color:var(--gold)">Düfte</span>'}</h2>
         <p>${hasOther ? 'Sortiert nach Übereinstimmung' : 'Wähle Filter für personalisierte Empfehlungen'}</p>
       </div>
       <div class="results-grid">${list.map((p,i) => buildCard(p,i,hasOther)).join('')}</div>
     </div>`;
   updateProgress();
+  renderFavorites();
   // Ergebnisse aktualisieren, ohne die Scrollposition beim Filtern zu verändern.
 }
  
 function buildCard(p, i, showScore) {
-  const isWinner = showScore && i === 0;
-  const isRunnerUp = showScore && i > 0 && i < 3;
+  const isWinner = showScore && i === 0 && p.sc.pct >= 60;
+  const isRunnerUp = showScore && i > 0 && i < 3 && p.sc.pct >= 60;
   let cls = 'card';
   if (isWinner) cls += ' winner';
   else if (isRunnerUp) cls += ' runner-up';
  
   const winnerBadge = isWinner ? `<div class="winner-badge">⭐ Beste Wahl</div>` : '';
   const scoreBar = showScore && p.sc.display !== null ? `
-    <div class="card-score">
+    <div class="card-score" aria-label="${p.sc.display} Prozent gewichtete Übereinstimmung">
       <div class="score-bar"><div class="score-fill" style="width:${p.sc.display}%"></div></div>
       <div class="score-num">${p.sc.display}%</div>
     </div>` : '';
@@ -1054,6 +1099,7 @@ function buildCard(p, i, showScore) {
       ${scoreBar}
       <p class="card-desc">${p.description}</p>
       ${tags}
+      <button type="button" class="fav-toggle" data-favorite-id="${safeText(p.id)}" aria-pressed="${favorites.has(p.id)}" onclick="toggleFavorite('${p.id}')">${favorites.has(p.id)?'♥ Merkliste entfernen':'♡ Merken & vergleichen'}</button>
       <div class="card-buttons">
         <a class="card-wa" href="https://wa.me/4915141336341?text=${waMsg}" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
