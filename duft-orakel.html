@@ -320,6 +320,7 @@
     .compare-table th,.compare-table td{display:block;width:100%;border:0;padding:7px 8px;overflow-wrap:anywhere}
     .compare-table th{border-bottom:1px solid var(--border)}
     .compare-table td+td{border-top:1px solid var(--border)}
+    .compare-table td::before{content:attr(data-label);display:block;color:var(--gold);font-weight:700;margin-bottom:4px}
     .favorites-panel{padding:16px;margin-inline:12px}
     .favorites-actions{flex-direction:column}
     .fav-action{display:block;text-align:center;min-height:44px}
@@ -978,7 +979,7 @@ function renderFavorites(){
   if(!items.length){compareOpen=false;panel.innerHTML='';return;}
   const lines=items.map(p=>'• '+p.name).join('\n');
   const wa='https://wa.me/4915141336341?text='+encodeURIComponent('Hallo Rodion, ich interessiere mich für folgende Düfte aus dem Duft-Orakel:\n'+lines+'\n\nBitte schick mir Informationen zur Bestellung.');
-  const rows=[['Duftcharakter','dufttyp'],['Anlass','anlass'],['Jahreszeit','jahreszeit'],['Duftnoten','notes']].map(([label,key])=>'<tr><th scope="row">'+label+'</th>'+items.map(p=>'<td>'+safeText(Array.isArray(p[key])?p[key].join(', '):p[key]||'Keine Angabe')+'</td>').join('')+'</tr>').join('');
+  const rows=[['Duftcharakter','dufttyp'],['Anlass','anlass'],['Jahreszeit','jahreszeit'],['Duftnoten','notes']].map(([label,key])=>'<tr><th scope="row">'+label+'</th>'+items.map(p=>'<td data-label="'+safeText(p.name)+'">'+safeText(Array.isArray(p[key])?p[key].join(', '):p[key]||'Keine Angabe')+'</td>').join('')+'</tr>').join('');
   panel.innerHTML='<h2>Deine Merkliste ('+items.length+'/'+MAX_FAVORITES+')</h2><p>'+items.map(p=>safeText(p.name)).join(' · ')+'</p>'+
     '<div class="favorites-actions"><button type="button" class="fav-action" onclick="compareOpen=!compareOpen;renderFavorites()">'+(compareOpen?'Vergleich schließen':'Düfte vergleichen')+'</button>'+
     '<a class="fav-action primary" href="'+wa+'" target="_blank" rel="noopener">Alle zusammen auf WhatsApp anfragen</a>'+
