@@ -544,7 +544,7 @@ function render(top, alts){
     ? `Docht vor dem ersten Anzünden auf ca. 5 mm kürzen und die Kerze randvoll abbrennen lassen — dann bleibt der Wachsspiegel gleichmäßig und der Duft hält länger.`
     : `Zwei bis drei Sprühstöße in die Raummitte reichen. Nicht direkt auf Textilien sprühen.`;
 
-  const waLink = `<button class="btn" onclick="addCur()">In den Warenkorb</button>`;
+  const waLink = `<button class="btn" onclick="addCur(event)">In den Warenkorb</button>`;
   const shopLink = '';
 
   document.getElementById('resultBox').innerHTML = `
@@ -620,7 +620,7 @@ function selSize(i){
     el.classList.toggle('pick', +el.dataset.i === i));
 }
 
-function addCur(){
+function addCur(e){
   if(!CUR) return;
   const p = CUR.p, s = p.s[CUR.si];
   const key = p.n + '|' + s[2];
@@ -629,7 +629,7 @@ function addCur(){
     CART.push({key:key, name:p.n, size:s[0], price:s[1], code:s[2], qty:1});
   }
   drawCart();
-  const b = event && event.target;
+  const b = e && e.currentTarget;
   if(b){ const t=b.textContent; b.textContent='Hinzugefügt'; setTimeout(()=>b.textContent=t,1400); }
 }
 
