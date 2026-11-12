@@ -880,7 +880,7 @@ function genRec() {
   document.getElementById('r_typ').textContent = ST.skin === 'Reif' ? 'Reife Haut · Anti-Aging' : ST.skin;
   document.getElementById('r_dsc').textContent = DESCS[ST.skin] || '';
  
-  var ziele = [].slice.call(document.querySelectorAll('input[name="zl"]:checked')).map(function(i){return i.value;});
+  var ziele = [].slice.call(document.querySelectorAll('input[name="zl"]:checked')).map(function(i){return escapeHTML(i.value);});
   document.getElementById('r_pills').innerHTML = ziele.length
     ? ziele.map(function(g){return '<span class="pill">'+g+'</span>';}).join('')
     : '<span class="pill">Allgemeine Pflege</span>';
@@ -949,7 +949,12 @@ function togSupp(id) {
   if (arr) { if (open) arr.classList.remove('o'); else arr.classList.add('o'); }
 }
  
-function g(id) { var el = document.getElementById(id); return el ? (el.value || '—') : '—'; }
+function escapeHTML(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
+}
+function g(id) { var el = document.getElementById(id); return escapeHTML(el ? (el.value || '—') : '—'); }
 function getChecked(name) { return [].slice.call(document.querySelectorAll('input[name="'+name+'"]:checked')).map(function(i){return i.value;}); }
  
 function buildSum() {
@@ -964,12 +969,12 @@ function buildSum() {
   var zl = getChecked('zl');
   var dg = getChecked('dg');
   document.getElementById('sum_haut').innerHTML =
-    '<div class="sumr"><div class="sumk">Hauttyp</div><div class="sumv" style="color:var(--purple);font-weight:500">' + (ST.skin||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Hauttyp</div><div class="sumv" style="color:var(--purple);font-weight:500">' + escapeHTML(ST.skin||'—') + '</div></div>' +
     '<div class="sumr"><div class="sumk">Hautzustand</div><div class="sumv">' + (hz.join(', ')||'—') + '</div></div>' +
     '<div class="sumr"><div class="sumk">Ziele</div><div class="sumv">' + (zl.join(', ')||'—') + '</div></div>' +
-    '<div class="sumr"><div class="sumk">Kneiftest</div><div class="sumv">' + (ST.tests.kStirn||'—') + '</div></div>' +
-    '<div class="sumr"><div class="sumk">Empfindlichkeit</div><div class="sumv">' + (ST.tests.eStirn||'—') + '</div></div>' +
-    '<div class="sumr"><div class="sumk">Poren</div><div class="sumv">' + (ST.tests.poren||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Kneiftest</div><div class="sumv">' + escapeHTML(ST.tests.kStirn||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Empfindlichkeit</div><div class="sumv">' + escapeHTML(ST.tests.eStirn||'—') + '</div></div>' +
+    '<div class="sumr"><div class="sumk">Poren</div><div class="sumv">' + escapeHTML(ST.tests.poren||'—') + '</div></div>' +
     (dg.length ? '<div class="sumr"><div class="sumk">Diagnosen</div><div class="sumv">' + dg.join(', ') + '</div></div>' : '');
 }
  
