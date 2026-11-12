@@ -2,10 +2,11 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>Duft-Orakel – Welches Chogan Parfüm passt zu mir? | Popow & Kamnew</title>
+<link rel="canonical" href="https://popow-kamnew.de/duft-orakel.html">
 <meta name="description" content="Finde dein perfektes Chogan Parfüm in 30 Sekunden. Unser Duft-Orakel empfiehlt dir deinen Signature-Duft nach Geschlecht, Anlass und Dufttyp – kostenlos und ohne Registrierung.">
 <meta name="keywords" content="Chogan Parfüm finden, welches Parfüm passt zu mir, Duft-Orakel, Chogan Duft Empfehlung, Parfüm Test online">
 <meta property="og:title" content="Duft-Orakel – Dein perfektes Chogan Parfüm in 30 Sekunden">
@@ -311,6 +312,18 @@
   .compare-table{width:100%;border-collapse:collapse;min-width:520px;color:var(--off-white);font-size:12px}
   .compare-table th,.compare-table td{border:1px solid var(--border);padding:10px;text-align:left;vertical-align:top;line-height:1.5}
   .compare-table th{color:var(--gold)}
+  @media(max-width:599px){
+    .compare-table{min-width:0;display:block}
+    .compare-table thead{display:none}
+    .compare-table tbody{display:grid;gap:12px}
+    .compare-table tr{display:block;background:var(--black2);border:1px solid var(--border);padding:10px}
+    .compare-table th,.compare-table td{display:block;width:100%;border:0;padding:7px 8px;overflow-wrap:anywhere}
+    .compare-table th{border-bottom:1px solid var(--border)}
+    .compare-table td+td{border-top:1px solid var(--border)}
+    .favorites-panel{padding:16px;margin-inline:12px}
+    .favorites-actions{flex-direction:column}
+    .fav-action{display:block;text-align:center;min-height:44px}
+  }
   .alternative-note{margin:0 16px 18px;padding:15px;border:1px solid var(--border);color:var(--muted);font-size:13px;line-height:1.5}
   @media(min-width:700px){.favorites-panel{margin:24px}}
   /* ── Product Cards ── */
@@ -516,7 +529,7 @@
     border-color: var(--gold); transform: translateY(-2px);
   }
  
-  .social-link img { width: 20px; height: 20px; object-fit: contain; }
+  .social-link svg { width: 20px; height: 20px; display:block; color:var(--off-white); }
  
   .footer-links {
     display: flex; align-items: center; justify-content: center;
@@ -751,19 +764,19 @@ a:focus-visible, button:focus-visible {
     <a href="/" class="footer-logo">POPOW<span>&</span>KAMNEW</a>
     <div class="social-row">
       <a class="social-link" href="https://www.instagram.com/rodionpopow/" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.7" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
       </a>
       <a class="social-link" href="https://www.tiktok.com/@rodionfragrance" target="_blank" rel="noopener">
-        <img src="https://www.citypng.com/public/uploads/preview/round-tiktok-icon-logo-transparent-background-701751695033010oraha4pc0r.png" alt="TikTok">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.6 2h-3.1v12.8a3.9 3.9 0 1 1-3.8-4v-3.2a7.1 7.1 0 1 0 7 7V8.9c1.4 1 3 1.5 4.8 1.5V7.2c-2.9 0-4.9-2.1-4.9-5.2Z"/></svg>
       </a>
       <a class="social-link" href="https://www.youtube.com/@rodionfragrance" target="_blank" rel="noopener">
-        <img src="https://www.citypng.com/public/uploads/preview/hd-youtube-yt-triangle-symbol-logo-icon-sign-png-701751695118564ln4ifqdive.png" alt="YouTube">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M21.4 6.6a2.8 2.8 0 0 0-2-2C17.6 4.1 12 4.1 12 4.1s-5.6 0-7.4.5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2 12a29 29 0 0 0 .6 5.4 2.8 2.8 0 0 0 2 2c1.8.5 7.4.5 7.4.5s5.6 0 7.4-.5a2.8 2.8 0 0 0 2-2A29 29 0 0 0 22 12a29 29 0 0 0-.6-5.4ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
       </a>
     </div>
     <div class="footer-links">
       <a href="/">Startseite</a>
-      <a href="/impressum">Impressum</a>
-      <a href="/datenschutz">Datenschutz</a>
+      <a href="/impressum.html">Impressum</a>
+      <a href="/datenschutz.html">Datenschutz</a>
     </div>
     <p class="copyright">© 2026 Rodion Popow · Alle Rechte vorbehalten</p>
   </footer>
