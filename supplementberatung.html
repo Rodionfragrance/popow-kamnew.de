@@ -1070,7 +1070,7 @@ function buildBiovSection() {
 // ─── HTML Builders ────────────────────────────────────────────
 function buildProductCard(p, name, m, saf) {
   const waMsg = encodeURIComponent(
-    `Hey Rodion! 👋 SuppleFit Protokoll – ${name}\n\n` +
+    `Hallo Rodion, ich interessiere mich für folgendes SuppleFit-Produkt:\n\n` +
     '' +
     `\nBestellung:\n➡️ ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
   );
@@ -1093,7 +1093,7 @@ function buildProductCard(p, name, m, saf) {
     <div class="prod-info">${p.info}</div>
     <div class="prod-bot">
       <span class="prod-price">${p.price.toFixed(2).replace('.',',')} €</span>
-      <a href="https://wa.me/4915141336341?text=${waMsg}" class="btn-wa-small" target="_blank">${WA_SVG} Bestellen</a>
+      <a href="https://wa.me/4915141336341?text=${waMsg}" class="btn-wa-small" target="_blank" rel="noopener noreferrer">${WA_SVG} Bestellen</a>
     </div>
   </div>`;
 }
@@ -1325,13 +1325,11 @@ function genResults() {
   // Preis + WA Komplett
   if (allProducts.length) {
     const tot = allProducts.reduce((s,p)=>s+p.price,0);
-    const list = allProducts.map(p=>`• ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €${checkSafety(p,m).level==='arzt'?' ⚠️ Arzt-Rücksprache':''}`).join('\n');
+    const list = allProducts.map(p=>`• ${p.name} (${p.code}) – ${p.price.toFixed(2).replace('.',',')} €`).join('\n');
     const statusTxt = '';
     const riskTxt = '';
     const waFull = encodeURIComponent(
-      `Hey Rodion! 👋 Komplettes SuppleFit Protokoll\n\n` +
-      `📋 ${name} | ${new Date().toLocaleDateString('de-DE')}\n` +
-      '' +
+      `Hallo Rodion, ich interessiere mich für diese SuppleFit-Produkte:\n\n` +
       `\n🛒 Produkte:\n${list}\n\n💰 Gesamt: ${tot.toFixed(2).replace('.',',')} €\n\nBitte melde dich!`
     );
     document.getElementById('priceSummaryContainer').innerHTML =
@@ -1342,8 +1340,8 @@ function genResults() {
         </div>
         <div style="font-size:11px;color:var(--muted);text-align:right;max-width:140px;line-height:1.5">${allProducts.length} Produkt${allProducts.length>1?'e':''} im Plan</div>
       </div>
-      <a href="https://wa.me/4915141336341?text=${waFull}" class="btn-wa-full" target="_blank">
-        ${WA_SVG.replace(/14/g,'18')} Komplettes Protokoll bestellen
+      <a href="https://wa.me/4915141336341?text=${waFull}" class="btn-wa-full" target="_blank" rel="noopener noreferrer">
+        ${WA_SVG.replace(/14/g,'18')} Produktauswahl anfragen
       </a>`;
   } else {
     document.getElementById('priceSummaryContainer').innerHTML = '';
